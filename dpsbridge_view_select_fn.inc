@@ -2,7 +2,7 @@
 var articles = "",
 	baseURL = "<?= $GLOBALS['base_url'] ?>";
 /* ----------------------------------------------------------- *
- * Attempts to obtain the values from the selected checkboxes,
+ * Attempts to obtain the values from the selected checkboxes, 
  *  toggles the overlay window if checkboxes are selected
  * ----------------------------------------------------------- */
 function get_selected(toggle) {

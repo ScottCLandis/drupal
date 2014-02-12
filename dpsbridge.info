@@ -1,1 +1,13 @@
-name = DPSBridge
+name = "Drupal to Adobe DPS"
+description = "This module will convert the contents from selected page(s) into HTML format and upload it into Adobe Folio Producer."
+version = 7.x-1.0
+package = "Adobe"
+core = 7.x
+
+files[] = dpsbridge.install
+files[] = dpsbridge.module
+
+dependencies[] = entityreference
+dependencies[] = views
+dependencies[] = views_bulk_operations
+dependencies[] = views_php

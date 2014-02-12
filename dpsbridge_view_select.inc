@@ -24,10 +24,10 @@ Overlay for updating existing folios
 		<fieldset>
 			<label for="fid">Folio Name:</label>
 			<select id="fid">
-		<?php
-			foreach ($fp_nodes_all as $fp_node)
-				echo "<option value='".$fp_node->nid."'>".$fp_node->title."</option>\n";
-		?>	
+      <?php
+        foreach ($fp_nodes_all as $fp_node)
+          echo "<option value='" . $fp_node->nid . "'>" . $fp_node->title . "</option>\n";
+      ?>	
 			</select><br/><br/>
 		</fieldset>
 	</form>

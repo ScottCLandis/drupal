@@ -1,12 +1,12 @@
 <script>
-var fid = '', // set to Folio node ID when opening the edit panel
+var fid = '', // set to Folio node ID when opening the edit panel 
     previewFileName   = '',
     amazonDimensions  = '',
     androidDimensions = '',
     appleDimensions   = '',
   	offsetIndex = 0,
     baseURL     = "<?= $GLOBALS['base_url'] ?>",
-    pathToDir   = "<?= drupal_get_path('module', 'adobe') ?>";
+    pathToDir   = "<?= drupal_get_path('module', 'dpsbridge') ?>";
 /* ==================================================== *
  * Given the folio node ID,
  *   pull the account type from the Folio node,
@@ -14,7 +14,7 @@ var fid = '', // set to Folio node ID when opening the edit panel
  * ==================================================== */
 function acquire_account_credentials(folioNodeID, filenames) {
 	$.ajax({
-		url: baseURL+"/adobe/folio/pull-accounts",
+		url: baseURL+"/dpsbridge/folio/pull-accounts",
 		type: "POST",
 		data: { "folioNodeID":folioNodeID },
 		success: function(output) {
@@ -34,11 +34,11 @@ function acquire_account_credentials(folioNodeID, filenames) {
 /* ============================================ *
  * Given the list of HTML article folder names,
  *   convert the folders into .folio files.
- *   (The .folio files are stored at /adobe/folio/)
+ *   (The .folio files are stored at /dpsbridge/folio/)
  * ============================================ */
 function generate_folio(folioNodeID, filenames) {
 	$.ajax({
-		url: baseURL+"/adobe/folio/generate-folios",
+		url: baseURL+"/dpsbridge/folio/generate-folios",
 		type: "POST",
 		data: { "filenames":filenames },
 		success: function(output) {
@@ -50,11 +50,11 @@ function generate_folio(folioNodeID, filenames) {
 /* ================================================= *
  * Given the selected folio node ID,
  *   pull the metadata and generate the HTML articles.
- *   (The HTML articles are stored at /adobe/html/)
+ *   (The HTML articles are stored at /dpsbridge/html/)
  * ================================================= */
 function generate_html(folioNodeID) {
 	$.ajax({
-		url: baseURL+"/adobe/folio/generate-HTML",
+		url: baseURL+"/dpsbridge/folio/generate-HTML",
 		type: "POST",
 		data: { "folioNodeID":folioNodeID },
 		success: function(output) {
@@ -66,12 +66,12 @@ function generate_html(folioNodeID) {
 /* =========================================== *
  * Given the selected list of article node ID,
  *   auto generate an HTML article folder,
- *   and store it at /adobe/html_stacks/
+ *   and store it at /dpsbridge/html_stacks/
  * =========================================== */
 function generate_selected_html(articleNodeID) {
 	helper_show_status('Generating HTML Stacks...');
 	$.ajax({
-		url: baseURL+"/adobe/folio/generate-selected-HTML",
+		url: baseURL+"/dpsbridge/folio/generate-selected-HTML",
 		type: "POST",
 		data: {
 			"folioNodeID"   :fid,
@@ -238,7 +238,7 @@ function fp_upload(accountMeta, folioMeta, filenames) {
  * ======================================================================== */
 function imageUI_update() {
 	$.ajax({
-		url: baseURL+"/adobe/folio/pull-content",
+		url: baseURL+"/dpsbridge/folio/pull-content",
 		type: "POST",
 		data: { "nodeID":fid, },
 		success: function(output) {
@@ -255,7 +255,7 @@ function imageUI_update() {
  * ======================================= */
 function node_status_update(folioNodeID, folioID) {
 	$.ajax({
-		url: baseURL+"/adobe/folio/update-status",
+		url: baseURL+"/dpsbridge/folio/update-status",
 		type: "POST",
 		data: {
 			"folioNodeID" :folioNodeID,
@@ -270,7 +270,7 @@ function node_status_update(folioNodeID, folioID) {
  * ======================================================= */
 function node_status_timestamp(folioNodeID) {
 	$.ajax({
-		url: baseURL+"/adobe/folio/update-timestamp",
+		url: baseURL+"/dpsbridge/folio/update-timestamp",
 		type: "POST",
 		data: { "folioNodeID" :folioNodeID },
 		success: function(output) {
@@ -291,7 +291,7 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 	for (var i = 0; i < drupalArticles.length; i++) {
 		var articleID = drupalArticles[i]['target_id'];
 		$.ajax({
-			url: baseURL+"/adobe/folio/pull-article",
+			url: baseURL+"/dpsbridge/folio/pull-article",
 			type: "POST",
 			async: false,
 			data: { "nodeID":articleID, },
@@ -382,7 +382,7 @@ function profileUI(folioNodeID, toggle) {
 	helper_show_status("Pulling content, please wait...", 400, 225);
 	$('#articles-wrapper').empty();
 	$.ajax({
-		url: baseURL+"/adobe/folio/pull-content",
+		url: baseURL+"/dpsbridge/folio/pull-content",
 		type: "POST",
 		data: { 
 			"nodeID":folioNodeID,
@@ -460,7 +460,7 @@ function profileUI(folioNodeID, toggle) {
 }
 /* ====================================================================================== *
  * Given the article node ID, article name, and the temperary HTML article name,
- *   generate a temperary HTML article in /adobe/html folder.
+ *   generate a temperary HTML article in /dpsbridge/html folder.
  *   Open the option UI dialog box for selecting the dimension size and mode upon success.
  * ====================================================================================== */
 function previewOptions(previewID, filename) {
@@ -468,7 +468,7 @@ function previewOptions(previewID, filename) {
 		pubcss = $("#pubcss").val();
 		previewFileName = filename;
 	$.ajax({
-		url: baseURL+"/adobe/folio/preview-article",
+		url: baseURL+"/dpsbridge/folio/preview-article",
 		type: "POST",
 		data: { 
 			"previewID"	:previewID,
@@ -482,7 +482,7 @@ function previewOptions(previewID, filename) {
 /* ============================================================================ *
  * Attempts to read the selected dimension in the preview dialog box,
  *   open a new window with the designated width and height,
- *   and set the URL to the preview HTML article created in /adobe/html/ folder.
+ *   and set the URL to the preview HTML article created in /dpsbridge/html/ folder.
  * ============================================================================ */
 function previewArticle(orientation) {
 	var windows_width, windows_height, previewURL,
@@ -495,17 +495,17 @@ function previewArticle(orientation) {
 		windows_width = preview_token[1];
 		windows_height = preview_token[0];
 	}
-	previewURL = 'sites/all/modules/adobe/html/'+previewFileName+'/'+previewFileName+'.html';
+	previewURL = 'sites/all/modules/dpsbridge/html/'+previewFileName+'/'+previewFileName+'.html';
 	window.open(previewURL, "popup", "width="+windows_width+", height="+windows_height);
 }
 /* ========================================================= *
  * Attempts to read the current available local stylesheets,
- *   The local storage folder is @ /adobe/styles.
+ *   The local storage folder is @ /dpsbridge/styles.
  * ========================================================= */
 function readStylesheets() {
 	var styleText = '';
 	$.ajax({
-		url: baseURL+"/adobe/stylesheet/read",
+		url: baseURL+"/dpsbridge/stylesheet/read",
 		type: "POST",
 		async: false,
 		success: function(output) {
@@ -546,7 +546,7 @@ function refreshDimensions() {
  * ============================================================= */
 function removePreviewFile() {
 	$.ajax({
-		url: baseURL+"/adobe/folio/preview-delete",
+		url: baseURL+"/dpsbridge/folio/preview-delete",
 		type: "POST",
 		data: { "filename":previewFileName }
 	})
@@ -634,7 +634,7 @@ $(function() {
 					ads += (isad[n].checked)?"1,":"0,";
 				// attempts to save the metadata to the selected Folio node
 				$.ajax({
-					url: baseURL+"/adobe/folio/update",
+					url: baseURL+"/dpsbridge/folio/update",
 					type: "POST",
 					data: {
 						"fid"         :fid,

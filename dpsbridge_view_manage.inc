@@ -1,5 +1,5 @@
 <!-- ==============================
-Overlay for editing existing folios
+Overlay for editing existing folios 
 =============================== -->
 <div id="dialog-edit-folio" title="">
 	<form action="#" method="POST">
@@ -94,7 +94,7 @@ Overlay for editing existing folios
 Overlay for editing folio images
 ============================ -->
 <div id="dialog-edit-cover" title="">
-	<form id="image-form" action="<?= $GLOBALS['base_url'] ?>/adobe/img/upload" method="POST" enctype="multipart/form-data">
+	<form id="image-form" action="<?= $GLOBALS['base_url'] ?>/dpsbridge/img/upload" method="POST" enctype="multipart/form-data">
 		<input type="hidden" id="image-ui-fname" name="fname" value="" />
 		<input type="hidden" id="image-ui-fid" name="fid" value="" />
 		<label style="margin-bottom:10px;">Cover Image</label>
@@ -144,10 +144,10 @@ Overlay for selecting article preview option
 	<label>Select an orientation to preview the article:</label><br/>
 	<div class='align-center'>
 		<a href="javascript:previewArticle('landscape');" alt="Landscape Mode" title="Landscape Mode">
-			<img src="<?= drupal_get_path('module', 'adobe') ?>/images/icons/preview_h.png" /> Landscape Mode
+			<img src="<?= drupal_get_path('module', 'dpsbridge') ?>/images/icons/preview_h.png" /> Landscape Mode
 		</a><br/><br/>
 		<a href="javascript:previewArticle('portrait');" alt="Portrait Mode" title="Portrait Mode">
-			<img src="<?= drupal_get_path('module', 'adobe') ?>/images/icons/preview_v.png" /> Portrait Mode
+			<img src="<?= drupal_get_path('module', 'dpsbridge') ?>/images/icons/preview_v.png" /> Portrait Mode
 		</a>
 	</div>
 </div>

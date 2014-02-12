@@ -1,5 +1,5 @@
 <!-- ==================================================
-Overlay for displaying options for testing connectivity
+Overlay for displaying options for testing connectivity 
 =================================================== -->
 <div id="dialog-option-connectivity" title="Test Connectivity" class="align-center"><br/>
 	<label>Select an account to test</label>
@@ -39,7 +39,7 @@ Overlay for deleting dimensions
 Overlay for adding stylesheet
 ========================= -->
 <div id="dialog-option-stylesheet-add" title="Add stylesheet">
-	<form id="stylesheet-form" action="<?= $GLOBALS['base_url'] ?>/adobe/stylesheet/upload" method="POST" enctype="multipart/form-data"><br/>
+	<form id="stylesheet-form" action="<?= $GLOBALS['base_url'] ?>/dpsbridge/stylesheet/upload" method="POST" enctype="multipart/form-data"><br/>
 		<label for="filename">Enter file name:</label>
 		<input id="filename" name="filename" type="text" size="40" />
 		<label for="zipfile">Select HTMLResource.zip file:</label>

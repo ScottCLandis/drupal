@@ -1,4 +1,4 @@
-<?php 
+<?php
 	require_once dirname(__FILE__).'/fp_config.php';
 	session_cache_limiter('private');
 	$cache_limiter = session_cache_limiter();
@@ -11,7 +11,7 @@
 	$_SESSION['Password']  = htmlspecialchars(isset($_POST["Password"])?$_POST["Password"]:'');
 	$_SESSION['APIKey']    = htmlspecialchars(isset($_POST["APIKey"])?$_POST["APIKey"]:'');
 	$_SESSION['APISecret'] = htmlspecialchars(isset($_POST["APISecret"])?$_POST["APISecret"]:'');
-	$folioID  			   = htmlspecialchars(isset($_POST['folioID'])?$_POST['folioID']:'');
+	$folio_id  			   = htmlspecialchars(isset($_POST['folioID'])?$_POST['folioID']:'');
 	$isTest				   = htmlspecialchars(isset($_POST["Test"])?$_POST["Test"]:'');
 
 	$fp = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
@@ -20,7 +20,7 @@
 	$fp = $config->fp;
 	$config->fpError = 'ok';
 	$config->fulfillmentError='ok';
-	
+
 	// Create session
 	if(!isset($_SESSION['ticket'])) {
 		$session = $fp->create_session();
@@ -37,12 +37,12 @@
 				echo "[".$session['status']."] ".$session['errorDetail'];
 			}
 			$config->fpError = $session['status'];
-		} else if ($folioID) {
-			$articles = $fp->articles($folioID);
+		} else if ($folio_id) {
+			$articles = $fp->articles($folio_id);
 			print_r(json_encode($articles));
 		} else {
 			echo "ok";
 		}
 	}
-	
+
 ?>

@@ -1,44 +1,44 @@
 <?php
 
-$fpselect   = false;
-$fpmanage   = false;
-$fpcredent  = false;
+$fpselect   = FALSE;
+$fpmanage   = FALSE;
+$fpcredent  = FALSE;
 
 /* --------------------------------------------------------------- *
  * Includes the respective PHP files depending on the current page *
  * --------------------------------------------------------------- */
 if (views_get_page_view()) {
 	$url = "$_SERVER[REQUEST_URI]";
-	// if on the Folio Article Selection page
+	// If on the Folio Article Selection page.
 	if (strpos($url, "fpselect")) {
 		if (user_access('folio_article_permission')) {
-			$fpselect = true;
+			$fpselect = TRUE;
 			helper_include_goodies('select');
 			$fp_nodes_all = node_load_multiple(array(), array('type' => 'folios'));
 			$fp_nodes_selected = array();
-			require_once drupal_get_path('module', 'adobe').'/adobe_view_select.inc';
+			require_once drupal_get_path('module', 'dpsbridge').'/dpsbridge_view_select.inc';
 		} else {
-			drupal_goto('adobe/views/access-denied');
+			drupal_goto('dpsbridge/views/access-denied');
 		}
 	}
-	// if on the Folio Management page
+	// If on the Folio Management page.
 	else if (strpos($url, "fpmanage")) {
 		if (user_access('folio_management_permission')) {
-			$fpmanage = true;
+			$fpmanage = TRUE;
 			helper_include_goodies('manage');
-			require_once drupal_get_path('module', 'adobe').'/adobe_view_manage.inc';
+			require_once drupal_get_path('module', 'dpsbridge').'/dpsbridge_view_manage.inc';
 		} else {
-			drupal_goto('adobe/views/access-denied');
+			drupal_goto('dpsbridge/views/access-denied');
 		}
 	}
-	// if on the Adobe DPS Folio Module Config page
+	// If on the Adobe DPS Folio Module Config page.
 	else if (strpos($url, "fpconfig")) {
 		if (user_access('folio_config_permission')) {
-			$fpcredent = true;
+			$fpcredent = TRUE;
 			helper_include_goodies('config');
-			require_once drupal_get_path('module', 'adobe').'/adobe_view_credential.inc';
+			require_once drupal_get_path('module', 'dpsbridge').'/dpsbridge_view_credential.inc';
 		} else {
-			drupal_goto('adobe/views/access-denied');
+			drupal_goto('dpsbridge/views/access-denied');
 		}
 	}
 }

@@ -1,5 +1,5 @@
-<?php 
-	
+<?php
+
 require_once dirname(__FILE__).'/fp_config.php';
 $config = FPConfig::Instance();
 require_once dirname(__FILE__).'/fp_helper.php';
@@ -10,7 +10,7 @@ if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
 	$fp 				= new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
 	$folioName 			= isset($_POST["folioName"])?$_POST["folioName"]:'';
 	$magazineTitle 		= isset($_POST["magazineTitle"])?$_POST["magazineTitle"]:'';
-	$folioNumber 		= isset($_POST["folioNumber"])?$_POST["folioNumber"]:'';
+	$folio_number 		= isset($_POST["folioNumber"])?$_POST["folioNumber"]:'';
 	$folioDescription 	= isset($_POST["folioDescription"])?$_POST["folioDescription"]:'';
 	$publicationDate 	= isset($_POST["publicationDate"])?date('Y-m-d\TH:i:s',strtotime($_POST['publicationDate'])):'';
 	$dimension 			= isset($_POST["dimension"])?explode(' x ', $_POST["dimension"]):'';
@@ -32,11 +32,11 @@ if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
 	else if ($folioIntent == 'Always')
 		$folioIntent = 'Both';
 
-	if ($folioName && $magazineTitle && $folioNumber && $resolutionWidth && $resolutionHeight) {
+	if ($folioName && $magazineTitle && $folio_number && $resolutionWidth && $resolutionHeight) {
 		$params = array(
 			'folioName'			=> $folioName,
 			'magazineTitle'		=> $magazineTitle,
-			'folioNumber'		=> $folioNumber,
+			'folioNumber'		=> $folio_number,
 			'folioDescription'	=> $folioDescription,
 			'publicationDate'	=> $publicationDate,
 			'resolutionWidth'	=> $resolutionWidth,

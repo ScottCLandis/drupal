@@ -1,5 +1,5 @@
 <script>
-var apikey,            // Folio Producer API key
+var apikey,            // Folio Producer API key 
 	apisec,            // Folio Producer API secret
 	amazon_id,         // Amazon - Folio Producer user ID
 	amazon_pass,       // Amazon - Folio Producer user password
@@ -11,7 +11,7 @@ var apikey,            // Folio Producer API key
 	apple_pass,        // Apple - Folio Producer user password
 	apple_dimension,   // Apple - available dimensions
 	baseURL = "<?= $GLOBALS['base_url'] ?>",
-    pathToDir = "<?= drupal_get_path('module', 'adobe') ?>";
+    pathToDir = "<?= drupal_get_path('module', 'dpsbridge') ?>";
 /* =================================================== *
  * Given the account type,
  *   call helper to connect to Folio Producer,
@@ -67,7 +67,7 @@ function dps_credentials() {
 	var apple_target_dimension = helper_array_to_string(apple_dimension);
 
 	$.ajax({
-		url: baseURL+"/adobe/dps/credentials/add",
+		url: baseURL+"/dpsbridge/dps/credentials/add",
 		type: "POST",
 		data: { 
 			"apikey"           :apikey.val(),
@@ -94,7 +94,7 @@ function dps_credentials() {
  * Generate the form table via JQuery
  * ================================== */
 function generate_form_table() {
-	$('.view-adobe-dps-folio-module-config').append("");
+	$('.view-dpsbridge-dps-folio-module-config').append("");
 }
 /* ======================================== *
  * Load user credentaisl from the database,
@@ -102,31 +102,31 @@ function generate_form_table() {
  * ======================================== */
 function generate_form_table_values() {
 	$.ajax({
-		url: baseURL+"/adobe/dps/credentials/pull",
+		url: baseURL+"/dpsbridge/dps/credentials/pull",
 		type: "POST",
 		success: function(output) {
 			$('#apikey').val(output['apikey']);
 			$('#apisec').val(output['apisec']);
 			$('#amazon_id').val(output['amazon']['id']);
 			$('#amazon_pass').val(output['amazon']['pass']);
-			helper_generate_dimensions('amazon_dimension', output['amazon']['dimension'], true);
+			helper_generate_dimensions('amazon_dimension', output['amazon']['dimension'], TRUE);
 			$('#android_id').val(output['android']['id']);
 			$('#android_pass').val(output['android']['pass']);
-			helper_generate_dimensions('android_dimension', output['android']['dimension'], true);
+			helper_generate_dimensions('android_dimension', output['android']['dimension'], TRUE);
 			$('#apple_id').val(output['apple']['id']);
 			$('#apple_pass').val(output['apple']['pass']);
-			helper_generate_dimensions('apple_dimension', output['apple']['dimension'], true);
+			helper_generate_dimensions('apple_dimension', output['apple']['dimension'], TRUE);
 		}
 	})
 }
 /* ========================================================= *
  * Attempts to read the current available local stylesheets,
- *   The local storage folder is @ /adobe/styles.
+ *   The local storage folder is @ /dpsbridge/styles.
  * ========================================================= */
 function generate_form_table_stylesheet() {
 	var styleText = '';
 	$.ajax({
-		url: baseURL+"/adobe/stylesheet/read",
+		url: baseURL+"/dpsbridge/stylesheet/read",
 		type: "POST",
 		success: function(output) {
 			for (var i = 0; i < output.length; i++) {
@@ -310,7 +310,7 @@ $(function() {
 					helper_show_status("Cannot delete the stocked Bootstrap or Foundation stylesheet!");
 				} else {
 					// deletes the stylesheet from local directory
-					$.ajax({ url: baseURL+"/adobe/stylesheet/delete", type: "POST", data: {'filename':stylesheet} });
+					$.ajax({ url: baseURL+"/dpsbridge/stylesheet/delete", type: "POST", data: {'filename':stylesheet} });
 					// remove stylesheet from view
 					$("#style-"+stylesheet).remove();
 					$("#stylesheet-delete option[value="+stylesheet+"]").remove();

@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 require_once dirname(__FILE__).'/fp_library.php';
 
 /**
-* FolioProducer Helper 
+* FolioProducer Helper
 * R25
 * @dbeaton
 */
@@ -11,7 +11,7 @@ class FPHelper
 {
 	var $fp;
 	var $config;
-	
+
 	function __construct($email, $password, $consumer_key, $consumer_secret)
 	{
 		$this->fp = new FPLibrary(array(
@@ -37,70 +37,70 @@ class FPHelper
 	{
 		return $this->fp->request('DELETE', 'sessions');
 	}
-	public function create_folio($folioParams) 
+	public function create_folio($folioParams)
 	{
 		if (!isset($folioParams['folioName']))
 			throw new Exception('Folio parameters required');
 		return $this->fp->request('POST', 'folios', $folioParams);
 	}
-	public function delete_folio($folioID) 
+	public function delete_folio($folio_id)
 	{
-		if (!isset($folioID))
+		if (!isset($folio_id))
 			throw new Exception('Folio ID required');
-		return $this->fp->request('DELETE', 'folios/'.$folioID);
+		return $this->fp->request('DELETE', 'folios/'.$folio_id);
 	}
-	public function update_folio($folioID, $metadata) 
+	public function update_folio($folio_id, $metadata)
 	{
-		if (!isset($folioID) || !isset($metadata))
+		if (!isset($folio_id) || !isset($metadata))
 			throw new Exception('Folio ID and parameters required');
-		return $this->fp->request('POST', 'folios/'.$folioID, $metadata);
+		return $this->fp->request('POST', 'folios/'.$folio_id, $metadata);
 	}
 	/**
-	 * Metadata for either all folios or particular one 
+	 * Metadata for either all folios or particular one
 	 * Depending on whether folioID is set or not
-	 * @param  string $folioId 
+	 * @param  string $folio_id
 	 */
-	public function folios($folioID = '') 
+	public function folios($folio_id = '')
 	{
-		return $this->fp->request('GET', 'folios/'.$folioID);
+		return $this->fp->request('GET', 'folios/'.$folio_id);
 	}
-	public function articles($folioID)
+	public function articles($folio_id)
 	{
-		if (!isset($folioID) )
+		if (!isset($folio_id) )
 			throw new Exception('Folio ID required');
-		return $this->fp->request('GET', 'folios/'.$folioID.'/articles'.'?resultData="All"');
+		return $this->fp->request('GET', 'folios/'.$folio_id.'/articles'.'?resultData="All"');
 	}
-	public function update_article($folioID, $articleID, $metadata) 
+	public function update_article($folio_id, $article_id, $metadata)
 	{
-		if (!isset($folioID) || !isset($articleID) || !isset($metadata))
+		if (!isset($folio_id) || !isset($article_id) || !isset($metadata))
 			throw new Exception('Folio ID and parameters required');
-		return $this->fp->request('POST', 'folios/'.$folioID.'/articles/'.$articleID.'/metadata', $metadata);
+		return $this->fp->request('POST', 'folios/'.$folio_id.'/articles/'.$article_id.'/metadata', $metadata);
 	}
-	public function upload_article($folioID, $metadata, $filePath)
+	public function upload_article($folio_id, $metadata, $filePath)
 	{
-		if (!isset($folioID) || !isset($filePath) )
+		if (!isset($folio_id) || !isset($filePath) )
 			throw new Exception('Folio ID and File required');
-		return $this->fp->request('POST', 'folios/'.$folioID.'/articles/'/*.'?name='.$metadata['name']*/, $metadata, $filePath);
+		return $this->fp->request('POST', 'folios/'.$folio_id.'/articles/'/*.'?name='.$metadata['name']*/, $metadata, $filePath);
 	}
-	public function delete_article($folioID, $articleID) 
+	public function delete_article($folio_id, $article_id)
 	{
-		if (!isset($folioID) || !isset($articleID) )
+		if (!isset($folio_id) || !isset($article_id) )
 			throw new Exception('Folio ID and Article ID required');
-		return $this->fp->request('DELETE', 'folios/'.$folioID.'/articles/'.$articleID);
+		return $this->fp->request('DELETE', 'folios/'.$folio_id.'/articles/'.$article_id);
 	}
 
-	public function upload_htmlresources($folioID, $filePath)
+	public function upload_htmlresources($folio_id, $filePath)
 	{
-		if (!isset($folioID) || !isset($filePath) )
+		if (!isset($folio_id) || !isset($filePath) )
 			throw new Exception('Folio ID and File required');
-		return $this->fp->request('POST', 'folios/'.$folioID.'/htmlresources', '', $filePath);
+		return $this->fp->request('POST', 'folios/'.$folio_id.'/htmlresources', '', $filePath);
 	}
 
-	public function upload_cover($folioID, $orientation, $url)
+	public function upload_cover($folio_id, $orientation, $url)
 	{
-		if (!isset($folioID) || !isset($orientation) || !isset($url) )
+		if (!isset($folio_id) || !isset($orientation) || !isset($url) )
 			throw new Exception('Folio ID and File required');
-		return $this->fp->request('POST', 'folios/'.$folioID.'/previews/'.$orientation, '', $url);
+		return $this->fp->request('POST', 'folios/'.$folio_id.'/previews/'.$orientation, '', $url);
 	}
 }
 
