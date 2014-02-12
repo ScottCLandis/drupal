@@ -35,6 +35,7 @@ function helper_check_existence($article_id, $folio_node_array) {
  *   -> META-INF
  *      -> pkgproperties.xml
  *   Skip creation if already exists.
+ * 
  * @param string $filename
  *   Filtered Article name, used as folder and file name.
  */
@@ -75,7 +76,7 @@ function helper_credential_update($uid, $id, $pass, $dimension, $key, $secret) {
   $user = user_load($uid);
   if (!$id || !$pass) {
     user_delete($uid);
-  } 
+  }
   elseif (empty($user)) {
     $credentials = array(
       'uid' => $uid,
@@ -88,7 +89,7 @@ function helper_credential_update($uid, $id, $pass, $dimension, $key, $secret) {
       'signature_format' => $secret,
     );
     user_save('', $credentials);
-  } 
+  }
   else {
     $user->name = $id;
     $user->mail = $pass;
@@ -99,10 +100,13 @@ function helper_credential_update($uid, $id, $pass, $dimension, $key, $secret) {
     user_save((object) array('uid' => $uid), (array) $user);
   }
 }
+
 /**
- * Helper method for unzipping the given stylesheet,
- *   located in /dpsbridge/styles/[stylsheet name]/HTMLResources.zip,
+ * Helper method for unzipping the given stylesheet.
+ * 
+ * Located in /dpsbridge/styles/[stylsheet name]/HTMLResources.zip,
  *   and place it in /dpsbridge/html/HTMLResources/
+ * 
  * @param string $stylesheet
  *   Name of the stylesheet to unzip.
  */
@@ -120,6 +124,7 @@ function helper_extract_stylesheet($stylesheet) {
  * 
  * @param string $url
  *   Webpage URL.
+ * 
  * @return string 
  *   Containing the URL to the saved snapshot
  */
@@ -135,11 +140,11 @@ function helper_format_thumbnail($url) {
   }
 }
 /**
- * Helper method for formatting the given video url,
- *   parse and convert the video url to embedded video url.
+ * Helper method for formatting the given video url to embedded video url.
  * 
  * @param string $url
  *   Video URL.
+ * 
  * @return string
  *   Containing the embedded video URL.
  */
@@ -180,31 +185,34 @@ function helper_folio_append($fid, $articles) {
   node_save_action($folio);
 }
 /**
- * Helper method for formatting the given filename (aka article title),
- *   by removing any special characters.
+ * Helper method for removing any special chars from filename (article title).
  * 
- * @param string filename
+ * @param string $filename
  *   Article title, used as the folder name, folio name, and .html filename.
+ * @param string $replacement
+ *   Optional replacement char for the special chars.
+ * 
  * @return string
  *   Containing the formatted filename without any special characters.
  */
-function helper_format_title($filename, $replacement='') {
+function helper_format_title($filename, $replacement = '') {
   $noises = array('.', '?', ' ', ':', '/', ',', '\'');
   $formatted = str_replace($noises, $replacement, $filename);
   return $formatted;
 }
 /**
- * Helper method for generating the HTML article folder,
- *   make calls to the following:
- *      - helper_create_dir() ..............creates the HTML article structure
- *      - helper_writePKG() ................writes to the pkgproperties.xml file
- *      - helper_writeFolioXML() ...........writes to the Folio.xml file
- *      - helper_style_bootstrap_toc() .....table of contents page with Bootstrap layout
- *      - helper_style_bootstrap_cover() ...cover page with Bootstrap layout
- *      - helper_style_bootstrap() .........article page with Bootstrap layout
- *      - helper_style_foundation_toc() ....table of contents page with Foundation layout
- *      - helper_style_foundation_cover() ..cover page with Foundation layout
- *      - helper_style_foundation() ........article page with Foundation layout
+ * Helper method for generating the HTML article folder.
+ * 
+ * Make calls to the following:
+ *  - helper_create_dir() ............creates the HTML article structure
+ *  - helper_writePKG() ..............writes to the pkgproperties.xml file
+ *  - helper_writeFolioXML() .........writes to the Folio.xml file
+ *  - helper_style_bootstrap_toc() ...TOC page with Bootstrap layout
+ *  - helper_style_bootstrap_cover() .cover page with Bootstrap layout
+ *  - helper_style_bootstrap() .......article page with Bootstrap layout
+ *  - helper_style_foundation_toc() ..TOC page with Foundation layout
+ *  - helper_style_foundation_cover() cover page with Foundation layout
+ *  - helper_style_foundation() ......article page with Foundation layout
  * 
  * @param array $article_metadata
  *   A list of metadata fields pertaining to the article node.
@@ -214,17 +222,17 @@ function helper_format_title($filename, $replacement='') {
  *   A list of 0's and 1's, 1 for ads and 0 for not.
  * @param array $article_list
  *   A list of article names, used for generating the ToC
- * 
  */
-function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $article_list='') {
+function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $article_list = '') {
   // Filter the title to create the folder & filename.
   $filename = helper_format_title($article_metadata['title']);
   // Create the directory and its default files.
   helper_create_dir($filename);
   // Write to the PKGProperties.xml.
   helper_writepkg($filename);
+
   // Write to the Folio.xml.
-  helper_writeFolioXML(
+  helper_writefolioxml(
       // The title of the article.
       $article_metadata['title'],
       // The author of the article.
@@ -307,7 +315,7 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
         // Videos from the article.
         $article_metadata['video']
     );
-  } 
+  }
   else {
     // Generate the HTML article with Foundation stylesheet.
     helper_style_foundation(
@@ -321,8 +329,10 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
     );
   }
 }
+
 /**
- * Helper method for including the necessary stylesheet and javascript for each of the 3 view pages:
+ * Helper method for including the css/js for each of the 3 view pages.
+ * 
  *   - /fpconfig
  *   - /fpmanage
  *   - /fpselect
@@ -354,9 +364,9 @@ function helper_include_goodies($toggle) {
   }
 }
 /**
- * Helper method for saving the given image url,
- *   to the predefined image path (/dpsbridge/file_name/image.jpg),
- *   with the given image name.
+ * Helper method for saving the given image url, to the predefined image path.
+ * 
+ * (/dpsbridge/file_name/image.jpg), with the given image name.
  * 
  * @param string $filename
  *   Image URL.
@@ -369,6 +379,7 @@ function helper_link_img($filename, $images) {
   helper_save_img($images, $filename . '/' . $img_name);
   return $img_name;
 }
+
 /**
  * Helper method to pull the article node contents.
  * 
@@ -391,18 +402,20 @@ function helper_pull_article($node_id) {
   }
   return $container;
 }
+
 /**
- * Helper method for pulling the folio node contents and the designated user credentials.
+ * Helper method for pulling folio node contents and the user credentials.
  * 
  * @param string $node_id
  *   Folio node id.
  * @param string $toggle
- *    Toggle for pulling the account information.
+ *   Toggle for pulling the account information.
  * 
  * @return array 
  *   Containing the folio metadata.
  */
-function helper_pull_content($node_id, $toggle='') {
+function helper_pull_content($node_id, $toggle = '') {
+
   // Load folio metadata.
   $container = array();
   $node = node_load($node_id);
@@ -428,7 +441,8 @@ function helper_pull_content($node_id, $toggle='') {
   $container['status'] = isset($node->field_folio_status[$lang][0]['value']) ? $node->field_folio_status[$lang][0]['value'] : '';
   $container['uploadDate'] = isset($node->field_folio_producer_timestamp[$lang][0]['value']) ? $node->field_folio_producer_timestamp[$lang][0]['value'] : '';
   $container['alienated'] = isset($node->field_folio_producer_article_id[$lang][0]['value']) ? explode(',', $node->field_folio_producer_article_id[$lang][0]['value']) : '';
-  //Load user metadata.
+
+  // Load user metadata.
   $amazon  = user_load('341');
   $android = user_load('342');
   $apple   = user_load('343');
@@ -518,8 +532,7 @@ function helper_pull_node($node_id) {
   return $container;
 }
 /**
- * Helper method for checking if an article node reference 
- * already exist within the folio node.
+ * Helper method to check for article node ref exist within the folio node.
  * 
  * @param array  $container
  *   List of article node references that are currently within the folio node.
@@ -537,8 +550,7 @@ function helper_reference_check($container, $target, $lang) {
   return FALSE;
 }
 /**
- * Helper method for recursively removing 
- * all files & sub-directories within a given directory.
+ * Helper method to remove all files & subfolders within a directory.
  * 
  * @param string $directory
  *   Name of the directory to be deleted.
@@ -630,7 +642,7 @@ function helper_scale_img($img_url, $newwidth, $newheight, $orientation) {
  * @param string $orientation
  *   The article orientation, default to both orientations.
  */
-function helper_writeFolioXML($title, $author, $mag_title, $folio_num, $desc, $kicker, $tags, $is_ads, $version, $dimension, $orientation='Always') {
+function helper_writefolioxml($title, $author, $mag_title, $folio_num, $desc, $kicker, $tags, $is_ads, $version, $dimension, $orientation = 'Always') {
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
   $date = date('Y-m-d\TH:i:s');
   $filename = helper_format_title($title);
