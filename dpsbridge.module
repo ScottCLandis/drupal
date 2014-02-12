@@ -153,30 +153,29 @@ function dpsbridge_menu() {
 
 /**
  * Create/update the Folio Producer credentials in the database.
- * 
- * @param string $apikey .............folio Producer API Key
- * @param string $apisec .............folio Producer API Secret
- * @param string $amazon_id ..........Amazon Folio Producer login ID
- * @param string $amazon_pass ........Amazon Folio Producer login Password 
- * @param string $amazon_dimension ...Amazon Folio Producer target dimensions
- * @param string $android_id .........Android Folio Producer login ID
- * @param string $android_pass .......Android Folio Producer login password 
- * @param string $android_dimension ..Android Folio Producer target dimensions
- * @param string $apple_id ...........Apple Folio Producer login ID
- * @param string $apple_pass .........Apple Folio Producer login password 
- * @param string $apple_dimension ....Apple Folio Producer target dimensions
  */
 function dpsbridge_dps_credentials_add() {
+  // Folio Producer API Key.
   $apikey = isset($_POST['apikey']) ? $_POST['apikey'] : '';
+  // Folio Producer API Secret.
   $apisec = isset($_POST['apisec']) ? $_POST['apisec'] : '';
+  // Folio Producer Amazon Login.
   $amazon_id  = isset($_POST['amazon_id']) ? $_POST['amazon_id'] : '';
+  // Folio Producer Amazon Login Password.
   $amazon_pass  = isset($_POST['amazon_pass']) ? $_POST['amazon_pass'] : '';
+  // Folio Producer Amazon Target Dimensions.
   $amazon_dimension = isset($_POST['amazon_dimension']) ? $_POST['amazon_dimension'] : '';
+  // Folio Producer Android Login.
   $android_id = isset($_POST['android_id']) ? $_POST['android_id'] : '';
+  // Folio Producer Android Login Password.
   $android_pass = isset($_POST['android_pass']) ? $_POST['android_pass'] : '';
+  // Folio Producer Android Target Dimensions.
   $android_dimension  = isset($_POST['android_dimension']) ? $_POST['android_dimension'] : '';
+  // Folio Producer Apple Login.
   $apple_id = isset($_POST['apple_id']) ? $_POST['apple_id'] : '';
+  // Folio Producer Apple Login Password.
   $apple_pass = isset($_POST['apple_pass']) ? $_POST['apple_pass'] : '';
+  // Folio Producer Apple Target Dimensions.
   $apple_dimension  = isset($_POST['apple_dimension']) ? $_POST['apple_dimension'] : '';
   // Predefined ID number for each of the account types.
   $amazon_user  = '341';
@@ -194,8 +193,9 @@ function dpsbridge_dps_credentials_add() {
 /**
  * Pulls the stored Folio Producer credentials from the database.
  * 
- * @return array containing the user credentials and 
- * Folio Producer API's key and secret.
+ * @return array 
+ *   Array containing the user credentials and Folio Producer API's 
+ *   Key and Secret.
  */
 function dpsbridge_dps_credentials_pull() {
   // Loads each respective users.
@@ -203,7 +203,7 @@ function dpsbridge_dps_credentials_pull() {
   $android   = user_load('342');
   $apple     = user_load('343');
   $container = array();
-  
+
   $container['amazon']['id']  = isset($amazon->name) ? $amazon->name : '';
   $container['amazon']['pass']  = isset($amazon->mail) ? $amazon->mail : '';
   $amazon_dimension = isset($amazon->theme) ? $amazon->theme : '960 x 640,';
@@ -218,16 +218,17 @@ function dpsbridge_dps_credentials_pull() {
   $container['apple']['pass'] = isset($apple->mail) ? $apple->mail : '';
   $apple_dimension  = isset($apple->theme) ? $apple->theme : '480 x 320,1024 x 768,1136 x 640,2048 x 1536,';
   $container['apple']['dimension']  = explode(',', $apple_dimension);
-  
-  // Loads the API key and secret (each account, if exist, should hold the same API key and secret).
+
+  // Loads the API Key and Secret
+  // (each account, if exist, should hold the same API key and secret).
   if (!empty($amazon) && $amazon->signature && $amazon->signature_format) {
     $apikey = $amazon->signature;
     $apisec = $amazon->signature_format;
-  } 
+  }
   elseif (!empty($android) && $android->signature && $android->signature_format) {
     $apikey = $android->signature;
     $apisec = $android->signature_format;
-  } 
+  }
   elseif (!empty($apple) && $apple->signature && $apple->signature_format) {
     $apikey = $apple->signature;
     $apisec = $apple->signature_format;
@@ -239,23 +240,23 @@ function dpsbridge_dps_credentials_pull() {
 }
 /**
  * Creates a new folio node in the database with the given folio metadata.
- * @param string $fname .....folio name
- * @param string $fnumber ...folio number
- * @param string $pname .....folio publication name
- * @param string $pdate .....folio publication date
- * @param array  $articles ..articles within the folio node
  */
 function dpsbridge_folio_add() {
+  // Folio Name.
   $fname    = isset($_POST['fname']) ? $_POST['fname'] : '';
+  // Folio Number.
   $fnumber  = isset($_POST['fnumber']) ? $_POST['fnumber'] : '';
+  // Folio Publication Name.
   $pname    = isset($_POST['pname']) ? $_POST['pname'] : '';
+  // Folio Publication Date.
   $pdate    = isset($_POST['pdate']) ? $_POST['pdate'] : '';
+  // Articles within the Folio node.
   $articles = isset($_POST['articles']) ? $_POST['articles'] : '';
   $message  = 'ok';
   // If any of the above POST request are not met.
   if (!$fname || !$pname || !$fnumber || !$pdate || !$articles) {
     $message = '[Error] Missing folio name, publication name, folio number, publication date, and/or list of articles!';
-  } 
+  }
   else {
     $lang = 'und';
     // Creates the new node.
@@ -267,7 +268,7 @@ function dpsbridge_folio_add() {
     $folio->status = 1;
     $folio->promote = 0;
     $folio->sticky = 0;
-    $folio->created = timestamp;
+    $folio->created = TIMESTAMP;
     $folio->field_folio_product_id          = array($lang => array(array('value' => '')));
     $folio->field_folio_publication_name    = array($lang => array(array('value' => $pname)));
     $folio->field_folio_number              = array($lang => array(array('value' => $fnumber)));
@@ -290,7 +291,8 @@ function dpsbridge_folio_add() {
     $folio->field_folio_portrait_url        = array($lang => array(array('value' => '')));
     $folio->field_folio_producer_article_id = array($lang => array(array('value' => '')));
     node_save_action($folio);
-    // Calls helper method to update the folio-to-articles and articles-to-folio references.
+    // Calls helper method to update
+    // folio-to-articles and articles-to-folio references.
     helper_folio_append($folio->nid, $articles);
   }
   drupal_json_output($message);
@@ -298,19 +300,19 @@ function dpsbridge_folio_add() {
 }
 /**
  * Appends the given list of articles to an existing folio node.
- * @param string $fid .......folio node ID
- * @param array  $articles ..articles within the folio node
  */
 function dpsbridge_folio_append() {
+  // Folio node id.
   $fid      = isset($_POST['fid']) ? $_POST['fid'] : '';
+  // Articles within the Folio node.
   $articles = isset($_POST['articles']) ? $_POST['articles'] : '';
   $message  = 'ok';
-  // if any of the above POST request are not met
+  // If any of the above POST request are not met.
   if (!$fid || !$articles) {
     $message = '[Error] Missing folio node ID and/or list of articles!';
   } 
   else {
-    // Calls helper method to append the added articles to an existing folio node.
+    // Calls helper method to append the articles to an existing folio node.
     helper_folio_append($fid, $articles);
   }
   drupal_json_output($message);
@@ -319,9 +321,9 @@ function dpsbridge_folio_append() {
 /**
  * Attempts to remove the generated HTML Article folders and folio files,
  *   with the given list of file names.
- * @param string $filenames ..list of file names that were used to generate HTML Articles and .folio files
  */
 function dpsbridge_folio_cleanup() {
+  // List of file names that are used to generate HTML Articles and .folio files.
   $filenames = isset($_POST['filenames']) ? $_POST['filenames'] : '';
   $message  = 'ok';
   if (!$filenames) {
@@ -432,11 +434,11 @@ function dpsbridge_folio_article_delete() {
     $message = '[Error] Missing article or stylsesheet name!';
   }
   else {
-    $directory = drupal_get_path("module", "dpsbridge").'/html/';
+    $directory = drupal_get_path("module", "dpsbridge") . '/html/';
     // Calls helper to recursively remove the generated HTML article folder.
-    helper_rrmdir($directory.$filename);
+    helper_rrmdir($directory . $filename);
     // Calls helper to recursively remove the unzipped HTML resources folder.
-    helper_rrmdir($directory.'HTMLResources');
+    helper_rrmdir($directory . 'HTMLResources');
   }
   drupal_json_output($message);
   drupal_exit();
@@ -458,12 +460,12 @@ function dpsbridge_folio_generate_folios() {
       // Locations of the targeted HTML article folder to the designated .folio file.
       $filename    = helper_format_title($filenames[$i]);
       $directory   = drupal_get_path('module', 'dpsbridge');
-      $source      = $directory.'/html/'.$filename;
-      $destination = $directory.'/folio/'.$filename.".folio";
+      $source      = $directory . '/html/' . $filename;
+      $destination = $directory . '/folio/' . $filename . ".folio";
       // Commands to zip up the HTML article folder.
-      $zip_mtype = "zip -r -j ".$destination." ".$source."/mimetype"; 
-      $zip_xml   = "zip -r -j ".$destination." ".$source."/Folio.xml"; 
-      $zip_rest  = "zip -r -j ".$destination." ".$source."/*";
+      $zip_mtype = "zip -r -j " . $destination . " " . $source . "/mimetype"; 
+      $zip_xml   = "zip -r -j " . $destination . " " . $source . "/Folio.xml"; 
+      $zip_rest  = "zip -r -j " . $destination . " " . $source . "/*";
       // Linux built-in zipper.
       exec($zip_mtype);
       exec($zip_xml);
@@ -571,13 +573,13 @@ function dpsbridge_folio_generate_selected_html() {
     }
     // Returns the path to the generated html stack .zip file.
     $message['filename'] = 'html_stacks';
-    $message['destination'] = $current_dir.'/folio/html_stacks.zip';
+    $message['destination'] = $current_dir . '/folio/html_stacks.zip';
     // Zip up all the generated HTML article .zip files via Linux built-in zipper.
-    $zipper  = "cd ".$current_dir." && zip -r folio/html_stacks.zip html/*";
+    $zipper  = "cd " . $current_dir . " && zip -r folio/html_stacks.zip html/*";
     exec($zipper);
     // Delete the generated HTML article folders.
     for ($n = 0; $n < count($filenames); $n++) {
-      helper_rrmdir($current_dir.'/html/'.$filenames[$n]);
+      helper_rrmdir($current_dir . '/html/' . $filenames[$n]);
     }
   }
   drupal_json_output($message);
@@ -608,9 +610,9 @@ function dpsbridge_folio_download_selected() {
       header("Cache-Control :  private", FALSE);
       header("Content-Description :  File Transfer");
       header("Content-type :  application/zip");
-      header("Content-Disposition :  attachment; filename=\"".$filename.".zip\"");
+      header("Content-Disposition :  attachment; filename=\"" . $filename . ".zip\"");
       header("Content-Transfer-Encoding :  binary");
-      header("Content-Length :  ".filesize($destination));
+      header("Content-Length :  " . filesize($destination));
         ob_clean(); 
         flush(); 
       readfile($destination);
@@ -632,13 +634,18 @@ function dpsbridge_folio_pull_accounts() {
   $account     = $folio_node->field_folio_producer_accounts['und'][0]['value'];
   $container   = array();
   switch ($account) {
-    case 'amazon': 
-      $user_id = '341'; $type = 'Amazon'; break;
-    case 'android': 
-      $user_id = '342'; $type = 'Android'; break;
+    case 'amazon':
+      $user_id = '341'; $type = 'Amazon';
+      break;
+
+    case 'android':
+      $user_id = '342'; $type = 'Android';
+      break;
+
     case 'apple':
     default:
-      $user_id = '343'; $type = 'Apple'; break;
+      $user_id = '343'; $type = 'Apple';
+      break;
   }
   $user = user_load($user_id);
   // If any of the user info are missing.
@@ -647,28 +654,28 @@ function dpsbridge_folio_pull_accounts() {
   }
   else { // Load folio metadata and account metadata if user info are available.
     $container['message'] = 'ok';
-    $container['account']['type']	   = $type;
-    $container['account']['adobeID']   = $user->name;
-    $container['account']['password']  = $user->mail;
-    $container['account']['apiKey']    = $user->signature;
+    $container['account']['type'] = $type;
+    $container['account']['adobeID'] = $user->name;
+    $container['account']['password'] = $user->mail;
+    $container['account']['apiKey'] = $user->signature;
     $container['account']['apiSecret'] = $user->signature_format;
     $lang = $folio_node->language;
     $container['folioMeta']['folioNodeID'] = $folio_node_id;
-    $container['folioMeta']['folioName']   = $folio_node->title;
-    $container['folioMeta']['productID']   = $folio_node->field_folio_product_id[$lang][0]['value'];
-    $container['folioMeta']['magTitle']    = $folio_node->field_folio_publication_name[$lang][0]['value'];
-    $container['folioMeta']['folioNum']    = $folio_node->field_folio_number[$lang][0]['value'];
-    $container['folioMeta']['folioDesc']   = $folio_node->field_folio_description[$lang][0]['value'];  
-    $container['folioMeta']['pubDate']     = $folio_node->field_folio_published_date[$lang][0]['value'];
-    $container['folioMeta']['alienated']   = explode(',', $folio_node->field_folio_producer_article_id[$lang][0]['value']);
-    $container['folioMeta']['dimension']   = $folio_node->field_folio_dimension[$lang][0]['value'];
+    $container['folioMeta']['folioName'] = $folio_node->title;
+    $container['folioMeta']['productID'] = $folio_node->field_folio_product_id[$lang][0]['value'];
+    $container['folioMeta']['magTitle'] = $folio_node->field_folio_publication_name[$lang][0]['value'];
+    $container['folioMeta']['folioNum'] = $folio_node->field_folio_number[$lang][0]['value'];
+    $container['folioMeta']['folioDesc'] = $folio_node->field_folio_description[$lang][0]['value'];  
+    $container['folioMeta']['pubDate'] = $folio_node->field_folio_published_date[$lang][0]['value'];
+    $container['folioMeta']['alienated'] = explode(',', $folio_node->field_folio_producer_article_id[$lang][0]['value']);
+    $container['folioMeta']['dimension'] = $folio_node->field_folio_dimension[$lang][0]['value'];
     $container['folioMeta']['orientation'] = $folio_node->field_folio_orientation[$lang][0]['value'];
-    $container['folioMeta']['viewer']      = $folio_node->field_folio_viewer_version[$lang][0]['value'];
-    $container['folioMeta']['filter']      = $folio_node->field_folio_library_filter[$lang][0]['value'];
-    $container['folioMeta']['status']      = $folio_node->field_folio_status[$lang][0]['value'];
-    $container['folioMeta']['stylesheet']  = $folio_node->field_folio_publication_css[$lang][0]['value'];
-    $container['folioMeta']['landscape']   = $folio_node->field_folio_landscape_url[$lang][0]['value'];
-    $container['folioMeta']['portrait']    = $folio_node->field_folio_portrait_url[$lang][0]['value'];
+    $container['folioMeta']['viewer'] = $folio_node->field_folio_viewer_version[$lang][0]['value'];
+    $container['folioMeta']['filter'] = $folio_node->field_folio_library_filter[$lang][0]['value'];
+    $container['folioMeta']['status'] = $folio_node->field_folio_status[$lang][0]['value'];
+    $container['folioMeta']['stylesheet'] = $folio_node->field_folio_publication_css[$lang][0]['value'];
+    $container['folioMeta']['landscape'] = $folio_node->field_folio_landscape_url[$lang][0]['value'];
+    $container['folioMeta']['portrait'] = $folio_node->field_folio_portrait_url[$lang][0]['value'];
   }
   drupal_json_output($container);
   drupal_exit();
@@ -737,7 +744,8 @@ function dpsbridge_folio_update() {
   // if any of the above POST request are not met
   if (!$fid || !$fname || !$fnumber || !$pdate || !$pname || !$pubcss || !$accounts || !$articles) {
     $message = '[Error] Missing folio node ID, folio name, publication name, folio number, publication date, publication stylesheet, ToC stylesheet, target dimension, or list of articles!';
-  } else {
+  } 
+  else {
     $node = node_load($fid);
     $lang = $node->language;
     $node->title = $fname;
@@ -764,7 +772,7 @@ function dpsbridge_folio_update() {
       } 
       elseif (strlen($articles[$i]) > 10) {
         $node->field_folio_reference[$lang][$i]['target_id'] = $fid;
-        $alienated .= $articles[$i].",";
+        $alienated .= $articles[$i] . ",";
       }
       else {
         $node->field_folio_reference[$lang][$i]['target_id'] = $articles[$i];
@@ -854,7 +862,7 @@ function dpsbridge_img_upload() {
     if ($landscape && !$landscape['error']) { 
       $landscape_fn  = $landscape['name'];
       $landscape_url = $landscape['tmp_name'];
-      $landscape_path = drupal_get_path('module', 'dpsbridge').'/images/landscape/'.helper_format_title($fname).'_'.$landscape_fn;
+      $landscape_path = drupal_get_path('module', 'dpsbridge') . '/images/landscape/' . helper_format_title($fname) . '_' . $landscape_fn;
       //$landscapeFake = '/sites/all/modules/dpsbridge/images/landscape/'.helper_format_title($fname).'_'.$landscape_fn;
       move_uploaded_file($landscape_url, $landscape_path);
       $node->field_folio_landscape_url['und'][0]['value'] = $landscape_path;
@@ -862,7 +870,7 @@ function dpsbridge_img_upload() {
     if ($portrait && !$portrait['error']) { 
       $portrait_fn  = $portrait['name'];
       $portrait_url = $portrait['tmp_name'];
-      $portrait_path = drupal_get_path('module', 'dpsbridge').'/images/portrait/'.helper_format_title($fname).'_'.$portrait_fn;
+      $portrait_path = drupal_get_path('module', 'dpsbridge') . '/images/portrait/' . helper_format_title($fname) . '_' . $portrait_fn;
       //$portraitFake = '/sites/all/modules/dpsbridge/images/portrait/'.helper_format_title($fname).'_'.$portrait_fn;
       move_uploaded_file($portrait_url, $portrait_path);
       $node->field_folio_portrait_url['und'][0]['value'] = $landscape_path;
@@ -879,7 +887,7 @@ function dpsbridge_img_upload() {
  */
 function dpsbridge_stylesheet_reader() {
   $stylesheets = array();
-  $directory = new DirectoryIterator(dirname(__FILE__).'/styles');
+  $directory = new DirectoryIterator(dirname(__FILE__) . '/styles');
   foreach ($directory as $file)
     if (!$file->isDot() && $file->getFilename() !== '.DS_Store' && $file->getFilename() !== 'HTMLResources')
       array_push($stylesheets, $file->getFilename());
@@ -901,8 +909,8 @@ function dpsbridge_stylesheet_delete() {
     $message = '[Denied] Cannot delete the stocked Bootstrap or Foundation stylesheet!';
   }
   else {
-    $directory = drupal_get_path('module', 'dpsbridge').'/styles/';
-    helper_rrmdir($directory.$filename);
+    $directory = drupal_get_path('module', 'dpsbridge') . '/styles/';
+    helper_rrmdir($directory . $filename);
   }
   drupal_json_output($message);
   drupal_exit();
@@ -926,9 +934,9 @@ function dpsbridge_stylesheet_upload() {
     $message = '[Denied]-Cannot override the stocked Bootstrap or Foundation stylesheet!';
   }
   else {
-    $directory = drupal_get_path('module', 'dpsbridge').'/styles/'.$derivative.'-'.$filename;
+    $directory = drupal_get_path('module', 'dpsbridge') . '/styles/' . $derivative . '-' . $filename;
     mkdir($directory);
-    $destination = $directory.'/HTMLResources.zip';
+    $destination = $directory . '/HTMLResources.zip';
     move_uploaded_file($zipfile['tmp_name'], $destination);
     $message .= $filename;
   }
@@ -989,7 +997,7 @@ function dpsbridge_permission() {
 }
 /* Implements hook_theme() */
 function dpsbridge_theme() {
-  return array (
+  return array(
     'dpsbridge' => array(
       'template' => 'dpsbridge',
       'arguments' => array(),

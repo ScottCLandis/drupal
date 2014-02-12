@@ -311,9 +311,11 @@ function helper_include_goodies($toggle) {
     case 'config': // for the configuration page
       require_once(drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_credential_fn.inc');
       break;
+
     case 'manage': // for the management page
       require_once(drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_manage_fn.inc');
       break;
+
     case 'select': // for the selection page
       require_once(drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_select_fn.inc');
       break;
@@ -352,7 +354,7 @@ function helper_pull_article($node_id) {
     $container['tags']      = isset($node->field_tags) ? $node->field_tags : '';
     $container['type']      = isset($node->type) ? $node->type : '';
     $container['modified']  = isset($node->changed) ? gmdate("m/d/Y - H:i", $node->changed) : '';
-    $container['timestamp'] = isset($node->changed) ? date('Y-m-d\TH:i:s',$node->changed) : '';
+    $container['timestamp'] = isset($node->changed) ? date('Y-m-d\TH:i:s', $node->changed) : '';
   }
   return $container;
 }
@@ -365,55 +367,57 @@ function helper_pull_article($node_id) {
 function helper_pull_content($node_id, $toggle='') {
   // Load folio metadata.
   $container = array();
-  $node      = node_load($node_id);
-  $lang 	   = $node->language;
-  $container['title']       = isset($node->title) ? $node->title : '';
-  $container['pubID']       = isset($node->field_folio_product_id[$lang][0]['value']) ? $node->field_folio_product_id[$lang][0]['value'] : '';
-  $container['pubName']     = isset($node->field_folio_publication_name[$lang][0]['value']) ? $node->field_folio_publication_name[$lang][0]['value'] : '';
-  $container['folioNum']    = isset($node->field_folio_number[$lang][0]['value']) ? $node->field_folio_number[$lang][0]['value'] : '';
-  $container['pubDate']     = isset($node->field_folio_published_date[$lang][0]['value']) ? $node->field_folio_published_date[$lang][0]['value'] : '';
-  $container['folioDesc']   = isset($node->field_folio_description[$lang][0]['value']) ? $node->field_folio_description[$lang][0]['value'] : '';
-  $container['folioVer']    = isset($node->field_folio_viewer_version[$lang][0]['value']) ? $node->field_folio_viewer_version[$lang][0]['value'] : '';
-  $container['accounts']    = isset($node->field_folio_producer_accounts[$lang][0]['value']) ? $node->field_folio_producer_accounts[$lang][0]['value'] : '';
-  $container['pubCSS']      = isset($node->field_folio_publication_css[$lang][0]['value']) ? $node->field_folio_publication_css[$lang][0]['value'] : '';
-  $container['tocCSS']      = isset($node->field_folio_toc_layout[$lang][0]['value']) ? $node->field_folio_toc_layout[$lang][0]['value'] : '';
-  $container['dimension']   = isset($node->field_folio_dimension[$lang][0]['value']) ? $node->field_folio_dimension[$lang][0]['value'] : '';
+  $node = node_load($node_id);
+  $lang = $node->language;
+  $container['title'] = isset($node->title) ? $node->title : '';
+  $container['pubID'] = isset($node->field_folio_product_id[$lang][0]['value']) ? $node->field_folio_product_id[$lang][0]['value'] : '';
+  $container['pubName'] = isset($node->field_folio_publication_name[$lang][0]['value']) ? $node->field_folio_publication_name[$lang][0]['value'] : '';
+  $container['folioNum'] = isset($node->field_folio_number[$lang][0]['value']) ? $node->field_folio_number[$lang][0]['value'] : '';
+  $container['pubDate'] = isset($node->field_folio_published_date[$lang][0]['value']) ? $node->field_folio_published_date[$lang][0]['value'] : '';
+  $container['folioDesc'] = isset($node->field_folio_description[$lang][0]['value']) ? $node->field_folio_description[$lang][0]['value'] : '';
+  $container['folioVer'] = isset($node->field_folio_viewer_version[$lang][0]['value']) ? $node->field_folio_viewer_version[$lang][0]['value'] : '';
+  $container['accounts'] = isset($node->field_folio_producer_accounts[$lang][0]['value']) ? $node->field_folio_producer_accounts[$lang][0]['value'] : '';
+  $container['pubCSS'] = isset($node->field_folio_publication_css[$lang][0]['value']) ? $node->field_folio_publication_css[$lang][0]['value'] : '';
+  $container['tocCSS'] = isset($node->field_folio_toc_layout[$lang][0]['value']) ? $node->field_folio_toc_layout[$lang][0]['value'] : '';
+  $container['dimension'] = isset($node->field_folio_dimension[$lang][0]['value']) ? $node->field_folio_dimension[$lang][0]['value'] : '';
   $container['orientation'] = isset($node->field_folio_orientation[$lang][0]['value']) ? $node->field_folio_orientation[$lang][0]['value'] : '';
-  $container['isAds']       = isset($node->field_folio_ads_filter[$lang][0]['value']) ? explode(',', $node->field_folio_ads_filter[$lang][0]['value']) : '';
-  $container['filter']      = isset($node->field_folio_library_filter[$lang][0]['value']) ? $node->field_folio_library_filter[$lang][0]['value'] : '';
-  $container['articles']    = isset($node->field_folio_reference[$lang]) ? $node->field_folio_reference[$lang] : '';
-  $container['landscape']   = isset($node->field_folio_landscape_url[$lang][0]['value']) ? $node->field_folio_landscape_url[$lang][0]['value'] : '';
-  $container['portrait']    = isset($node->field_folio_portrait_url[$lang][0]['value']) ? $node->field_folio_portrait_url[$lang][0]['value'] : '';
-  $container['autoToggle']  = isset($node->field_folio_auto_generate[$lang][0]['value']) ? $node->field_folio_auto_generate[$lang][0]['value'] : '';
-  $container['status']      = isset($node->field_folio_status[$lang][0]['value']) ? $node->field_folio_status[$lang][0]['value'] : '';
-  $container['uploadDate']  = isset($node->field_folio_producer_timestamp[$lang][0]['value']) ? $node->field_folio_producer_timestamp[$lang][0]['value'] : '';
-  $container['alienated']   = isset($node->field_folio_producer_article_id[$lang][0]['value']) ? explode(',', $node->field_folio_producer_article_id[$lang][0]['value']) : '';
+  $container['isAds'] = isset($node->field_folio_ads_filter[$lang][0]['value']) ? explode(',', $node->field_folio_ads_filter[$lang][0]['value']) : '';
+  $container['filter'] = isset($node->field_folio_library_filter[$lang][0]['value']) ? $node->field_folio_library_filter[$lang][0]['value'] : '';
+  $container['articles'] = isset($node->field_folio_reference[$lang]) ? $node->field_folio_reference[$lang] : '';
+  $container['landscape'] = isset($node->field_folio_landscape_url[$lang][0]['value']) ? $node->field_folio_landscape_url[$lang][0]['value'] : '';
+  $container['portrait'] = isset($node->field_folio_portrait_url[$lang][0]['value']) ? $node->field_folio_portrait_url[$lang][0]['value'] : '';
+  $container['autoToggle'] = isset($node->field_folio_auto_generate[$lang][0]['value']) ? $node->field_folio_auto_generate[$lang][0]['value'] : '';
+  $container['status'] = isset($node->field_folio_status[$lang][0]['value']) ? $node->field_folio_status[$lang][0]['value'] : '';
+  $container['uploadDate'] = isset($node->field_folio_producer_timestamp[$lang][0]['value']) ? $node->field_folio_producer_timestamp[$lang][0]['value'] : '';
+  $container['alienated'] = isset($node->field_folio_producer_article_id[$lang][0]['value']) ? explode(',', $node->field_folio_producer_article_id[$lang][0]['value']) : '';
   //Load user metadata.
   $amazon  = user_load('341');
   $android = user_load('342');
   $apple   = user_load('343');
-  $container['amazonDimensions']  = isset($amazon->theme) ? explode(',', $amazon->theme) : explode(',', '960 x 640,');
+  $container['amazonDimensions'] = isset($amazon->theme) ? explode(',', $amazon->theme) : explode(',', '960 x 640,');
   $container['androidDimensions'] = isset($android->theme) ? explode(',', $android->theme) : explode(',', '960 x 640,');
-  $container['appleDimensions']   = isset($apple->theme) ? explode(',', $apple->theme) : explode(',', '480 x 320,1024 x 768,1136 x 640,2048 x 1536,');
+  $container['appleDimensions'] = isset($apple->theme) ? explode(',', $apple->theme) : explode(',', '480 x 320,1024 x 768,1136 x 640,2048 x 1536,');
   if ($toggle == 'sync') {
     switch ($container['accounts']) {
       case 'amazon':
-        $container['credentials']['adobeID']   = $amazon->name;
-        $container['credentials']['password']  = $amazon->mail;
-        $container['credentials']['apiKey']    = $amazon->signature;
+        $container['credentials']['adobeID'] = $amazon->name;
+        $container['credentials']['password'] = $amazon->mail;
+        $container['credentials']['apiKey'] = $amazon->signature;
         $container['credentials']['apiSecret'] = $amazon->signature_format;
         break;
+
       case 'android':
-        $container['credentials']['adobeID']   = $android->name;
-        $container['credentials']['password']  = $android->mail;
-        $container['credentials']['apiKey']    = $android->signature;
+        $container['credentials']['adobeID'] = $android->name;
+        $container['credentials']['password'] = $android->mail;
+        $container['credentials']['apiKey'] = $android->signature;
         $container['credentials']['apiSecret'] = $android->signature_format;
         break;
+
       case 'apple':
       default:
-        $container['credentials']['adobeID']   = $apple->name;
-        $container['credentials']['password']  = $apple->mail;
-        $container['credentials']['apiKey']    = $apple->signature;
+        $container['credentials']['adobeID'] = $apple->name;
+        $container['credentials']['password'] = $apple->mail;
+        $container['credentials']['apiKey'] = $apple->signature;
         $container['credentials']['apiSecret'] = $apple->signature_format;
         break;
     }
@@ -446,20 +450,20 @@ function helper_pull_node($node_id) {
   if (isset($node->field_tags['und']))
     for ($i = 0; $i < count($node->field_tags['und']); $i++)
       if (isset($node->field_tags['und'][$i]['tid']))
-        $tags .= (taxonomy_term_load($node->field_tags['und'][$i]['tid'])->name).', ';
+        $tags .= (taxonomy_term_load($node->field_tags['und'][$i]['tid'])->name) . ', ';
   $container['author'] = isset($node->field_folio_byline['und'][0]['value']) ? $node->field_folio_byline['und'][0]['value'] : $node->name;
-  $container['title']	 = isset($node->title) ? $node->title : '';
-  $container['desc']	 = isset($node->field_intro) ? $node->field_intro['und'][0]['value'] : '';
+  $container['title']	= isset($node->title) ? $node->title : '';
+  $container['desc'] = isset($node->field_intro) ? $node->field_intro['und'][0]['value'] : '';
   $container['kicker'] = '';
-  $container['tags']   = ($tags != false) ? substr($tags, 0, -2) : '';
-  $container['title']  = isset($node->title) ? $node->title : '';
-  $container['body']   = isset($node->body) ? $node->body : '';
-  $container['image']  = isset($images[0]) ? $images : '';
-  $container['video']  = isset($node->field_video['und'][0]['video_url']) ? $node->field_video['und'][0]['video_url'] : '';
+  $container['tags'] = ($tags != FALSE) ? substr($tags, 0, -2) : '';
+  $container['title'] = isset($node->title) ? $node->title : '';
+  $container['body'] = isset($node->body) ? $node->body : '';
+  $container['image'] = isset($images[0]) ? $images : '';
+  $container['video'] = isset($node->field_video['und'][0]['video_url']) ? $node->field_video['und'][0]['video_url'] : '';
   // Loads the taxonomy term.
   if (isset($node->field_topic['und'][0]['tid'])) {
-    $tid                 = $node->field_topic['und'][0]['tid'];
-    $taxonomy            = taxonomy_term_load($tid);
+    $tid = $node->field_topic['und'][0]['tid'];
+    $taxonomy = taxonomy_term_load($tid);
     $container['kicker'] = $taxonomy->name;
   }
   return $container;
@@ -481,7 +485,7 @@ function helper_reference_check($container, $target, $lang) {
  * @param string $directory ..name of the directory to be deleted
  */
 function helper_rrmdir($directory) {
-  foreach(glob($directory . '/*') as $item) {
+  foreach (glob($directory . '/*') as $item) {
     if (is_dir($item))
       helper_rrmdir($item);
     else
@@ -542,12 +546,12 @@ function helper_scale_img($img_url, $newwidth, $newheight, $orientation) {
  */
 function helper_writeFolioXML($title, $author, $mag_title, $folio_num, $desc, $kicker, $tags, $is_ads, $version, $dimension, $orientation='Always') {
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
-  $date      = date('Y-m-d\TH:i:s');
-  $filename  = helper_format_title($title);
-  $targeted  = explode(' x ', $dimension);
-  $width     = $targeted[1];
-  $height    = $targeted[0];
-  $is_ads     = ($is_ads == TRUE) ? 'true' : 'false';
+  $date = date('Y-m-d\TH:i:s');
+  $filename = helper_format_title($title);
+  $targeted = explode(' x ', $dimension);
+  $width = $targeted[1];
+  $height = $targeted[0];
+  $is_ads = ($is_ads == TRUE) ? 'true' : 'false';
 
   // Generate the content of the Folio.xml.
   $xml  = "<?xml version='1.0' encoding='UTF-8'?>\n";
@@ -606,7 +610,7 @@ function helper_writeFolioXML($title, $author, $mag_title, $folio_num, $desc, $k
  * @param string $filename ..same as the article name
  */
 function helper_writePKG($filename) {
-  $directory   = drupal_get_path('module', 'dpsbridge').'/html/';
+  $directory   = drupal_get_path('module', 'dpsbridge') . '/html/';
   $current_date = date('Y-m-d\TH:i:s');
   // Generate the content of the pkgproperties.xml.
   $pkg  = "<?xml version='1.0' encoding='UTF-8'?>\n";
@@ -626,5 +630,3 @@ function helper_writePKG($filename) {
   $pkg .= "</pkgProperties>\n";
   file_put_contents($directory . $filename . '/META-INF/pkgproperties.xml', $pkg);
 }
-
-?>

@@ -78,12 +78,12 @@ function _dpsbridge_install_article_fields() {
     'field_folio_byline' => array(
       'field_name' => 'field_folio_byline',
       'label' => $t('Article Byline'),
-      'type' => 'text' ),
+      'type' => 'text'),
     'field_article_reference' => array(
       'field_name' => 'field_article_reference',
       'label' => $t('Article Reference'),
       'cardinality' => FIELD_CARDINALITY_UNLIMITED,
-      'type' => 'entityreference' ),
+      'type' => 'entityreference'),
   );
 }
 
@@ -95,22 +95,26 @@ function _dpsbridge_installed_article_instances() {
       'label' => $t('Article Byline'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Article Author(s)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_article_reference' => array(
       'field_name' => 'field_article_reference',
       'label' => $t('Article Reference'),
       'cardinality' => FIELD_CARDINALITY_UNLIMITED,
       'type' => 'entityreference',
       'widget' => array(
-        'type' => 'autocomplete' ),
+        'type' => 'autocomplete'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Article Reference'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
   );
 }
 
