@@ -70,11 +70,11 @@ class FPHelper
 			throw new Exception('Folio ID required');
 		return $this->fp->request('GET', 'folios/'.$folio_id.'/articles'.'?resultData="All"');
 	}
-	public function update_article($folio_id, $article_id, $metadata)
+	public function update_article($folio_id, $articleID, $metadata)
 	{
-		if (!isset($folio_id) || !isset($article_id) || !isset($metadata))
+		if (!isset($folio_id) || !isset($articleID) || !isset($metadata))
 			throw new Exception('Folio ID and parameters required');
-		return $this->fp->request('POST', 'folios/'.$folio_id.'/articles/'.$article_id.'/metadata', $metadata);
+		return $this->fp->request('POST', 'folios/'.$folio_id.'/articles/'.$articleID.'/metadata', $metadata);
 	}
 	public function upload_article($folio_id, $metadata, $filePath)
 	{
@@ -82,11 +82,11 @@ class FPHelper
 			throw new Exception('Folio ID and File required');
 		return $this->fp->request('POST', 'folios/'.$folio_id.'/articles/'/*.'?name='.$metadata['name']*/, $metadata, $filePath);
 	}
-	public function delete_article($folio_id, $article_id)
+	public function delete_article($folio_id, $articleID)
 	{
-		if (!isset($folio_id) || !isset($article_id) )
+		if (!isset($folio_id) || !isset($articleID) )
 			throw new Exception('Folio ID and Article ID required');
-		return $this->fp->request('DELETE', 'folios/'.$folio_id.'/articles/'.$article_id);
+		return $this->fp->request('DELETE', 'folios/'.$folio_id.'/articles/'.$articleID);
 	}
 
 	public function upload_htmlresources($folio_id, $filePath)

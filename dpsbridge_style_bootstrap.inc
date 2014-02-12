@@ -154,7 +154,7 @@ function helper_style_bootstrap($publication, $title, $author, $kicker, $body, $
     $slideshow .= "<div id='imageArea' class='col-lg-6 col-12'>\n";
     // if there are only one image
     if (count($images) == 1) { 
-      $slideshow .= "<img src='" . helper_link_img($filename, $images[0]) . "' width='100%' /><br/>\n";
+      $slideshow .= "<img src='" . helper_linkImg($filename, $images[0]) . "' width='100%' /><br/>\n";
     }
     else { // creates a slideshow if there are multiple images
       $slideshow .= "<div id='carousel-generic' class='carousel slide'>\n";
@@ -166,7 +166,7 @@ function helper_style_bootstrap($publication, $title, $author, $kicker, $body, $
         $slideshow .= "<li data-target='#carousel-generic' data-slide-to='" . $q . "' class='" . $active . "'></li>\n";
         // build the wrapper
         $wrapper .= "<div class='item " . $active . "'>\n";
-        $wrapper .= "<img src='" . helper_link_img($filename, $images[$q]) . "' alt=''>\n";
+        $wrapper .= "<img src='" . helper_linkImg($filename, $images[$q]) . "' alt=''>\n";
         $wrapper .= "<div class='carousel-caption'>Some Caption Here</div>\n";
         $wrapper .= "</div>\n";
         $active   = "";
