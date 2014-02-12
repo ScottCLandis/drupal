@@ -1,0 +1,575 @@
+<?php
+/**
+ * Helper method to check if an article already exists within the selected folio ndoe.
+ *   Loops through the existing articles in the folio node.
+ * @param string $articleID .......article node ID
+ * @param array  $folioNodeArray ..array containing a list of article node ID's
+ */
+function helper_check_existence($articleID, $folioNodeArray) {
+	for ($i = 0; $i < sizeof($folioNodeArray); $i++)
+		if ($articleID == $folioNodeArray[$i]['target_id'])
+			return true;
+	return false;
+}
+/**
+ * Helper method for creating the Folio structure:
+ *   directory [filename]
+ *   -> Folio.xml
+ *   -> [filename].html
+ *   -> mimetype
+ *   -> META-INF
+ *      -> pkgproperties.xml
+ *   Skip creation if already exists.
+ * @param string $filename ..filtered Article name, used as folder and file name
+ */
+function helper_create_dir($filename) {
+	$directory = drupal_get_path('module', 'adobe').'/html/';
+	if (!file_exists($directory.'/'.$filename)) {
+	    mkdir($directory.$filename);
+	    mkdir($directory.$filename.'/META-INF');
+	    $FolioXML    = fopen($directory.$filename.'/Folio.xml', 'w+');
+	    $IndexHTML   = fopen($directory.$filename.'/'.$filename.'.html', 'w+');
+	    $mimetype    = fopen($directory.$filename.'/mimetype', 'w+');
+	    $metadata    = fopen($directory.$filename.'/META-INF/pkgproperties.xml', 'w+');
+	    $mimecontent = "application/vnd.adobe.folio+zip";
+	    file_put_contents($directory.$filename.'/mimetype', $mimecontent);
+	    fclose($FolioXML);
+	    fclose($IndexHTML);
+	    fclose($mimetype);
+	    fclose($metadata);
+	}
+}
+/**
+ * Helper method for saving the Adobe DPS credentials as a Drupal 7 user.
+ * @param string $uid ........Drupal 7 user ID
+ * @param string $id .........Adobe DPS user ID
+ * @param string $pass .......Adobe DPS user password
+ * @param string $dimension ..available dimensions per account type (not used ATM)
+ * @param string $key ........Adobe DPS API key
+ * @param string $secret .....Adobe DPS API secret
+ */
+function helper_credential_update($uid, $id, $pass, $dimension, $key, $secret) {
+	$user = user_load($uid);
+	if (!$id || !$pass) {
+		user_delete($uid);
+	} else if (empty($user)) {
+		$credentials = array(
+			'uid'              => $uid,
+			'name'             => $id,
+			'mail'             => $pass,
+			'pass'             => $pass,
+			'theme'			   => $dimension,
+			'status'           => 1,
+			'signature'        => $key,
+			'signature_format' => $secret,
+		);
+		user_save('', $credentials);
+	} else {
+		$user->name             = $id;
+		$user->mail             = $pass;
+		$user->pass             = $pass;
+		$user->theme			= $dimension;
+		$user->signature        = $key;
+		$user->signature_format = $secret;
+		user_save((object) array('uid' => $uid), (array) $user);
+	}
+}
+/**
+ * Helper method for unzipping the given stylesheet,
+ *   located in /adobe/styles/[stylsheet name]/HTMLResources.zip,
+ *   and place it in /adobe/html/HTMLResources/
+ * @param string $stylesheet ..name of the stylesheet to unzip
+ */
+function helper_extract_stylesheet($stylesheet) {
+	$stylesheet  = str_replace(" ", "\ ", $stylesheet);
+	$directory   = drupal_get_path("module", "adobe");
+	$source      = $directory."/styles/".$stylesheet."/HTMLResources.zip";
+	$destination = $directory."/html/HTMLResources";
+	// linux built-in zipper
+	$zipper      = "unzip ".$source." -d ".$destination;
+	exec($zipper);
+}
+/**
+ * Helper method for taking a snapshot of the webpage via shrinktheweb module.
+ * @param string $url ..webpage URL
+ * @return string containing the URL to the saved snapshot
+ */
+function helper_format_thumbnail($url) {
+    $imgURL  = theme('shrinktheweb_image', array('url' => $url));
+	$pattern = '<img src="([\w:\/.]+)" />';
+    preg_match($pattern, $imgURL, $formattedURL);
+    if (!$formatedURL)
+    	return 'http://placehold.it/100x100&text=Adobe';
+    else
+    	return $formatedURL[1];
+}
+/**
+ * Helper method for formatting the given video url,
+ *   parse and convert the video url to embedded video url.
+ * @param string $url ..video URL
+ * @return string containing the embedded video URL 
+ */
+function helper_format_URL($url) {
+    $pattern = '/v=([\w]+)(&)*/';
+    preg_match($pattern, $url, $formatedURL);
+    return 'http://youtube.com/embed/'.$formatedURL[1];
+}
+/**
+ * Helper method for appending the articles to a folio node.
+ * @param string $fid .......folio node ID
+ * @param array  $articles ..list of article node ID's
+ */
+function helper_folio_append($fid, $articles) {
+	$articles = explode(',', $articles);
+	$folio = node_load($fid);
+	for ($i = 0; $i < sizeof($articles); $i++) {
+		// if the array is empty but not null
+		if ($articles[$i] == '')
+			continue;
+		// if article already exists within the folio node
+		if (helper_check_existence($articles[$i], $folio->field_folio_reference['und']))
+			continue;
+		// appends the folio reference to the article
+		$article = node_load(intval($articles[$i]));
+		if (isset($article->field_article_reference)) {
+			$article->field_article_reference['und'][]['target_id'] = $fid;
+			node_save_action($article);
+		}
+		// appends the article reference to the folio
+		$folio->field_folio_reference['und'][]['target_id'] = $articles[$i];
+	}
+	node_save_action($folio);
+}
+/**
+ * Helper method for formatting the given filename (aka article title),
+ *   by removing any special characters.
+ * @param string filename ..article title, used as the folder name, folio name, and .html filename
+ * @return string containing the formatted filename without any special characters
+ */
+function helper_format_title($filename, $replacement='') {
+    $noises = array('.', '?', ' ', ':', '/', ',', '\'');
+    $formatted = str_replace($noises, $replacement, $filename);
+    return $formatted;
+}
+/**
+ * Helper method for generating the HTML article folder,
+ *   make calls to the following:
+ *      - helper_create_dir() ..............creates the HTML article structure
+ *      - helper_writePKG() ................writes to the pkgproperties.xml file
+ *      - helper_writeFolioXML() ...........writes to the Folio.xml file
+ *      - helper_style_bootstrap_toc() .....table of contents page with Bootstrap layout
+ *      - helper_style_bootstrap_cover() ...cover page with Bootstrap layout
+ *      - helper_style_bootstrap() .........article page with Bootstrap layout
+ *      - helper_style_foundation_toc() ....table of contents page with Foundation layout
+ *      - helper_style_foundation_cover() ..cover page with Foundation layout
+ *      - helper_style_foundation() ........article page with Foundation layout
+ * @param array $article_metadata ..a list of metadata fields pertaining to the article node
+ * @param array $folio_metadata ....a list of metadata fields pertaining to the folio node
+ * @param array $ads_toggle ........a list of 0's and 1's, 1 for ads and 0 for not
+ * @param array $article_list ......a list of article names, used for generating the ToC
+ */
+function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $article_list='') {
+	// filter the title to create the folder & filename
+	$filename = helper_format_title($article_metadata['title']);
+	// create the directory and its default files
+	helper_create_dir($filename);
+	// write to the PKGProperties.xml
+	helper_writePKG($filename);
+	// write to the Folio.xml
+	helper_writeFolioXML(
+		$article_metadata['title'],    // the title of the article
+		$article_metadata['author'],   // the author of the article
+		$folio_metadata['pubName'],    // the publication name
+		$folio_metadata['folioNum'],   // the folio number (not the same as sort number!)
+		$article_metadata['desc'],     // the description of the article
+		$article_metadata['kicker'],   // the kicker of the article
+		$article_metadata['tags'],     // the tags of the article
+		$ads_toggle,                   // toggle for if the article is an advertisement
+		$folio_metadata['folioVer'],   // the viewer version of the article (must match the parent Folio)
+		$folio_metadata['dimension'],  // the target dimension of the article (must match the parent Folio)
+		$folio_metadata['orientation'] // the article orientation 
+	);
+	// checks if the given is the ToC, cover page, or an article
+	if ($article_list != '') {
+		// generate the Table of Contents wiht Bootstrap stylesheet
+		if ($folio_metadata['pubCSS'] == 'Bootstrap') {
+			helper_style_bootstrap_toc(
+				$folio_metadata['pubName'], // the publication name
+				$article_list               // list of article names
+			);
+		} else { // generate the Table of Contents with Foundation stylesheet
+			helper_style_foundation_toc(
+				$folio_metadata['pubName'], // the publication name
+				$article_list               // list of article names
+			);
+		}
+	} else if (isset($article_metadata['cover']) && $article_metadata['cover']) {
+		// generate the cover article with Bootstrap stylesheet
+		if ($folio_metadata['tocCSS'] == 'Bootstrap') {
+			helper_style_bootstrap_cover(
+				$folio_metadata['pubName'],   // the publication name
+				$folio_metadata['landscape'], // the preview landscape image
+				$folio_metadata['portrait'],  // the preview portrait image
+				$folio_metadata['dimension']  // the targeted dimension
+			);
+		} else { // generate the cover article with Foundation stylesheet
+			helper_style_foundation_cover(
+				$folio_metadata['pubName'],   // the publication name
+				$folio_metadata['landscape'], // the preview landscape image
+				$folio_metadata['portrait'],  // the preview portrait image
+				$folio_metadata['dimension']  // the targeted dimension
+			);
+		}
+	} else if ($folio_metadata['pubCSS'] == 'Bootstrap') {
+		// generate the HTML article with Bootstrap stylesheet
+		helper_style_bootstrap(
+			$folio_metadata['pubName'],  // the publication name
+			$article_metadata['title'],  // the title of the article
+			$article_metadata['author'], // the author of the article
+			$article_metadata['kicker'], // the kicker of the article
+			$article_metadata['body'],   // the body of the article
+			$article_metadata['image'],  // any images from the article
+			$article_metadata['video']  // any videos from the article
+		);
+	} else {
+		// generate the HTML article with Foundation stylesheet
+		helper_style_foundation(
+			$folio_metadata['pubName'],  // the publication name
+			$article_metadata['title'],  // the title of the article
+			$article_metadata['author'], // the author of the article
+			$article_metadata['kicker'], // the kicker of the article
+			$article_metadata['body'],   // the body of the article
+			$article_metadata['image'],  // any images from the article
+			$article_metadata['video']  // any videos from the article
+		);
+	}
+}
+/**
+ * Helper method for including the necessary stylesheet and javascript for each of the 3 view pages:
+ *   - /fpconfig
+ *   - /fpmanage
+ *   - /fpselect
+ * @param string $toggle ..includes the respective javascript depending on the view page
+ */
+function helper_include_goodies($toggle) {
+	drupal_add_css('http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', 'external');
+	drupal_add_css(drupal_get_path('module', 'adobe').'/includes/override.css');
+	drupal_add_js(drupal_get_path('module', 'adobe').'/includes/jquery.js');
+	drupal_add_js(drupal_get_path('module', 'adobe').'/includes/jqueryui.js');
+	drupal_add_js(drupal_get_path('module', 'adobe').'/includes/adobe.js');
+	switch ($toggle) {
+		case 'config': // for the configuration page
+			require_once (drupal_get_path('module', 'adobe').'/adobe_view_credential_fn.inc');
+			break;
+		case 'manage': // for the management page
+			require_once (drupal_get_path('module', 'adobe').'/adobe_view_manage_fn.inc');
+			break;
+		case 'select': // for the selection page
+			require_once (drupal_get_path('module', 'adobe').'/adobe_view_select_fn.inc');
+			break;
+	}
+}
+/**
+ * Helper method for saving the given image url,
+ *   to the predefined image path (/adobe/file_name/image.jpg),
+ *   with the given image name.
+ * @param string $filename ..image URL
+ * @param string $image .....new name of the saved image
+ */
+function helper_linkImg($filename, $images) {
+	$parsed    = explode('/', $images);
+	$img_name  = $parsed[sizeof($parsed)-1];
+	helper_save_img($images, $filename.'/'.$img_name);
+	return $img_name;
+}
+/**
+ * Helper method to pull the article node contents.
+ * @param string $nodeID ..article node ID (or any other types of node)
+ * @return array containing the article metadata
+ */
+function helper_pull_article($nodeID) {
+	$container = array();
+	$node      = node_load($nodeID);
+	if ($node->type != 'folios') { 
+		$container['title']     = isset($node->title)?$node->title:'';
+		$container['filename']  = isset($node->title)?helper_format_title($node->title):'';
+		$container['tags']      = isset($node->field_tags)?$node->field_tags:'';
+		$container['type']      = isset($node->type)?$node->type:'';
+		$container['modified']  = isset($node->changed)?gmdate("m/d/Y - H:i", $node->changed):'';
+		$container['timestamp'] = isset($node->changed)?date('Y-m-d\TH:i:s',$node->changed):'';
+	}
+	return $container;
+}
+/**
+ * Helper method for pulling the folio node contents and the designated user credentials.
+ * @param string $nodeID ..folio node ID
+ * @param string $toggle ..toggle for pulling the account information
+ * @return array containing the folio metadata
+ */
+function helper_pull_content($nodeID, $toggle='') {
+	// load folio metadata
+	$container = array();
+	$node      = node_load($nodeID);
+	$lang 	   = $node->language;
+	$container['title']       = isset($node->title)?$node->title:'';
+	$container['pubID']       = isset($node->field_folio_product_id[$lang][0]['value'])?$node->field_folio_product_id[$lang][0]['value']:'';
+	$container['pubName']     = isset($node->field_folio_publication_name[$lang][0]['value'])?$node->field_folio_publication_name[$lang][0]['value']:'';
+	$container['folioNum']    = isset($node->field_folio_number[$lang][0]['value'])?$node->field_folio_number[$lang][0]['value']:'';
+	$container['pubDate']     = isset($node->field_folio_published_date[$lang][0]['value'])?$node->field_folio_published_date[$lang][0]['value']:'';
+	$container['folioDesc']   = isset($node->field_folio_description[$lang][0]['value'])?$node->field_folio_description[$lang][0]['value']:'';
+	$container['folioVer']    = isset($node->field_folio_viewer_version[$lang][0]['value'])?$node->field_folio_viewer_version[$lang][0]['value']:'';
+	$container['accounts']    = isset($node->field_folio_producer_accounts[$lang][0]['value'])?$node->field_folio_producer_accounts[$lang][0]['value']:'';
+	$container['pubCSS']      = isset($node->field_folio_publication_css[$lang][0]['value'])?$node->field_folio_publication_css[$lang][0]['value']:'';
+	$container['tocCSS']      = isset($node->field_folio_toc_layout[$lang][0]['value'])?$node->field_folio_toc_layout[$lang][0]['value']:'';
+	$container['dimension']   = isset($node->field_folio_dimension[$lang][0]['value'])?$node->field_folio_dimension[$lang][0]['value']:'';
+	$container['orientation'] = isset($node->field_folio_orientation[$lang][0]['value'])?$node->field_folio_orientation[$lang][0]['value']:'';
+	$container['isAds']       = isset($node->field_folio_ads_filter[$lang][0]['value'])?explode(',', $node->field_folio_ads_filter[$lang][0]['value']):'';
+	$container['filter']      = isset($node->field_folio_library_filter[$lang][0]['value'])?$node->field_folio_library_filter[$lang][0]['value']:'';
+	$container['articles']    = isset($node->field_folio_reference[$lang])?$node->field_folio_reference[$lang]:'';
+	$container['landscape']   = isset($node->field_folio_landscape_url[$lang][0]['value'])?$node->field_folio_landscape_url[$lang][0]['value']:'';
+	$container['portrait']    = isset($node->field_folio_portrait_url[$lang][0]['value'])?$node->field_folio_portrait_url[$lang][0]['value']:'';
+	$container['autoToggle']  = isset($node->field_folio_auto_generate[$lang][0]['value'])?$node->field_folio_auto_generate[$lang][0]['value']:'';
+	$container['status']      = isset($node->field_folio_status[$lang][0]['value'])?$node->field_folio_status[$lang][0]['value']:'';
+	$container['uploadDate']  = isset($node->field_folio_producer_timestamp[$lang][0]['value'])?$node->field_folio_producer_timestamp[$lang][0]['value']:'';
+	$container['alienated']   = isset($node->field_folio_producer_article_id[$lang][0]['value'])?explode(',', $node->field_folio_producer_article_id[$lang][0]['value']):'';
+	//load user metadata
+	$amazon  = user_load('341');
+	$android = user_load('342');
+	$apple   = user_load('343');
+	$container['amazonDimensions']  = isset($amazon->theme)?explode(',', $amazon->theme):explode(',', '960 x 640,');
+	$container['androidDimensions'] = isset($android->theme)?explode(',', $android->theme):explode(',', '960 x 640,');
+	$container['appleDimensions']   = isset($apple->theme)?explode(',', $apple->theme):explode(',', '480 x 320,1024 x 768,1136 x 640,2048 x 1536,');
+	if ($toggle == 'sync') {
+		switch ($container['accounts']) {
+			case 'amazon':
+				$container['credentials']['adobeID']   = $amazon->name;
+				$container['credentials']['password']  = $amazon->mail;
+				$container['credentials']['apiKey']    = $amazon->signature;
+				$container['credentials']['apiSecret'] = $amazon->signature_format;
+				break;
+			case 'android':
+				$container['credentials']['adobeID']   = $android->name;
+				$container['credentials']['password']  = $android->mail;
+				$container['credentials']['apiKey']    = $android->signature;
+				$container['credentials']['apiSecret'] = $android->signature_format;
+				break;
+			case 'apple':
+			default:
+				$container['credentials']['adobeID']   = $apple->name;
+				$container['credentials']['password']  = $apple->mail;
+				$container['credentials']['apiKey']    = $apple->signature;
+				$container['credentials']['apiSecret'] = $apple->signature_format;
+				break;
+		}
+	}
+	return $container;
+}
+/**
+ * Helper method for pulling the article node contents.
+ * @param string $nodeID ..article node ID
+ * @return array containing the article metadata
+ */
+function helper_pull_node($nodeID) {
+	$container = array();
+	// loads the node from the database
+	$node = node_load($nodeID);
+	// loads the image urls from the database
+	$images = array();
+	$img_list = "";
+	$tags = "";
+	// checks if there are only 1 or more than 1 images
+	if (isset($node->field_image['und']))
+		$img_list = $node->field_image['und'];
+	else if (isset($node->field_images['und']))
+		$img_list = $node->field_images['und'];
+	// store images in an array
+	if ($img_list)
+		for ($i = 0; $i < sizeof($img_list); $i++)
+			array_push($images, file_create_url($img_list[$i]['uri']));
+	// translate tag ID into tag string
+	if (isset($node->field_tags['und']))
+		for ($i = 0; $i < sizeof($node->field_tags['und']); $i++)
+			if (isset($node->field_tags['und'][$i]['tid']))
+				$tags .= (taxonomy_term_load($node->field_tags['und'][$i]['tid'])->name).', ';
+	$container['author'] = isset($node->field_folio_byline['und'][0]['value'])?$node->field_folio_byline['und'][0]['value']:$node->name;
+	$container['title']	 = isset($node->title)?$node->title:'';
+	$container['desc']	 = isset($node->field_intro)?$node->field_intro['und'][0]['value']:'';
+	$container['kicker'] = '';
+	$container['tags']   = ($tags != false)?substr($tags, 0, -2):'';
+	$container['title']  = isset($node->title)?$node->title:'';
+	$container['body']   = isset($node->body)?$node->body:'';
+	$container['image']  = isset($images[0])?$images:'';
+	$container['video']  = isset($node->field_video['und'][0]['video_url'])?$node->field_video['und'][0]['video_url']:'';
+	// loads the taxonomy term
+	if (isset($node->field_topic['und'][0]['tid'])) {
+		$tid                 = $node->field_topic['und'][0]['tid'];
+		$taxonomy            = taxonomy_term_load($tid);
+		$container['kicker'] = $taxonomy->name;
+	}
+	return $container;
+}
+/**
+ * Helper method for checking if an article node reference already exist within the folio node.
+ * @param array  $container ..the list of article node references that are currently within the folio node
+ * @param string $target .....the pending article node reference
+ * @param string $lang .......the language of the folio node
+ */
+function helper_reference_check($container, $target, $lang) {
+	for ($i = 0; $i < sizeof($container); $i++)
+		if ($container[$lang][$i]['target_id'] == $target)
+			return true;
+	return false;
+}
+/**
+ * Helper method for recursively removing all files & sub-directories within a given directory
+ * @param string $directory ..name of the directory to be deleted
+ */
+function helper_rrmdir($directory) {
+	foreach(glob($directory.'/*') as $item) {
+		if (is_dir($item))
+			helper_rrmdir($item);
+		else
+			unlink($item);
+	}
+	rmdir($directory);
+}
+/**
+ * Helper method for storing the image in the generated HTML article folder.
+ * @param string $img_url ...URL to the source image
+ * @param string $filename ..path to save the image (@ /adobe/html/[filename]/)
+ */
+function helper_save_img($img_url, $filename) 
+{
+	$directory = drupal_get_path('module', 'adobe').'/html/';
+	$img = file_get_contents($img_url);
+	file_put_contents($directory.$filename, $img);
+}
+/**
+ * Helper method for scaling the image accordingly and save the scaled image in a temp directory.
+ * @param string $img_url .....the targeted image url (local)
+ * @param string $newwidth ....specify the new image width
+ * @param string newheight ....specify the new image height
+ * @param string orientation ..specify if the image is landscape or portrait
+ * @return string url to the scaled image
+ */
+function helper_scale_img($img_url, $newwidth, $newheight, $orientation) {
+	header('Content-Type: image/jpeg');
+	// Get the current sizes
+	list($width, $height) = getimagesize($img_url);
+	$thumb = imagecreatetruecolor($newwidth, $newheight);
+	if (exif_imagetype($img_url) == IMAGETYPE_PNG) { // Resizes a .png image file
+		$source = imagecreatefrompng($img_url);
+		imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+		imagepng($thumb, dirname(__FILE__).'/images/'.$orientation.'/temp.png');
+		return 'images/'.$orientation.'/temp.png';
+	} else if (exif_imagetype($img_url) == IMAGETYPE_JPEG) { // Resizes a .jpeg image file
+		$source = imagecreatefromjpeg($img_url);
+		imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+		imagejpeg($thumb, dirname(__FILE__).'/images/'.$orientation.'/temp.jpg');
+		return 'images/'.$orientation.'/temp.jpg';
+	}
+}
+/**
+ * Helper method for writing the Folio.xml file.
+ *   Located in /adobe/html/[filename]/Folio.xml
+ * @param string $title .........the article title, used as the filename after removing special characters
+ * @param string $author ........the article author
+ * @param string $magTitle ......the magazine title
+ * @param string $folioNum ......the folio number 
+ * @param string $desc ..........the folio description
+ * @param string $kicker ........the folio kicker
+ * @param string $tags ..........the folio tags
+ * @param string $isAds .........toggle for deciding if the article is an advertisement
+ * @param string $version .......the targeted folio version
+ * @param string $dimension .....the targeted folio dimension
+ * @param string $orientation ...the article orientation, default to both orientations
+ */
+function helper_writeFolioXML($title, $author, $magTitle, $folioNum, $desc, $kicker, $tags, $isAds, $version, $dimension, $orientation='Always') 
+{
+	$directory = drupal_get_path('module', 'adobe').'/html/';
+	$date      = date('Y-m-d\TH:i:s');
+    $filename  = helper_format_title($title);
+    $targeted  = explode(' x ', $dimension);
+    $width     = $targeted[1];
+    $height    = $targeted[0];
+    $isAds     = ($isAds == true)?'true':'false';
+
+	// generate the content of the Folio.xml
+	$xml  = "<?xml version='1.0' encoding='UTF-8'?>\n";
+	$xml .= "<folio version='".$version."' id='".$filename."' lastUpdated='".$date."' date='".$date."'>\n";
+	$xml .= "<metadata>\n";
+	$xml .= 	"<description>".$desc."</description>\n";
+	$xml .= 	"<magazineTitle>".$magTitle."</magazineTitle>\n";
+ 	$xml .= 	"<folioNumber>".$folioNum."</folioNumber>\n";
+	$xml .= "</metadata>\n";
+	$xml .= "<targetDimensions>\n";
+	$xml .= 	"<targetDimension wideDimension='".$height."' narrowDimension='".$width."'/>";
+	$xml .= "</targetDimensions>\n";
+	$xml .= "<contentStacks>\n";
+	$xml .= 	"<contentStack lastUpdated='".$date."' id='".$filename."' smoothScrolling='always' layout='vertical' alwaysDisplayOverlays='false'>\n";
+  	$xml .= 	"<content>\n";
+    $xml .= 		"<previews>\n";
+    $xml .= 			"<toc>toc.png</toc>\n";
+    $xml .= 		"</previews>\n";
+    $xml .= 		"<regions>\n";
+    $xml .= 			"<region>\n";
+    $xml .= 				"<portraitBounds>\n";
+    $xml .= 					"<rectangle x='0' y='0' width='".$width."' height='".$height."'/>\n";
+    $xml .= 				"</portraitBounds>\n";
+    $xml .= 				"<landscapeBounds>\n";
+    $xml .= 					"<rectangle x='0' y='0' width='".$height."' height='".$width."'/>\n";
+    $xml .= 				"</landscapeBounds>\n";
+    $xml .= 				"<metadata lastUpdated='2012-10-31T15:01:07Z'>\n";
+    $xml .= 					"<title>".$title."</title>\n";
+    $xml .= 					"<description>".$desc."</description>\n";
+    $xml .= 					"<author>".$author."</author>\n";
+    $xml .= 					"<tags>".$tags."</tags>\n";
+    $xml .= 					"<kicker>".$kicker."</kicker>\n";
+    $xml .= 					"<isAdvertisement>".$isAds."</isAdvertisement>\n";
+    $xml .= 					"<orientation>".strtolower($orientation)."</orientation>\n";
+    //$xml .= 					"<smoothScrolling>Always</smoothScrolling>\n";
+    $xml .= 				"</metadata>\n";
+    $xml .= 			"</region>\n";
+    $xml .= 		"</regions>\n";
+    $xml .= 		"<assets>\n";
+    $xml .= 			"<asset landscape='false'>\n";
+    $xml .= 				"<assetRendition type='web' paginated='false' source='".$filename.".html' includesOverlays='true' width='".$width."' height='".$height."' role='content'/>\n";
+    $xml .= 			"</asset>\n";
+    $xml .= 			"<asset landscape='true'>\n";
+    $xml .= 				"<assetRendition type='web' paginated='false' source='".$filename.".html' includesOverlays='true' width='".$height."' height='".$width."' role='content'/>\n";
+    $xml .= 			"</asset>\n";
+    $xml .= 		"</assets>\n";
+    $xml .= 	"</content>\n";
+	$xml .= 	"</contentStack>\n";
+	$xml .= "</contentStacks>\n";
+	$xml .= "</folio>\n";
+	file_put_contents($directory.$filename.'/Folio.xml', $xml);
+}
+/**
+ * Helper method for writing the pkgproperties.xml file.
+ *   Located in /adobe/html/[filename]/META-INF/pkgproperties.xml
+ * @param string $filename ..same as the article name
+ */
+function helper_writePKG($filename) {
+	$directory   = drupal_get_path('module', 'adobe').'/html/';
+	$currentDate = date('Y-m-d\TH:i:s');
+	// generate the content of the pkgproperties.xml
+    $pkg  = "<?xml version='1.0' encoding='UTF-8'?>\n";
+    $pkg .= "<pkgProperties xmlns='http://ns.adobe.com/ucf/1.0/'>\n";
+    $pkg .= "<package/>\n";
+    $pkg .= "<entries>\n";
+    $pkg .= "<entry path='Folio.xml'>\n";
+    $pkg .= "<prop key='datetime'>".$currentDate."</prop>\n";
+    $pkg .= "</entry>\n";
+    $pkg .= "<entry path='toc.png'>\n";
+    $pkg .= "<prop key='datetime'>".$currentDate."</prop>\n";
+    $pkg .= "</entry>\n";
+    $pkg .= "<entry path='".$filename.".html'>\n";
+    $pkg .= "<prop key='datetime'>".$currentDate."</prop>\n";
+    $pkg .= "</entry>\n";
+    $pkg .= "</entries>\n";
+    $pkg .= "</pkgProperties>\n";
+    file_put_contents($directory.$filename.'/META-INF/pkgproperties.xml', $pkg);
+}
+
+?>
