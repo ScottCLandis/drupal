@@ -205,7 +205,7 @@ function _dpsbridge_install_folio_fields() {
       'field_name' => 'field_folio_reference',
       'label' => $t('Folio Reference'),
       'cardinality' => FIELD_CARDINALITY_UNLIMITED,
-      'type' => 'entityreference' ),
+      'type' => 'entityreference'),
     'field_folio_producer_article_id' => array(
       'field_name' => 'field_folio_producer_article_id',
       'label' => $t('Alienated Reference'),
@@ -221,223 +221,265 @@ function _dpsbridge_installed_folio_instances() {
       'label' => $t('Product ID'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Product ID (Folio Producer metadata)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_publication_name' => array(
       'field_name' => 'field_folio_publication_name',
       'label' => $t('Publication Name'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Publication Name (Folio Producer metadata)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_number' => array(
       'field_name' => 'field_folio_number',
       'label' => $t('Folio Number'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Folio Number (Folio Producer metadata)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_description' => array(
       'field_name' => 'field_folio_description',
       'label' => $t('Folio Description'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Folio Description (Folio Producer metadata)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_dimension' => array(
       'field_name' => 'field_folio_dimension',
       'label' => $t('Target Dimension'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Target Dimension (Folio Producer metadata)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_viewer_version' => array(
       'field_name' => 'field_folio_viewer_version',
       'label' => $t('Viewer Version'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Viewer Version (Folio Producer metadata)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_producer_accounts' => array(
       'field_name' => 'field_folio_producer_accounts',
       'label' => $t('Folio Producer Accounts'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Folio Producer Accounts (to upload to)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_producer_timestamp' => array(
       'field_name' => 'field_folio_producer_timestamp',
       'label' => $t('Folio Producer Upload Timestamp'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Folio Producer Upload Timestamp'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_status' => array(
       'field_name' => 'field_folio_status',
       'label' => $t('Upload Status'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Upload Status'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_sync_status' => array(
       'field_name' => 'field_folio_sync_status',
       'label' => $t('Sync Status'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Sync Status'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_orientation' => array(
       'field_name' => 'field_folio_orientation',
       'label' => $t('Orientation'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Orientation'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_publication_css' => array(
       'field_name' => 'field_folio_publication_css',
       'label' => $t('Publication Stylesheet'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Stylesheet for HTML Articles'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_published_date' => array(
       'field_name' => 'field_folio_published_date',
       'label' => $t('Publication Date'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Publication Date (Folio Producer metadata)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_toc' => array(
       'field_name' => 'field_folio_toc',
       'label' => $t('ToC Status'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Table of Contents status (generated or uploaded)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_toc_layout' => array(
       'field_name' => 'field_folio_toc_layout',
       'label' => $t('ToC Stylesheet'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Stylesheet for Table of Contents'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_auto_generate' => array(
       'field_name' => 'field_folio_auto_generate',
       'label' => $t('ToC & Cover Toggle'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Toggle for auto-generating ToC and Cover page'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_library_filter' => array(
       'field_name' => 'field_folio_library_filter',
       'label' => $t('Library Filter'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Library Filter (Folio Producer metadata)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_ads_filter' => array(
       'field_name' => 'field_folio_ads_filter',
       'label' => $t('List of Ads'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Is Ads (Folio Producer metadata)'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_landscape_url' => array(
       'field_name' => 'field_folio_landscape_url',
       'label' => $t('Cover Image Landscape'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Cover Image Landscape'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_portrait_url' => array(
       'field_name' => 'field_folio_portrait_url',
       'label' => $t('Cover Image Portrait'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Cover Image Portrait'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_reference' => array(
       'field_name' => 'field_folio_reference',
       'label' => $t('Folio Reference'),
       'cardinality' => FIELD_CARDINALITY_UNLIMITED,
       'type' => 'entityreference',
       'widget' => array(
-        'type' => 'autocomplete' ),
+        'type' => 'autocomplete'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Folio Reference'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
     'field_folio_producer_article_id' => array(
       'field_name' => 'field_folio_producer_article_id',
       'label' => $t('Alienated Reference'),
       'type' => 'text',
       'widget' => array(
-        'type' => 'text_textfield' ),
+        'type' => 'text_textfield'),
       'display' => array(
         'example_node_list' => array(
           'label' => $t('Alienated Reference'),
-          'type' => 'text' ) ), ),
+          'type' => 'text'),
+      ),
+    ),
   );
 }
-
-?>

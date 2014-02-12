@@ -127,10 +127,12 @@ function helper_format_thumbnail($url) {
   $img_url  = theme('shrinktheweb_image', array('url' => $url));
   $pattern = '<img src="([\w:\/.]+)" />';
   preg_match($pattern, $img_url, $formatted_url);
-  if (!$formated_url)
+  if (!$formated_url) {
     return 'http://placehold.it/100x100&text=Adobe';
-  else
+  }
+  else {
     return $formated_url[1];
+  }
 }
 /**
  * Helper method for formatting the given video url,
@@ -159,11 +161,13 @@ function helper_folio_append($fid, $articles) {
   $folio = node_load($fid);
   for ($i = 0; $i < count($articles); $i++) {
     // If the array is empty but not null.
-    if ($articles[$i] == '')
+    if ($articles[$i] == '') {
       continue;
+    }
     // If article already exists within the folio node.
-    if (helper_check_existence($articles[$i], $folio->field_folio_reference['und']))
+    if (helper_check_existence($articles[$i], $folio->field_folio_reference['und'])) {
       continue;
+    }
     // Appends the folio reference to the article.
     $article = node_load(intval($articles[$i]));
     if (isset($article->field_article_reference)) {
@@ -218,78 +222,102 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
   // Create the directory and its default files.
   helper_create_dir($filename);
   // Write to the PKGProperties.xml.
-  helper_writePKG($filename);
+  helper_writepkg($filename);
   // Write to the Folio.xml.
   helper_writeFolioXML(
-    $article_metadata['title'],    // The title of the article.
-    $article_metadata['author'],   // The author of the article.
-    $folio_metadata['pubName'],    // The publication name.
-    $folio_metadata['folioNum'],   // The folio number (not the same as sort number!).
-    $article_metadata['desc'],     // The description of the article.
-    $article_metadata['kicker'],   // The kicker of the article.
-    $article_metadata['tags'],     // The tags of the article.
-    $ads_toggle,                   // Toggle for if the article is an advertisement.
-    $folio_metadata['folioVer'],   // The viewer version of the article (must match the parent Folio).
-    $folio_metadata['dimension'],  // The target dimension of the article (must match the parent Folio).
-    $folio_metadata['orientation'] // The article orientation .
+      // The title of the article.
+      $article_metadata['title'],
+      // The author of the article.
+      $article_metadata['author'],
+      // The publication name.
+      $folio_metadata['pubName'],
+      // The folio number (not the same as sort number!).
+      $folio_metadata['folioNum'],
+      // The description of the article.
+      $article_metadata['desc'],
+      // The kicker of the article.
+      $article_metadata['kicker'],
+      // The tags of the article.
+      $article_metadata['tags'],
+      // Toggle for if the article is an advertisement.
+      $ads_toggle,
+      // The viewer version of the article (must match the parent Folio).
+      $folio_metadata['folioVer'],
+      // The target dimension of the article (must match the parent Folio).
+      $folio_metadata['dimension'],
+      // The article orientation .
+      $folio_metadata['orientation']
   );
   // Checks if the given is the ToC, cover page, or an article.
   if ($article_list != '') {
     // Generate the Table of Contents wiht Bootstrap stylesheet.
     if ($folio_metadata['pubCSS'] == 'Bootstrap') {
       helper_style_bootstrap_toc(
-        $folio_metadata['pubName'], // the publication name.
-        $article_list               // list of article names.
-      );
-    } 
-    else { // Generate the Table of Contents with Foundation stylesheet.
-      helper_style_foundation_toc(
-        $folio_metadata['pubName'], // the publication name.
-        $article_list               // list of article names.
+          $folio_metadata['pubName'],
+          $article_list
       );
     }
-  } 
+    // Generate the Table of Contents with Foundation stylesheet.
+    else {
+      helper_style_foundation_toc(
+          $folio_metadata['pubName'],
+          $article_list
+      );
+    }
+  }
   elseif (isset($article_metadata['cover']) && $article_metadata['cover']) {
     // Generate the cover article with Bootstrap stylesheet.
     if ($folio_metadata['tocCSS'] == 'Bootstrap') {
       helper_style_bootstrap_cover(
-        $folio_metadata['pubName'],   // the publication name
-        $folio_metadata['landscape'], // the preview landscape image
-        $folio_metadata['portrait'],  // the preview portrait image
-        $folio_metadata['dimension']  // the targeted dimension
-      );
-    } 
-    else { // Generate the cover article with Foundation stylesheet
-      helper_style_foundation_cover(
-        $folio_metadata['pubName'],   // the publication name
-        $folio_metadata['landscape'], // the preview landscape image
-        $folio_metadata['portrait'],  // the preview portrait image
-        $folio_metadata['dimension']  // the targeted dimension
+          // Publication name.
+          $folio_metadata['pubName'],
+          // Preview landscape image.
+          $folio_metadata['landscape'],
+          // Preview portrait image.
+          $folio_metadata['portrait'],
+          // Targeted dimension.
+          $folio_metadata['dimension']
       );
     }
-  } 
+    // Generate the cover article with Foundation stylesheet.
+    else {
+      helper_style_foundation_cover(
+          $folio_metadata['pubName'],
+          $folio_metadata['landscape'],
+          $folio_metadata['portrait'],
+          $folio_metadata['dimension']
+      );
+    }
+  }
   elseif ($folio_metadata['pubCSS'] == 'Bootstrap') {
-    // Generate the HTML article with Bootstrap stylesheet
+    // Generate the HTML article with Bootstrap stylesheet.
     helper_style_bootstrap(
-      $folio_metadata['pubName'],  // the publication name
-      $article_metadata['title'],  // the title of the article
-      $article_metadata['author'], // the author of the article
-      $article_metadata['kicker'], // the kicker of the article
-      $article_metadata['body'],   // the body of the article
-      $article_metadata['image'],  // any images from the article
-      $article_metadata['video']  // any videos from the article
+        // Publication name.
+        $folio_metadata['pubName'],
+        // Title of the article.
+        $article_metadata['title'],
+        // Author of the article.
+        $article_metadata['author'],
+        // Kicker of the article.
+        $article_metadata['kicker'],
+        // Body of the article.
+        $article_metadata['body'],
+        // Images from the article.
+        $article_metadata['image'],
+        // Videos from the article.
+        $article_metadata['video']
     );
   } 
   else {
-    // Generate the HTML article with Foundation stylesheet
+    // Generate the HTML article with Foundation stylesheet.
     helper_style_foundation(
-      $folio_metadata['pubName'],  // the publication name
-      $article_metadata['title'],  // the title of the article
-      $article_metadata['author'], // the author of the article
-      $article_metadata['kicker'], // the kicker of the article
-      $article_metadata['body'],   // the body of the article
-      $article_metadata['image'],  // any images from the article
-      $article_metadata['video']  // any videos from the article
+        $folio_metadata['pubName'],
+        $article_metadata['title'],
+        $article_metadata['author'],
+        $article_metadata['kicker'],
+        $article_metadata['body'],
+        $article_metadata['image'],
+        $article_metadata['video']
     );
   }
 }
@@ -298,6 +326,7 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
  *   - /fpconfig
  *   - /fpmanage
  *   - /fpselect
+ * 
  * @param string $toggle
  *   Includes the respective javascript depending on the view page.
  */
@@ -308,16 +337,19 @@ function helper_include_goodies($toggle) {
   drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/jqueryui.js');
   drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge.js');
   switch ($toggle) {
-    case 'config': // for the configuration page
-      require_once(drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_credential_fn.inc');
+    // For the configuration page.
+    case 'config':
+      require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_credential_fn.inc';
       break;
 
-    case 'manage': // for the management page
-      require_once(drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_manage_fn.inc');
+    // For the management page.
+    case 'manage':
+      require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_manage_fn.inc';
       break;
 
-    case 'select': // for the selection page
-      require_once(drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_select_fn.inc');
+    // For the selection page.
+    case 'select':
+      require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_select_fn.inc';
       break;
   }
 }
@@ -328,7 +360,7 @@ function helper_include_goodies($toggle) {
  * 
  * @param string $filename
  *   Image URL.
- * @param string $image
+ * @param string $images
  *   New name of the saved image.
  */
 function helper_link_img($filename, $images) {
@@ -342,13 +374,14 @@ function helper_link_img($filename, $images) {
  * 
  * @param string $node_id
  *   Article node ID (or any other types of node).
+ * 
  * @return array
  *   Containing the article metadata.
  */
 function helper_pull_article($node_id) {
   $container = array();
   $node      = node_load($node_id);
-  if ($node->type != 'folios') { 
+  if ($node->type != 'folios') {
     $container['title']     = isset($node->title) ? $node->title : '';
     $container['filename']  = isset($node->title) ? helper_format_title($node->title) : '';
     $container['tags']      = isset($node->field_tags) ? $node->field_tags : '';
@@ -360,9 +393,14 @@ function helper_pull_article($node_id) {
 }
 /**
  * Helper method for pulling the folio node contents and the designated user credentials.
- * @param string $node_id ..folio node ID
- * @param string $toggle ..toggle for pulling the account information
- * @return array containing the folio metadata
+ * 
+ * @param string $node_id
+ *   Folio node id.
+ * @param string $toggle
+ *    Toggle for pulling the account information.
+ * 
+ * @return array 
+ *   Containing the folio metadata.
  */
 function helper_pull_content($node_id, $toggle='') {
   // Load folio metadata.
@@ -426,8 +464,12 @@ function helper_pull_content($node_id, $toggle='') {
 }
 /**
  * Helper method for pulling the article node contents.
- * @param string $node_id ..article node ID
- * @return array containing the article metadata
+ * 
+ * @param string $node_id
+ *   Article node id.
+ * 
+ * @return array
+ *   Containing the article metadata.
  */
 function helper_pull_node($node_id) {
   $container = array();
@@ -437,22 +479,29 @@ function helper_pull_node($node_id) {
   $images = array();
   $img_list = "";
   $tags = "";
-  // checks if there are only 1 or more than 1 images
-  if (isset($node->field_image['und']))
+  // Checks if there is only 1 or more than 1 images.
+  if (isset($node->field_image['und'])) {
     $img_list = $node->field_image['und'];
-  elseif (isset($node->field_images['und']))
+  }
+  elseif (isset($node->field_images['und'])) {
     $img_list = $node->field_images['und'];
+  }
   // Store images in an array.
-  if ($img_list)
-    for ($i = 0; $i < count($img_list); $i++)
+  if ($img_list) {
+    for ($i = 0; $i < count($img_list); $i++) {
       array_push($images, file_create_url($img_list[$i]['uri']));
+    }
+  }
   // Translate tag ID into tag string.
-  if (isset($node->field_tags['und']))
-    for ($i = 0; $i < count($node->field_tags['und']); $i++)
-      if (isset($node->field_tags['und'][$i]['tid']))
+  if (isset($node->field_tags['und'])) {
+    for ($i = 0; $i < count($node->field_tags['und']); $i++) {
+      if (isset($node->field_tags['und'][$i]['tid'])) {
         $tags .= (taxonomy_term_load($node->field_tags['und'][$i]['tid'])->name) . ', ';
+      }
+    }
+  }
   $container['author'] = isset($node->field_folio_byline['und'][0]['value']) ? $node->field_folio_byline['und'][0]['value'] : $node->name;
-  $container['title']	= isset($node->title) ? $node->title : '';
+  $container['title'] = isset($node->title) ? $node->title : '';
   $container['desc'] = isset($node->field_intro) ? $node->field_intro['und'][0]['value'] : '';
   $container['kicker'] = '';
   $container['tags'] = ($tags != FALSE) ? substr($tags, 0, -2) : '';
@@ -469,34 +518,49 @@ function helper_pull_node($node_id) {
   return $container;
 }
 /**
- * Helper method for checking if an article node reference already exist within the folio node.
- * @param array  $container ..the list of article node references that are currently within the folio node
- * @param string $target .....the pending article node reference
- * @param string $lang .......the language of the folio node
+ * Helper method for checking if an article node reference 
+ * already exist within the folio node.
+ * 
+ * @param array  $container
+ *   List of article node references that are currently within the folio node.
+ * @param string $target
+ *   Pending article node reference.
+ * @param string $lang
+ *   Language of the folio node.
  */
 function helper_reference_check($container, $target, $lang) {
-  for ($i = 0; $i < count($container); $i++)
-    if ($container[$lang][$i]['target_id'] == $target)
+  for ($i = 0; $i < count($container); $i++) {
+    if ($container[$lang][$i]['target_id'] == $target) {
       return TRUE;
+    }
+  }
   return FALSE;
 }
 /**
- * Helper method for recursively removing all files & sub-directories within a given directory
- * @param string $directory ..name of the directory to be deleted
+ * Helper method for recursively removing 
+ * all files & sub-directories within a given directory.
+ * 
+ * @param string $directory
+ *   Name of the directory to be deleted.
  */
 function helper_rrmdir($directory) {
   foreach (glob($directory . '/*') as $item) {
-    if (is_dir($item))
+    if (is_dir($item)) {
       helper_rrmdir($item);
-    else
+    }
+    else {
       unlink($item);
+    }
   }
   rmdir($directory);
 }
 /**
  * Helper method for storing the image in the generated HTML article folder.
- * @param string $img_url ...URL to the source image
- * @param string $filename ..path to save the image (@ /dpsbridge/html/[filename]/)
+ * 
+ * @param string $img_url
+ *   URL to the source image.
+ * @param string $filename
+ *   Path to save the image (@ /dpsbridge/html/[filename]/).
  */
 function helper_save_img($img_url, $filename) {
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
@@ -504,25 +568,34 @@ function helper_save_img($img_url, $filename) {
   file_put_contents($directory . $filename, $img);
 }
 /**
- * Helper method for scaling the image accordingly and save the scaled image in a temp directory.
- * @param string $img_url .....the targeted image url (local)
- * @param string $newwidth ....specify the new image width
- * @param string newheight ....specify the new image height
- * @param string orientation ..specify if the image is landscape or portrait
- * @return string url to the scaled image
+ * Helper method for scaling the image and saving it in a temp directory.
+ * 
+ * @param string $img_url
+ *   The targeted image url (local).
+ * @param string $newwidth
+ *   Specify the new image width.
+ * @param string $newheight
+ *   Specify the new image height.
+ * @param string $orientation
+ *   Specify if the image is landscape or portrait.
+ * 
+ * @return string
+ *   Url of the scaled image.
  */
 function helper_scale_img($img_url, $newwidth, $newheight, $orientation) {
   header('Content-Type: image/jpeg');
   // Get the current sizes.
   list($width, $height) = getimagesize($img_url);
   $thumb = imagecreatetruecolor($newwidth, $newheight);
-  if (exif_imagetype($img_url) == IMAGETYPE_PNG) { // Resizes a .png image file
+  // Resizes a .png image file.
+  if (exif_imagetype($img_url) == IMAGETYPE_PNG) {
     $source = imagecreatefrompng($img_url);
     imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
     imagepng($thumb, dirname(__FILE__) . '/images/' . $orientation . '/temp.png');
     return 'images/' . $orientation . '/temp.png';
   }
-  elseif (exif_imagetype($img_url) == IMAGETYPE_JPEG) { // Resizes a .jpeg image file
+  // Resizes a .jpeg image file.
+  elseif (exif_imagetype($img_url) == IMAGETYPE_JPEG) {
     $source = imagecreatefromjpeg($img_url);
     imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
     imagejpeg($thumb, dirname(__FILE__) . '/images/' . $orientation . '/temp.jpg');
@@ -531,18 +604,31 @@ function helper_scale_img($img_url, $newwidth, $newheight, $orientation) {
 }
 /**
  * Helper method for writing the Folio.xml file.
- *   Located in /dpsbridge/html/[filename]/Folio.xml
- * @param string $title .........the article title, used as the filename after removing special characters
- * @param string $author ........the article author
- * @param string $mag_title ......the magazine title
- * @param string $folio_num ......the folio number 
- * @param string $desc ..........the folio description
- * @param string $kicker ........the folio kicker
- * @param string $tags ..........the folio tags
- * @param string $is_ads .........toggle for deciding if the article is an advertisement
- * @param string $version .......the targeted folio version
- * @param string $dimension .....the targeted folio dimension
- * @param string $orientation ...the article orientation, default to both orientations
+ * 
+ * Located in /dpsbridge/html/[filename]/Folio.xml
+ * 
+ * @param string $title
+ *   The article title, used as the filename after removing special characters.
+ * @param string $author
+ *   The article author.
+ * @param string $mag_title
+ *   The magazine title.
+ * @param string $folio_num
+ *   The folio number.
+ * @param string $desc
+ *   The folio description.
+ * @param string $kicker
+ *   The folio kicker.
+ * @param string $tags
+ *   The folio tags.
+ * @param string $is_ads
+ *   Toggle to indicate if the article is an advertisement.
+ * @param string $version
+ *   The targeted folio version.
+ * @param string $dimension
+ *   The targeted folio dimension.
+ * @param string $orientation
+ *   The article orientation, default to both orientations.
  */
 function helper_writeFolioXML($title, $author, $mag_title, $folio_num, $desc, $kicker, $tags, $is_ads, $version, $dimension, $orientation='Always') {
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
@@ -586,7 +672,7 @@ function helper_writeFolioXML($title, $author, $mag_title, $folio_num, $desc, $k
   $xml .= "<kicker>" . $kicker . "</kicker>\n";
   $xml .= "<isAdvertisement>" . $is_ads . "</isAdvertisement>\n";
   $xml .= "<orientation>" . strtolower($orientation) . "</orientation>\n";
-  //$xml .= 					"<smoothScrolling>Always</smoothScrolling>\n";
+  /*$xml .= "<smoothScrolling>Always</smoothScrolling>\n";*/
   $xml .= "</metadata>\n";
   $xml .= "</region>\n";
   $xml .= "</regions>\n";
@@ -606,10 +692,13 @@ function helper_writeFolioXML($title, $author, $mag_title, $folio_num, $desc, $k
 }
 /**
  * Helper method for writing the pkgproperties.xml file.
- *   Located in /dpsbridge/html/[filename]/META-INF/pkgproperties.xml
- * @param string $filename ..same as the article name
+ * 
+ * Located in /dpsbridge/html/[filename]/META-INF/pkgproperties.xml
+ * 
+ * @param string $filename
+ *   Same as the article name.
  */
-function helper_writePKG($filename) {
+function helper_writepkg($filename) {
   $directory   = drupal_get_path('module', 'dpsbridge') . '/html/';
   $current_date = date('Y-m-d\TH:i:s');
   // Generate the content of the pkgproperties.xml.
