@@ -148,7 +148,7 @@ function helper_format_thumbnail($url) {
  * @return string
  *   Containing the embedded video URL.
  */
-function helper_format_URL($url) {
+function helper_format_url($url) {
   $pattern = '/v=([\w]+)(&)*/';
   preg_match($pattern, $url, $formated_url);
   return 'http://youtube.com/embed/' . $formated_url[1];
