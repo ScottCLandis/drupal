@@ -3,11 +3,11 @@
 /**
  * @file
  * Enable views for the DPSBridge module.
- * 
  */
 
 /**
- * Gemerate the following views page (sourced @ /dpsbridge/views/):
+ * Gemerate the following views page (sourced @ /dpsbridge/views/).
+ * 
  *   - Folio Selection view
  *   - Folio Management view
  *   - Adobe DPS Folio Configuration view

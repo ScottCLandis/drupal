@@ -5,6 +5,9 @@
  * Install, update and uninstall functions of the DPSBridge module.
  */
 
+/**
+ * Implements hook_install().
+ */
 function dpsbridge_install() {
   node_types_rebuild();
   $types = node_type_get_types();
@@ -12,6 +15,9 @@ function dpsbridge_install() {
   add_custom_fields();
 }
 
+/**
+ * Implements hook_uninstall().
+ */
 function dpsbridge_uninstall() {
   $folios = 'folios';
   $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
@@ -22,14 +28,17 @@ function dpsbridge_uninstall() {
   }
   node_delete_multiple($node_ids);
   delete_custom_fields();
-  //Node_type_delete($folios);
+  // Node_type_delete($folios);.
   field_purge_batch(500);
 }
 
+/**
+ * Add Custom Fields.
+ */
 function add_custom_fields() {
-  // install folio fields
+  // Install folio fields.
   foreach (_dpsbridge_install_folio_fields() as $field) {
-      field_create_field($field);
+    field_create_field($field);
   }
   // Install folio instances.
   foreach (_dpsbridge_installed_folio_instances() as $fieldinstance) {
@@ -51,6 +60,9 @@ function add_custom_fields() {
   }
 }
 
+/**
+ * Delete Custom Fields.
+ */
 function delete_custom_fields() {
   // Delete folio fields.
   foreach (array_keys(_dpsbridge_install_folio_fields()) as $field) {
@@ -72,6 +84,10 @@ function delete_custom_fields() {
   field_delete_instance($article_reference_instances);
 }
 
+
+/**
+ * Add Article Fields.
+ */
 function _dpsbridge_install_article_fields() {
   $t = get_t();
   return array(
@@ -87,6 +103,9 @@ function _dpsbridge_install_article_fields() {
   );
 }
 
+/**
+ * Install Article Instances.
+ */
 function _dpsbridge_installed_article_instances() {
   $t = get_t();
   return array(
@@ -118,6 +137,9 @@ function _dpsbridge_installed_article_instances() {
   );
 }
 
+/**
+ * Function to install Folio fields.
+ */
 function _dpsbridge_install_folio_fields() {
   $t = get_t();
   return array(
@@ -213,6 +235,9 @@ function _dpsbridge_install_folio_fields() {
   );
 }
 
+/**
+ * Function to install Folio instances.
+ */
 function _dpsbridge_installed_folio_instances() {
   $t = get_t();
   return array(
