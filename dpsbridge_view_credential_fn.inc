@@ -11,7 +11,7 @@ var apikey,            // Folio Producer API key
 	apple_pass,        // Apple - Folio Producer user password
 	apple_dimension,   // Apple - available dimensions
 	baseURL = "<?= $GLOBALS['base_url'] ?>",
-    pathToDir = "<?= drupal_get_path('module', 'dpsbridge') ?>";
+  pathToDir = "<?= drupal_get_path('module', 'dpsbridge') ?>";
 /* =================================================== *
  * Given the account type,
  *   call helper to connect to Folio Producer,
@@ -342,4 +342,3 @@ $(function() {
 	$('#jqueryui-tabs').tabs();
 });
 </script>
-

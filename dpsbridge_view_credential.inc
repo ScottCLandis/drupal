@@ -71,4 +71,3 @@ Overlay for displaying status
 <div id="dialog-status" title="Notice">
 	<div id="status"></div>
 </div>
-
