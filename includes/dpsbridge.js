@@ -70,7 +70,7 @@ function helper_folio_clone(baseURL, folioNodeID) {
 		data: { "fid":folioNodeID },
 		success: function(output) {
 			if (output === 'ok')
-				window.location = baseURL+"/fpmanage";
+				window.location = baseURL+"/admin/config/dpsbridge/fpmanage";
 			else
 				helper_show_status(output);
 		}
@@ -102,7 +102,7 @@ function helper_delete_node(baseURL, nodeID) {
 		data: { "fid":nodeID },
 		success: function(output) {
 			if (output === 'ok')
-				window.location = baseURL+"/fpmanage";
+				window.location = baseURL+"/admin/config/dpsbridge/fpmanage";
 			else
 				helper_show_status(output);
 		}

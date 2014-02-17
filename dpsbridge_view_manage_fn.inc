@@ -276,7 +276,7 @@ function node_status_timestamp(folioNodeID) {
 		success: function(output) {
 			fp_logout();
 			helper_update_status("Redirecting in 5 seconds...");
-			setTimeout(function() { window.location = baseURL+"/fpmanage"; }, 5000);
+			setTimeout(function() { window.location = baseURL+"/admin/config/dpsbridge/fpmanage"; }, 5000);
 		}
 	});
 }
@@ -325,7 +325,7 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 					html += "<td class='article-index'><input type='checkbox' value='"+articleID+"' /></td>\n";
 					html += "<td><span class='ui-icon ui-icon-arrow-4'></span></td>\n";
 					html += "<td id='articleSortIndex-"+index+"' class='sortable-index' style='text-align:center'>"+index+"</td>\n";
-					html += "<td><a href='/node/"+articleID+"/edit?destination=fpmanage'><span class='ui-icon ui-icon-pencil'></span></a></td>\n";
+					html += "<td><a href='/node/"+articleID+"/edit?destination=admin/config/dpsbridge/fpmanage'><span class='ui-icon ui-icon-pencil'></span></a></td>\n";
 					html += "<td><a href='javascript:previewOptions("+articleID+", \""+output['filename']+"\")'>"+output['title']+"</a></td>\n";
 					html += "<td>"+output['type']+"</td>\n";
 					//html += "<td><select class='overridecss'></select></td>\n";
@@ -655,7 +655,7 @@ $(function() {
 						"articles"    :articles, },
 					success: function(output) {
 						if (output === 'ok')
-							window.location = baseURL+"/fpmanage";
+							window.location = baseURL+"/admin/config/dpsbridge/fpmanage";
 						else
 							helper_show_status("Failed to update '"+fname.val()+"'<br/><br/>:: "+output, 400, 300);
 					},

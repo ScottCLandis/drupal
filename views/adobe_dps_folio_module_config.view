@@ -31,7 +31,7 @@ $handler->display->display_options['header']['php']['php_output'] = '<?php
 echo "<div id=\'jqueryui-tabs\'>\\n";
 echo	"<ul>\\n";
 echo		"<li><a href=\'#tabs-1\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/fpselect\\"\'>Folio Article Selection</a></li>\\n";
-echo		"<li><a href=\'#tabs-2\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/fpmanage\\"\'>Folio Management View</a></li>\\n";
+echo		"<li><a href=\'#tabs-2\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/dpsbridge/fpmanage\\"\'>Folio Management View</a></li>\\n";
 echo		"<li class=\'ui-tabs-active\'><a href=\'#tabs-3\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/dpsbridge/fpconfig\\"\'>Adobe DPS Folio Module Config</a></li>\\n";
 echo	"</ul>\\n";
 echo "</div>\\n";
