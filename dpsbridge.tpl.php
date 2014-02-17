@@ -10,7 +10,7 @@ $fpcredent  = FALSE;
 if (views_get_page_view()) {
 	$url = "$_SERVER[REQUEST_URI]";
 	// If on the Folio Article Selection page.
-	if (strpos($url, "fpselect")) {
+	if (strpos($url, "admin/config/dpsbridge/fpselect")) {
 		if (user_access('folio_article_permission')) {
 			$fpselect = TRUE;
 			helper_include_goodies('select');
@@ -79,7 +79,8 @@ if ($fpmanage || $fpselect || $fpcredent) {
 
 ?>
 
-<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/fpselect'">Folio Article Selection</button>
+<!--
+<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpselect'">Folio Article Selection</button>
 <button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpmanage'">Folio Management View</button>
 <button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpconfig'">Adobe DPS Folio Module Config</button>
-
+-->

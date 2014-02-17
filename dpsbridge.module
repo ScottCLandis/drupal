@@ -49,8 +49,17 @@ function dpsbridge_menu() {
     'page arguments' => array('dpsbridge_settings'),
     'access arguments' => array('administer dpsbridge'),
     'file' => 'dpsbridge.admin.inc',
-    'weight' => -100,
-  );    
+    'weight' => -101,
+  );
+  $items['admin/config/dpsbridge/fpselect'] = array(
+    'title' => 'Folio Article Selection',
+    'description' => "Folio Article Selection",
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dpsbridge_settings'),
+    'access arguments' => array('administer dpsbridge'),
+    'file' => 'dpsbridge.admin.inc',
+    'weight' => -102,
+  );   
   $items['dpsbridge/dps/credentials/add'] = array(
     'title' => 'Updates the Adobe DPS Credentials',
     'page callback' => 'dpsbridge_dps_credentials_add',

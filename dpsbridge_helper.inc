@@ -335,7 +335,7 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
  * 
  *   - /admin/config/dpsbridge/fpconfig
  *   - /admin/config/dpsbridge/fpmanage
- *   - /fpselect
+ *   - /admin/config/dpsbridge/fpselect
  * 
  * @param string $toggle
  *   Includes the respective javascript depending on the view page.

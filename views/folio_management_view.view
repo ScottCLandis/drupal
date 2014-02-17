@@ -110,19 +110,20 @@ $handler->display->display_options['style_options']['info'] = array(
 );
 $handler->display->display_options['style_options']['empty_table'] = TRUE;
 /* Header: Global: PHP */
+/* Remove View Header.
 $handler->display->display_options['header']['php']['id'] = 'php';
 $handler->display->display_options['header']['php']['table'] = 'views';
 $handler->display->display_options['header']['php']['field'] = 'php';
 $handler->display->display_options['header']['php']['php_output'] = '<?php
 echo "<div id=\'jqueryui-tabs\'>\\n";
 echo  "<ul>\\n";
-echo    "<li><a href=\'#tabs-1\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/fpselect\\"\'>Folio Article Selection</a></li>\\n";
+echo    "<li><a href=\'#tabs-1\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/dpsbridge/fpselect\\"\'>Folio Article Selection</a></li>\\n";
 echo    "<li class=\'ui-tabs-active\'><a href=\'#tabs-2\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/dpsbridge/fpmanage\\"\'>Folio Management View</a></li>\\n";
 echo    "<li><a href=\'#tabs-3\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/dpsbridge/fpconfig\\"\'>Adobe DPS Folio Module Config</a></li>\\n";
 echo  "</ul>\\n";
 echo "</div>\\n";
-?>
-';
+?>';
+ */
 /* Field: Bulk operations: Content */
 $handler->display->display_options['fields']['views_bulk_operations']['id'] = 'views_bulk_operations';
 $handler->display->display_options['fields']['views_bulk_operations']['table'] = 'node';
