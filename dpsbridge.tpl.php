@@ -31,7 +31,7 @@ if (views_get_page_view()) {
 			drupal_goto('dpsbridge/views/access-denied');
 		}
 	}
-	// If on the Adobe DPS Folio Module Config page.
+	// If on the DPSBridge Config page.
 	else if (strpos($url, "admin/config/dpsbridge/fpconfig")) {
 		if (user_access('folio_config_permission')) {
 			$fpcredent = TRUE;
@@ -79,8 +79,8 @@ if ($fpmanage || $fpselect || $fpcredent) {
 
 ?>
 
-<!--
+<!--  These redundant button based navigation is not required.
 <button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpselect'">Folio Article Selection</button>
 <button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpmanage'">Folio Management View</button>
-<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpconfig'">Adobe DPS Folio Module Config</button>
+<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpconfig'">DPSBridge Config</button>
 -->

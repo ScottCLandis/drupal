@@ -44,10 +44,10 @@ function helper_create_dir($filename) {
   if (!file_exists($directory . '/' . $filename)) {
     mkdir($directory . $filename);
     mkdir($directory . $filename . '/META-INF');
-    $folio_xml    = fopen($directory . $filename . '/Folio.xml', 'w+');
-    $index_html   = fopen($directory . $filename . '/' . $filename . '.html', 'w+');
-    $mimetype    = fopen($directory . $filename . '/mimetype', 'w+');
-    $metadata    = fopen($directory . $filename . '/META-INF/pkgproperties.xml', 'w+');
+    $folio_xml = fopen($directory . $filename . '/Folio.xml', 'w+');
+    $index_html = fopen($directory . $filename . '/' . $filename . '.html', 'w+');
+    $mimetype = fopen($directory . $filename . '/mimetype', 'w+');
+    $metadata = fopen($directory . $filename . '/META-INF/pkgproperties.xml', 'w+');
     $mimecontent = "application/vnd.dpsbridge.folio+zip";
     file_put_contents($directory . $filename . '/mimetype', $mimecontent);
     fclose($folio_xml);

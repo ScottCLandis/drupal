@@ -181,7 +181,7 @@ function dpsbridge_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK);
   $items['dpsbridge/views/access-denied'] = array(
-    'title' => 'Adobe DPS Folio Module Config page',
+    'title' => 'DPSBridge Config page',
     'page callback' => 'dpsbridge_views_access_denied',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK);
@@ -1054,7 +1054,7 @@ function dpsbridge_permission() {
       'description' => t('Allow users to edit and upload folios.'),
     ),
     'folio_config_permission' => array(
-      'title' => t('Adobe DPS Folio Module Config'),
+      'title' => t('DPSBridge Config'),
       'description' => t('Allow users to add and edit Folio Producer credentials.'),
     ),
   );
