@@ -32,7 +32,7 @@ if (views_get_page_view()) {
 		}
 	}
 	// If on the Adobe DPS Folio Module Config page.
-	else if (strpos($url, "fpconfig")) {
+	else if (strpos($url, "admin/config/dpsbridge/fpconfig")) {
 		if (user_access('folio_config_permission')) {
 			$fpcredent = TRUE;
 			helper_include_goodies('config');
@@ -81,5 +81,5 @@ if ($fpmanage || $fpselect || $fpcredent) {
 
 <button onclick="window.location='<?= $GLOBALS['base_url'] ?>/fpselect'">Folio Article Selection</button>
 <button onclick="window.location='<?= $GLOBALS['base_url'] ?>/fpmanage'">Folio Management View</button>
-<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/fpconfig'">Adobe DPS Folio Module Config</button>
+<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpconfig'">Adobe DPS Folio Module Config</button>
 

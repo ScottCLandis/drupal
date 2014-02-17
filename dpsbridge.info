@@ -6,6 +6,7 @@ core = 7.x
 
 files[] = dpsbridge.install
 files[] = dpsbridge.module
+files[] = dpsbridge.admin
 
 dependencies[] = entityreference
 dependencies[] = views

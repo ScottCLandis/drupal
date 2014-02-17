@@ -23,6 +23,25 @@ function dpsbridge_init() {
  */
 function dpsbridge_menu() {
   $items = array();
+  $items['admin/config/dpsbridge'] = array(
+    'title' => 'Adobe DPS Bridge',
+    'description' => 'Manage DPSBridge settings. ',
+    'position' => 'left',
+    'weight' => -5,
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('administer dpsbridge'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+  $items['admin/config/dpsbridge/fpconfig'] = array(
+    'title' => 'Configuration',
+    'description' => "Manage DPSBridge module settings",
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dpsbridge_settings'),
+    'access arguments' => array('administer dpsbridge'),
+    'file' => 'dpsbridge.admin.inc',
+    'weight' => -100,
+  );  
   $items['dpsbridge/dps/credentials/add'] = array(
     'title' => 'Updates the Adobe DPS Credentials',
     'page callback' => 'dpsbridge_dps_credentials_add',
