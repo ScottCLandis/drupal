@@ -1,11 +1,11 @@
 <?php
 
 $view = new view();
-$view->name = 'adobe_dps_folio_module_config';
+$view->name = 'dpsbridge_module_config';
 $view->description = '';
 $view->tag = 'default';
 $view->base_table = 'node';
-$view->human_name = 'Adobe DPS Folio Module Config';
+$view->human_name = 'DPSBridge Module Config';
 $view->core = 7;
 $view->api_version = '3.0';
 $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
