@@ -1,4 +1,4 @@
-name = "DPSBridge"
+name = "DPS Bridge"
 description = "This module will convert the contents from selected page(s) into HTML format and upload it into Adobe Folio Producer."
 version = 7.x-1.0
 package = "Adobe DPS"
@@ -7,6 +7,8 @@ core = 7.x
 files[] = dpsbridge.install
 files[] = dpsbridge.module
 files[] = dpsbridge.admin
+
+configure = admin/config/content/dpsbridge
 
 dependencies[] = entityreference
 dependencies[] = views

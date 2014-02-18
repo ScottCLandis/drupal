@@ -11,8 +11,8 @@
 	$_SESSION['Password']  = htmlspecialchars(isset($_POST["Password"])?$_POST["Password"]:'');
 	$_SESSION['APIKey']    = htmlspecialchars(isset($_POST["APIKey"])?$_POST["APIKey"]:'');
 	$_SESSION['APISecret'] = htmlspecialchars(isset($_POST["APISecret"])?$_POST["APISecret"]:'');
-	$folio_id  			   = htmlspecialchars(isset($_POST['folioID'])?$_POST['folioID']:'');
-	$isTest				   = htmlspecialchars(isset($_POST["Test"])?$_POST["Test"]:'');
+	$folio_id = htmlspecialchars(isset($_POST['folioID'])?$_POST['folioID']:'');
+	$isTest = htmlspecialchars(isset($_POST["Test"])?$_POST["Test"]:'');
 
 	$fp = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
 	$config->fp = $fp;

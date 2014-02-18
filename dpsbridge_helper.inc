@@ -333,9 +333,9 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
 /**
  * Helper method for including the css/js for each of the 3 view pages.
  * 
- *   - /admin/config/dpsbridge/fpconfig
- *   - /admin/config/dpsbridge/fpmanage
- *   - /admin/config/dpsbridge/fpselect
+ *   - /admin/config/content/dpsbridge
+ *   - /admin/config/content/fpmanage
+ *   - /admin/config/content/fpselect
  * 
  * @param string $toggle
  *   Includes the respective javascript depending on the view page.

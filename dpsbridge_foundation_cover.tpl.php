@@ -33,28 +33,28 @@
   <div id='display-home' class='row'>
     <div class='large-12 small-12 columns'>
       <div class='large-12 small-12 columns'>
-      // If a landscape image was provided.
+      <?php
       if ($landscape) {
         $landscape_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $landscape);
         file_put_contents($directory . 'Cover/landscape.png', $landscape_img);
-        $content .= "<div class='show-for-landscape'><img src='landscape.png' width='100%' /></div>
+      ?>
+        <div class='show-for-landscape'><img src='landscape.png' width='100%' /></div>
+      <?php
       }
-      else {
-        $content .= "<div class='show-for-landscape'><img src='portrait.png' width='100%' /></div>
+      else {?>
+        <div class='show-for-landscape'><img src='portrait.png' width='100%' /></div>
+      <?php
       }
-      // If a portrait image was provided.
       if ($portrait) {
         $portrait_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $portrait);
-        file_put_contents($directory . 'Cover/portrait.png', $portrait_img);
-        $content .= "<div class='show-for-portrait'><img src='portrait.png' width='100%' /></div>
+        file_put_contents($directory . 'Cover/portrait.png', $portrait_img);?>
+        <div class='show-for-portrait'><img src='portrait.png' width='100%' /></div>
+      <?php
       }
-      else {
-        $content .= "<div class='show-for-portrait'><img src='landscape.png' width='100%' /></div>
-      }
-      // Generate the contents of the HTML article.
-
-
-        $html .= $content;
+      else {?>
+        <div class='show-for-portrait'><img src='landscape.png' width='100%' /></div>
+      <?php
+      }?> 
       </div>
     </div>
   </div>

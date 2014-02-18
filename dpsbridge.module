@@ -23,17 +23,7 @@ function dpsbridge_init() {
  */
 function dpsbridge_menu() {
   $items = array();
-  $items['admin/config/dpsbridge'] = array(
-    'title' => 'Adobe DPS Bridge',
-    'description' => 'Manage DPSBridge settings. ',
-    'position' => 'left',
-    'weight' => -5,
-    'page callback' => 'system_admin_menu_block_page',
-    'access arguments' => array('administer dpsbridge'),
-    'file' => 'system.admin.inc',
-    'file path' => drupal_get_path('module', 'system'),
-  );
-  $items['admin/config/dpsbridge/fpconfig'] = array(
+  $items['admin/config/content/dpsbridge'] = array(
     'title' => 'DPS Bridge Configuration',
     'description' => "Manage DPSBridge module settings",
     'page callback' => 'drupal_get_form',
@@ -42,23 +32,23 @@ function dpsbridge_menu() {
     'file' => 'dpsbridge.admin.inc',
     'weight' => -100,
   );
-  $items['admin/config/dpsbridge/fpmanage'] = array(
+  $items['admin/config/content/fpmanage'] = array(
     'title' => 'Folio Management',
-    'description' => "Folio Management View",
+    'description' => "Manage Folios created by the DPS Bridge module.",
     'page callback' => 'drupal_get_form',
     'page arguments' => array('dpsbridge_settings'),
-    'access arguments' => array('administer dpsbridge'),
+    'access arguments' => array('manage dpsbridge folio'),
     'file' => 'dpsbridge.admin.inc',
-    'weight' => -101,
+    'weight' => -9,
   );
-  $items['admin/config/dpsbridge/fpselect'] = array(
-    'title' => 'Folio Article Selection',
-    'description' => "Folio Article Selection",
+  $items['admin/config/content/fpselect'] = array(
+    'title' => 'Folio Article Selection', 
+    'description' => "Create Folio by selected content.",
     'page callback' => 'drupal_get_form',
     'page arguments' => array('dpsbridge_settings'),
     'access arguments' => array('administer dpsbridge'),
     'file' => 'dpsbridge.admin.inc',
-    'weight' => -102,
+    'weight' => -8,
   );   
   $items['dpsbridge/dps/credentials/add'] = array(
     'title' => 'Updates the Adobe DPS Credentials',
@@ -1045,17 +1035,17 @@ function dpsbridge_node_info() {
  */
 function dpsbridge_permission() {
   return array(
+    'administer dpsbridge' => array(
+      'title' => t('Administer DPS Bridge'),
+      'description' => t('Allow users to add and edit Folio Producer credentials.'),
+    ),    
     'folio_article_permission' => array(
       'title' => t('Folio Article Selection View'),
       'description' => t('Allow users to add articles to a folio.'),
     ),
-    'folio_management_permission' => array(
+    'manage dpsbridge folio' => array(
       'title' => t('Folio Management View'),
       'description' => t('Allow users to edit and upload folios.'),
-    ),
-    'folio_config_permission' => array(
-      'title' => t('DPSBridge Config'),
-      'description' => t('Allow users to add and edit Folio Producer credentials.'),
     ),
   );
 }

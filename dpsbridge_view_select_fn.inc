@@ -54,7 +54,7 @@ $(function() {
 						"articles":articles, },
 					success: function(output) {
 						if (output === 'ok')
-							window.location = baseURL+"/admin/config/dpsbridge/fpmanage";
+							window.location = baseURL+"/admin/config/content/fpmanage";
 						else
 							helper_show_status(output);
 					}
@@ -76,7 +76,7 @@ $(function() {
 						"articles":articles, },
 					success: function(output) {
 						if (output === 'ok')
-							window.location = baseURL+"/admin/config/dpsbridge/fpmanage";
+							window.location = baseURL+"/admin/config/content/fpmanage";
 						else
 							helper_show_status(output);
 					}

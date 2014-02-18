@@ -117,9 +117,9 @@ $handler->display->display_options['header']['php']['field'] = 'php';
 $handler->display->display_options['header']['php']['php_output'] = '<?php
 echo "<div id=\'jqueryui-tabs\'>\\n";
 echo  "<ul>\\n";
-echo    "<li><a href=\'#tabs-1\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/dpsbridge/fpselect\\"\'>Folio Article Selection</a></li>\\n";
-echo    "<li class=\'ui-tabs-active\'><a href=\'#tabs-2\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/dpsbridge/fpmanage\\"\'>Folio Management View</a></li>\\n";
-echo    "<li><a href=\'#tabs-3\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/dpsbridge/fpconfig\\"\'>DPSBridge Config</a></li>\\n";
+echo    "<li><a href=\'#tabs-1\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/content/fpselect\\"\'>Folio Article Selection</a></li>\\n";
+echo    "<li class=\'ui-tabs-active\'><a href=\'#tabs-2\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/content/fpmanage\\"\'>Folio Management View</a></li>\\n";
+echo    "<li><a href=\'#tabs-3\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/content/dpsbridge\\"\'>DPSBridge Config</a></li>\\n";
 echo  "</ul>\\n";
 echo "</div>\\n";
 ?>';
@@ -321,5 +321,5 @@ $handler->display->display_options['filters']['type']['value'] = array(
 
 /* Display: Page */
 $handler = $view->new_display('page', 'Page', 'page');
-$handler->display->display_options['path'] = 'admin/config/dpsbridge/fpmanage';
+$handler->display->display_options['path'] = 'admin/config/content/fpmanage';
 

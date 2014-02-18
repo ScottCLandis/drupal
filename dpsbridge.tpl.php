@@ -10,7 +10,7 @@ $fpcredent  = FALSE;
 if (views_get_page_view()) {
 	$url = "$_SERVER[REQUEST_URI]";
 	// If on the Folio Article Selection page.
-	if (strpos($url, "admin/config/dpsbridge/fpselect")) {
+	if (strpos($url, "admin/config/content/fpselect")) {
 		if (user_access('folio_article_permission')) {
 			$fpselect = TRUE;
 			helper_include_goodies('select');
@@ -22,8 +22,8 @@ if (views_get_page_view()) {
 		}
 	}
 	// If on the Folio Management page.
-	else if (strpos($url, "admin/config/dpsbridge/fpmanage")) {
-		if (user_access('folio_management_permission')) {
+	else if (strpos($url, "admin/config/content/fpmanage")) {
+		if (user_access('manage dpsbridge folio')) {
 			$fpmanage = TRUE;
 			helper_include_goodies('manage');
 			require_once drupal_get_path('module', 'dpsbridge').'/dpsbridge_view_manage.inc';
@@ -32,8 +32,8 @@ if (views_get_page_view()) {
 		}
 	}
 	// If on the DPSBridge Config page.
-	else if (strpos($url, "admin/config/dpsbridge/fpconfig")) {
-		if (user_access('folio_config_permission')) {
+	else if (strpos($url, "admin/config/content/dpsbridge")) {
+		if (user_access('administer dpsbridge')) {
 			$fpcredent = TRUE;
 			helper_include_goodies('config');
 			require_once drupal_get_path('module', 'dpsbridge').'/dpsbridge_view_credential.inc';
@@ -80,7 +80,7 @@ if ($fpmanage || $fpselect || $fpcredent) {
 ?>
 
 <!--  These redundant button based navigation is not required.
-<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpselect'">Folio Article Selection</button>
-<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpmanage'">Folio Management View</button>
-<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/dpsbridge/fpconfig'">DPSBridge Config</button>
+<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/content/fpselect'">Folio Article Selection</button>
+<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/content/fpmanage'">Folio Management View</button>
+<button onclick="window.location='<?= $GLOBALS['base_url'] ?>/admin/config/content/dpsbridge'">DPSBridge Config</button>
 -->
