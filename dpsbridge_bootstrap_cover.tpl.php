@@ -31,31 +31,41 @@
   <script type='text/javascript'>try{Typekit.load();}catch(e){}</script>
 </head>
 <body>
-  <div id="display-home" class="container">
+  <div id='display-home' class='container'>
+  <div class='col-lg-12 col-12'>
     <div class='col-lg-12 col-12'>
-      <div class='col-lg-12 col-12'>
-        <div class='navbar navbar-fixed-top text-center'>
-          <h4><?php print $publication; ?></h4>
-          <h6>Foundation</h6>
-        </div>
-        <h1 class='title'>Table of Contents</h1>
-      </div>
-      <div class='col-lg-12 col-12'>
-      <?php
-        for ($i = 1, $n = 1; $i < count($article_names); $i++) {
-          if ($ads_list[$i - 1] == TRUE) {
-            continue;
-          }
-      ?>
-        <div class='col-lg-12 col-12'>
-          <h4><a class="bluebg" href="navto://<?php print helper_format_title($article_names[$i]); ?>"> <?php print $n; ?> )  <?php print $article_names[$i]; ?></a></h4>
-        </div>
-      <?php
-          $n++;
-        }
-      ?>        
-      </div>
+    <div class='navbar navbar-fixed-top text-center'>
+      <h4><?php $publication; ?></h4>
+      <h6>Cover</h6>
     </div>
+    <h1 class='title'>Table of Contents</h1>
+    </div>
+    <div class='col-lg-12 col-12'>
+    <?php 
+    // If a landscape image was provided.
+    if ($landscape) {
+      $landscape_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $landscape);
+      file_put_contents($directory . 'Cover/landscape.png', $landscape_img);?>
+      <div class='visible-lg'><img src='landscape.png' width='100%' /></div>
+    <?php
+    }
+    else {?>
+      <div class='visible-lg'><img src='portrait.png' width='100%' /></div>
+    <?php
+    }
+    // If a portrait image was provided.
+    if ($portrait) {
+      $portrait_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $portrait);
+      file_put_contents($directory . 'Cover/portrait.png', $portrait_img);?>
+      <div class='hidden-lg'><img src='portrait.png' width='100%' /></div>
+    <?
+    }
+    else {?>
+      <div class='hidden-lg'><img src='landscape.png' width='100%' /></div>
+    <?php
+    }?>
+    </div>
+  </div>
   </div>
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/jquery.js'></script>
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/bootstrap.min.js'></script>
