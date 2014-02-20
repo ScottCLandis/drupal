@@ -44,7 +44,7 @@ $(function() {
 			"Create Folio": function() {
 				helper_show_status("Adding the selected Article(s) to \""+fname.val()+"\", please wait...");
 				$.ajax({
-					url: baseURL+"/adobe/folio/add",
+					url: baseURL+"/dpsbridge/folio/add",
 					type: "POST",
 					data: {
 						"fname":fname.val(),
@@ -69,7 +69,7 @@ $(function() {
 				var fid = $("#fid :selected")
 				helper_show_status("Adding the selected Article(s) to \""+fid.text()+"\", please wait...");
 				$.ajax({
-					url: baseURL+"/adobe/folio/append",
+					url: baseURL+"/dpsbridge/folio/append",
 					type: "POST",
 					data: {
 						"fid":fid.val(),

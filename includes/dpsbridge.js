@@ -65,7 +65,7 @@ function helper_generate_dimensions(id, dimensions, toggle) {
  */
 function helper_folio_clone(baseURL, folioNodeID) {
 	$.ajax({
-		url: baseURL+"/adobe/folio/clone-node",
+		url: baseURL+"/dpsbridge/folio/clone-node",
 		type: "POST",
 		data: { "fid":folioNodeID },
 		success: function(output) {
@@ -84,7 +84,7 @@ function helper_folio_clone(baseURL, folioNodeID) {
  */
 function helper_delete_files(baseURL, filenames) {
 	$.ajax({
-		url: baseURL+"/adobe/folio/clean-up",
+		url: baseURL+"/dpsbridge/folio/clean-up",
 		type: "POST",
 		data: { "filenames":filenames }
 	});
@@ -97,7 +97,7 @@ function helper_delete_files(baseURL, filenames) {
  */
 function helper_delete_node(baseURL, nodeID) {
 	$.ajax({
-		url: baseURL+"/adobe/folio/delete-node",
+		url: baseURL+"/dpsbridge/folio/delete-node",
 		type: "POST",
 		data: { "fid":nodeID },
 		success: function(output) {
@@ -118,7 +118,7 @@ function helper_delete_node(baseURL, nodeID) {
 function helper_download_file(baseURL, filepath, filename, toggle) {
 	$('#dialog-upload-status').dialog('close');
 	$('<form>').attr('method', 'post')
-			   .attr('action', baseURL+'/adobe/folio/download-selected')
+			   .attr('action', baseURL+'/dpsbridge/folio/download-selected')
 			   .append('<input name="filename" value="'+filename+'" />')
 			   .append('<input name="destination" value="'+filepath+'" />')
 			   .append('<input name="toggle" value="'+toggle+'" />')
