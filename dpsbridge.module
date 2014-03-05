@@ -352,19 +352,19 @@ function dpsbridge_folio_append() {
  */
 function dpsbridge_folio_cleanup() {
   // List of file names, used to generate HTML Articles and .folio files.
-  $filenames = isset($_POST['filenames']) ? $_POST['filenames'] : '';
-  $message  = 'ok';
-  if (!$filenames) {
-    $message = '[Error] Missing array containing file metadata!';
-  }
-  else {
-    for ($i = 0; $i < count($filenames); $i++) {
-      $file = helper_format_title($filenames[$i]);
-      unlink(dirname(__FILE__) . '/folio/' . $file . '.folio');
-      helper_rrmdir(dirname(__FILE__) . '/html/' . $file);
-    }
-  }
-  drupal_json_output($message);
+//  $filenames = isset($_POST['filenames']) ? $_POST['filenames'] : '';
+//  $message  = 'ok';
+//  if (!$filenames) {
+//    $message = '[Error] Missing array containing file metadata!';
+//  }
+//  else {
+//    for ($i = 0; $i < count($filenames); $i++) {
+//      $file = helper_format_title($filenames[$i]);
+//      unlink(dirname(__FILE__) . '/folio/' . $file . '.folio');
+//      helper_rrmdir(dirname(__FILE__) . '/html/' . $file);
+//    }
+//  }
+//  drupal_json_output($message);
   drupal_exit();
 }
 /**
@@ -1053,10 +1053,77 @@ function dpsbridge_permission() {
  * Implements hook_theme().
  */
 function dpsbridge_theme() {
+  $path = drupal_get_path('module', 'dpsbridge');
   return array(
     'dpsbridge' => array(
       'template' => 'dpsbridge',
       'arguments' => array(),
+    ),
+    'dpsbridge_bootstrap_cover' => array(
+      'variables' => array(
+        'publication' => NULL,
+        'landscape' => NULL,
+        'portrait' => NULL,
+        'directory' => NULL,
+      ),
+      'template' => 'dpsbridge-bootstrap-cover',
+      'path' => $path . '/theme',
+    ),
+    'dpsbridge_bootstrap_toc' => array(
+      'variables' => array(
+        'publication' => NULL,
+        'ads_list' => NULL,
+        'article_names' => NULL,
+      ),
+      'template' => 'dpsbridge-bootstrap-toc',
+      'path' => $path . '/theme',
+    ),
+    'dpsbridge_bootstrap' => array(
+      'variables' => array(
+        'publication' => NULL,
+        'kicker' => NULL,
+        'title' => NULL,
+        'author' => NULL,
+        'images' => NULL,
+        'filename' => NULL,
+        'videos' => NULL,
+        'paragraphs' => NULL,
+      ),
+      'template' => 'dpsbridge-bootstrap',
+      'path' => $path . '/theme',
+    ),
+    'dpsbridge_foundation_cover' => array(
+      'variables' => array(
+        'publication' => NULL,
+        'landscape' => NULL,
+        'portrait' => NULL,
+        'directory' => NULL,
+      ),
+      'template' => 'dpsbridge-foundation-cover',
+      'path' => $path . '/theme',
+    ),
+    'dpsbridge_foundation_toc' => array(
+      'variables' => array(
+        'publication' => NULL,
+        'ads_list' => NULL,
+        'article_names' => NULL,
+      ),
+      'template' => 'dpsbridge-foundation-toc',
+      'path' => $path . '/theme',
+    ),
+    'dpsbridge_foundation' => array(
+      'variables' => array(
+        'publication' => NULL,
+        'kicker' => NULL,
+        'title' => NULL,
+        'author' => NULL,
+        'images' => NULL,
+        'filename' => NULL,
+        'videos' => NULL,
+        'paragraphs' => NULL,
+      ),
+      'template' => 'dpsbridge-foundation',
+      'path' => $path . '/theme',
     ),
   );
 }
