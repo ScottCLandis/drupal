@@ -16,13 +16,13 @@ if (views_get_page_view()) {
 			helper_include_goodies('select');
 			$fp_nodes_all = node_load_multiple(array(), array('type' => 'folios'));
 			$fp_nodes_selected = array();
-			require_once drupal_get_path('module', 'dpsbridge').'/dpsbridge_view_select.inc';
+//			require_once drupal_get_path('module', 'dpsbridge').'/dpsbridge_view_select.inc';
 		} else {
 			drupal_goto('dpsbridge/views/access-denied');
 		}
 	}
 	// If on the Folio Management page.
-	else if (strpos($url, "admin/config/content/fpmanage")) {
+	elseif (strpos($url, "admin/config/content/fpmanage")) {
 		if (user_access('manage dpsbridge folio')) {
 			$fpmanage = TRUE;
 			helper_include_goodies('manage');

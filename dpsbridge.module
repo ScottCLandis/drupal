@@ -10,9 +10,14 @@
  * Implements hook_init().
  */
 function dpsbridge_init() {
+  global $base_url;
   drupal_add_js('misc/jquery.form.js');
   drupal_add_library('system', 'drupal.ajax');
   drupal_add_library('system', 'jquery.form');
+  drupal_add_library('system', 'ui.dialog');
+  drupal_add_library('system', 'ui.tabs');
+  drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge.js');
+  drupal_add_js(array('dpsbridge' => array('base_url' => $base_url)), 'setting');
   require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_helper.inc';
   require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_style_bootstrap.inc';
   require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_style_foundation.inc';
@@ -44,9 +49,8 @@ function dpsbridge_menu() {
   $items['admin/config/content/fpselect'] = array(
     'title' => 'Folio Article Selection', 
     'description' => "Create Folio by selected content.",
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('dpsbridge_settings'),
-    'access arguments' => array('administer dpsbridge'),
+    'page callback' => 'dpsbridge_fpselect_page',
+    'access arguments' => array('folio_article_permission'),
     'file' => 'dpsbridge.admin.inc',
     'weight' => -8,
   );   
@@ -176,6 +180,69 @@ function dpsbridge_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK);
   return $items;
+}
+
+function dpsbridge_add_new_articles_to_folio_form($form, &$form_state) {
+  $form = array();
+  $form['folio_info'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => FALSE, 
+    '#collapsed' => FALSE,
+  );
+  $form['folio_info']['fname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Folio Name'),
+    '#size' => 20,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'fname', 'placeholder' => t('Folio Name')),
+   );
+  $form['folio_info']['pname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Publication Name'),
+    '#size' => 20,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'pname', 'placeholder' => t('Publication Name')),
+   );
+   $form['folio_info']['fnumber'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Folio Number'),
+    '#size' => 20,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'fnumber', 'placeholder' => t('Folio Number')),
+   );
+   $form['folio_info']['pdate'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Publication Date'),
+    '#default_value' => date('Y-m-d'),
+    '#size' => 20,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'pdate'),
+    '#theme' => array('dpsbridge_date'),
+   );
+  return $form;
+}
+
+function dpsbridge_add_existing_articles_to_folio_form($form, &$form_state) {
+  $form = array();
+  $form['folio_info'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => FALSE, 
+    '#collapsed' => FALSE,
+  );
+  $fp_nodes_all = node_load_multiple(array(), array('type' => 'folios'));
+  $options = array();
+  foreach ($fp_nodes_all as $fp_node) {
+    $options[$fp_node->nid] = $fp_node->title;
+  }
+  $form['folio_info']['fid'] = array(
+    '#type' => 'select',
+    '#title' => t('Folio Name'),
+    '#options' => $options,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'fid'),
+   );
+
+  return $form;
 }
 
 /**
@@ -1125,6 +1192,9 @@ function dpsbridge_theme() {
       'template' => 'dpsbridge-foundation',
       'path' => $path . '/theme',
     ),
+    'dpsbridge_date' => array(
+      'render element' => 'element', 
+    ),
   );
 }
 /**
@@ -1224,4 +1294,36 @@ function dpsbridge_node_delete($node) {
       }
     }
   }
+}
+
+
+/**
+ * Theme function for number field in form.
+ * 
+ * @param type $variables
+ * @return string
+ */
+function theme_dpsbridge_date($variables) {
+  $element = $variables['element'];
+  $element['#attributes']['type'] = 'date';
+  element_set_attributes($element, array('id', 'name', 'value', 'size', 'maxlength'));
+  _form_set_class($element, array('form-text'));
+
+  $extra = '';
+  if ($element['#autocomplete_path'] && drupal_valid_path($element['#autocomplete_path'])) {
+    drupal_add_library('system', 'drupal.autocomplete');
+    $element['#attributes']['class'][] = 'form-autocomplete';
+
+    $attributes = array();
+    $attributes['type'] = 'hidden';
+    $attributes['id'] = $element['#attributes']['id'] . '-autocomplete';
+    $attributes['value'] = url($element['#autocomplete_path'], array('absolute' => TRUE));
+    $attributes['disabled'] = 'disabled';
+    $attributes['class'][] = 'autocomplete';
+    $extra = '<input' . drupal_attributes($attributes) . ' />';
+  }
+
+  $output = '<input' . drupal_attributes($element['#attributes']) . ' />';
+
+  return $output . $extra;
 }

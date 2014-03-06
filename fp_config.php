@@ -51,10 +51,10 @@ class FPConfig extends Settings
 			}
 		
 			if($this->server_family=='production') {
-				$this->host = 'dpsapi2.acrobat.com';
+				$this->host = 'dpsapi2.digitalpublishing.acrobat.com';
 				$this->distributionHost = 'origin.adobe-dcfs.com';
 			} else { // staging
-				$this->host = 'dpsapi2-stage.acrobat.com';
+				$this->host = 'dpsapi2-stage.digitalpublishing.acrobat.com';
 				$this->distributionHost = 'origin-stage.adobe-dcfs.com';
 			}
 			

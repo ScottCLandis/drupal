@@ -85,3 +85,33 @@ function dpsbridge_settings() {
   ); */
   return system_settings_form($form);
 }
+
+
+/**
+ *  Menu callback for folio selection.
+ */
+function dpsbridge_fpselect_page() {
+  drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge_view_select_fn.js');
+  
+  $output = '';
+  
+  $view = views_get_view('folio_article_selection');
+  $display = 'page';
+  //set the display
+  $view->set_display($display);
+  $output .= $view->preview($display);
+  
+  // Overlay for adding new folios.
+  $output .= '<div id="dialog-new" title="Add Selected Articles to New Folio">';
+  $form = drupal_get_form('dpsbridge_add_new_articles_to_folio_form');
+  $output .= drupal_render($form);
+  $output .= '</div>';
+  // Overlay for updating existing folios.
+  $output .= '<div id="dialog-existing" title="Add Selected Articles to Existing Folio" class="align-center">';
+  $form = drupal_get_form('dpsbridge_add_existing_articles_to_folio_form');
+  $output .= drupal_render($form);
+  $output .= '</div>';
+  // Overlay for displaying status.
+  $output .= '<div id="dialog-status" title="Notice"><div id="status"></div></div>';
+  return $output;
+}

@@ -51,9 +51,9 @@ function helper_generate_dimensions(id, dimensions, toggle) {
 		if (dimensions[i] == '') // do nothing if array is empty
 			continue;
 		if (toggle) // for inputing the dimension values on load
-			$('#'+id).append('<option value="'+dimensions[i]+'">'+dimensions[i]+'</option>');
+			jQuery('#'+id).append('<option value="'+dimensions[i]+'">'+dimensions[i]+'</option>');
 		else // for the delete dimensions window
-			$('#'+id).append('<option value="'+dimensions[i].value+'">'+dimensions[i].value+'</option>');
+			jQuery('#'+id).append('<option value="'+dimensions[i].value+'">'+dimensions[i].value+'</option>');
 	}
 }
 /**
@@ -64,7 +64,7 @@ function helper_generate_dimensions(id, dimensions, toggle) {
  * @param {string} folioNodeID ..the folio node ID
  */
 function helper_folio_clone(baseURL, folioNodeID) {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/clone-node",
 		type: "POST",
 		data: { "fid":folioNodeID },
@@ -83,7 +83,7 @@ function helper_folio_clone(baseURL, folioNodeID) {
  * @param {array} filenames ..the array list of file names
  */
 function helper_delete_files(baseURL, filenames) {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/clean-up",
 		type: "POST",
 		data: { "filenames":filenames }
@@ -96,7 +96,7 @@ function helper_delete_files(baseURL, filenames) {
  * @param {string} nodeID ...the node ID
  */
 function helper_delete_node(baseURL, nodeID) {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/delete-node",
 		type: "POST",
 		data: { "fid":nodeID },
@@ -116,8 +116,8 @@ function helper_delete_node(baseURL, nodeID) {
  * @param {string} toggle ....trigger to delete the selected file
  */
 function helper_download_file(baseURL, filepath, filename, toggle) {
-	$('#dialog-upload-status').dialog('close');
-	$('<form>').attr('method', 'post')
+	jQuery('#dialog-upload-status').dialog('close');
+	jQuery('<form>').attr('method', 'post')
 			   .attr('action', baseURL+'/dpsbridge/folio/download-selected')
 			   .append('<input name="filename" value="'+filename+'" />')
 			   .append('<input name="destination" value="'+filepath+'" />')
@@ -135,9 +135,9 @@ function helper_download_file(baseURL, filepath, filename, toggle) {
 function helper_show_status(message, width, height) {
 	width  = (width)?width:350;
 	height = (height)?height:200;
-	$('#status').empty();
-	$('#status').append("<br/><p>"+message+"</p>\n");
-	$('#dialog-status').dialog('open').dialog("option", "width", width).dialog("option", "height", height);
+	jQuery('#status').empty();
+	jQuery('#status').append("<br/><p>"+message+"</p>\n");
+	jQuery('#dialog-status').dialog('open').dialog("option", "width", width).dialog("option", "height", height);
 }
 
 /**
@@ -146,6 +146,6 @@ function helper_show_status(message, width, height) {
  * @param {string} message ..the message for the dialog box
  */
 function helper_update_status(message) {
-	$('#status').append("<p>"+message+"</p>\n");
+	jQuery('#status').append("<p>"+message+"</p>\n");
 }
 
