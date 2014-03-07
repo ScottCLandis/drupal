@@ -3,6 +3,7 @@
  * @file
  * Template for bootstrap page.
  *
+ * - $ds_content: content array() from DPS node view.
  * - $publication
  * - $kicker
  * - $title

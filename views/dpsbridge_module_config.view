@@ -50,9 +50,9 @@ echo \'		</td>\';
 echo \'		<td class="views-field" rowspan="4">\';
 echo \'			<label for="stylesheets">Available Publication Stylesheets</label>\';
 echo \'			<table id="stylesheets"></table>\';
-echo \'			<button type="button" onclick="javascript:$(\\\'#dialog-option-stylesheet-add\\\').dialog(\\\'open\\\')">Add Stylesheet</button>\';
-echo \'			<button type="button" onclick="javascript:$(\\\'#dialog-option-stylesheet-delete\\\').dialog(\\\'open\\\')">Delete Stylesheet</button>\';
-echo \'			<button type="button" onclick="javascript:$(\\\'#dialog-option-stylesheet-download\\\').dialog(\\\'open\\\')">Download Stylesheet</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-stylesheet-add\\\').dialog(\\\'open\\\')">Add Stylesheet</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-stylesheet-delete\\\').dialog(\\\'open\\\')">Delete Stylesheet</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-stylesheet-download\\\').dialog(\\\'open\\\')">Download Stylesheet</button>\';
 echo \'		</td>\';
 echo \'	</tr>\';
 echo \'	<tr class="even">\';
@@ -99,9 +99,9 @@ echo \'		</td>\';
 echo \'	</tr>\';
 echo \'	<tr class="odd views-row-last">\';
 echo \'		<td class="views-field align-center" colspan="4">\';
-echo \'			<button type="button" onclick="javascript:$(\\\'#dialog-option-connectivity\\\').dialog(\\\'open\\\')">Test Connection</button>\';
-echo \'			<button type="button" onclick="javascript:$(\\\'#dialog-option-dimension-add\\\').dialog(\\\'open\\\')">Add Dimensions</button>\';
-echo \'			<button type="button" onclick="javascript:$(\\\'#dialog-option-dimension-delete\\\').dialog(\\\'open\\\')">Delete Dimensions</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-connectivity\\\').dialog(\\\'open\\\')">Test Connection</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-dimension-add\\\').dialog(\\\'open\\\')">Add Dimensions</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-dimension-delete\\\').dialog(\\\'open\\\')">Delete Dimensions</button>\';
 echo \'			<button type="button" onclick="javascript:dps_credentials()">Save</button>\';
 echo \'			<button type="button" onclick="location.href=\\\'/admin/config/content/fpselect\\\'">Cancel</button>\';
 echo \'		</td>\';
@@ -147,7 +147,7 @@ $handler->display->display_options['filters']['type']['value'] = array(
 
 /* Display: Page */
 $handler = $view->new_display('page', 'Page', 'page');
-$handler->display->display_options['path'] = 'admin/config/content/dpsbridge';
+$handler->display->display_options['path'] = 'admin/config/content/dpsbridge_0';
 $handler->display->display_options['menu']['title'] = 'DPSBridge Config';
 $handler->display->display_options['menu']['weight'] = '0';
 $handler->display->display_options['menu']['context'] = 0;

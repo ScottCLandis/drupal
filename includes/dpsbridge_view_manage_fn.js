@@ -570,7 +570,7 @@ function replaceHREF(ahref, toggle) {
     Drupal.behaviors.dpsbridge_view_credential_init = {
         attach: function() {
             baseURL = Drupal.settings.dpsbridge.base_url;
-            pathToDir = baseURL = Drupal.settings.dpsbridge.path_to_dir;
+            pathToDir = Drupal.settings.dpsbridge.path_to_dir;
         }
     }
     Drupal.behaviors.dpsbridge_view_select = {
@@ -706,6 +706,16 @@ function replaceHREF(ahref, toggle) {
             });
 
             $("#jqueryui-tabs").tabs();
+            
+            var container = $('#block-system-main');
+            var button_wrapper = $('<div/>').css({'float':'left', 'margin-bottom':'15px'});
+            var button_clone = $('<button/>').text('Clone Selected Folio').click(function() { get_selected('clone'); });
+            var button_delete = $('<button/>').text('Delete Selected Folio').click(function() { get_selected('delete'); });
+            var button_upload = $('<button/>').text('Upload Selected Folio to Folio Producer').click(function() { get_selected('upload'); });
+            button_wrapper.append(button_clone, button_delete, button_upload);
+            container.append(button_wrapper);
+            replaceHREF($('table td.views-field-edit-node a'), 'full');
+            replaceHREF($('table td.views-field-edit-node-1 a'), 'half');
         }
     }
 })(jQuery);

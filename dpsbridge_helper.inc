@@ -354,7 +354,7 @@ function helper_include_goodies($toggle) {
 
     // For the management page.
     case 'manage':
-      require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_manage_fn.inc';
+//      require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_manage_fn.inc';
       break;
 
     // For the selection page.

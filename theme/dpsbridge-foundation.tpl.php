@@ -2,7 +2,8 @@
 /**
  * @file
  * Template for foundation page.
- *
+ * 
+ * - $ds_content: content array() from DPS node view.
  * - $publication
  * - $kicker
  * - $title

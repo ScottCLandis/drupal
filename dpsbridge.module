@@ -11,16 +11,20 @@
  */
 function dpsbridge_init() {
   global $base_url;
+  $path_to_dir = drupal_get_path('module', 'dpsbridge');
   drupal_add_js('misc/jquery.form.js');
   drupal_add_library('system', 'drupal.ajax');
   drupal_add_library('system', 'jquery.form');
   drupal_add_library('system', 'ui.dialog');
   drupal_add_library('system', 'ui.tabs');
-  drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge.js');
-  drupal_add_js(array('dpsbridge' => array('base_url' => $base_url)), 'setting');
-  require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_helper.inc';
-  require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_style_bootstrap.inc';
-  require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_style_foundation.inc';
+  drupal_add_library('system', 'ui.sortable');
+  drupal_add_js($path_to_dir . '/includes/dpsbridge.js');
+  drupal_add_js(array('dpsbridge' => array('base_url' => $base_url, 'path_to_dir' => $path_to_dir)), 'setting');
+  drupal_add_css($path_to_dir . '/includes/override.css');
+
+  module_load_include('inc', 'dpsbridge', 'dpsbridge_helper');
+  module_load_include('inc', 'dpsbridge', 'dpsbridge_style_bootstrap');
+  module_load_include('inc', 'dpsbridge', 'dpsbridge_style_foundation');
 }
 
 /**
@@ -31,8 +35,7 @@ function dpsbridge_menu() {
   $items['admin/config/content/dpsbridge'] = array(
     'title' => 'DPS Bridge Configuration',
     'description' => "Manage DPSBridge module settings",
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('dpsbridge_settings'),
+    'page callback' => 'dpsbridge_credential_page',
     'access arguments' => array('administer dpsbridge'),
     'file' => 'dpsbridge.admin.inc',
     'weight' => -100,
@@ -40,8 +43,7 @@ function dpsbridge_menu() {
   $items['admin/config/content/fpmanage'] = array(
     'title' => 'Folio Management',
     'description' => "Manage Folios created by the DPS Bridge module.",
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('dpsbridge_settings'),
+    'page callback' => 'dpsbridge_fpmanage_page',
     'access arguments' => array('manage dpsbridge folio'),
     'file' => 'dpsbridge.admin.inc',
     'weight' => -9,
@@ -222,6 +224,16 @@ function dpsbridge_add_new_articles_to_folio_form($form, &$form_state) {
   return $form;
 }
 
+/**
+ * Implements hook_entity_info_alter().
+ */
+function dpsbridge_entity_info_alter(&$entity_info){
+  $entity_info['node']['view modes']['dps'] = array(
+    'label' => t('DPS'),
+    'custom settings' => TRUE,
+  ); 
+}
+
 function dpsbridge_add_existing_articles_to_folio_form($form, &$form_state) {
   $form = array();
   $form['folio_info'] = array(
@@ -242,6 +254,143 @@ function dpsbridge_add_existing_articles_to_folio_form($form, &$form_state) {
     '#attributes' => array('id' => 'fid'),
    );
 
+  return $form;
+}
+
+function dpsbridge_edit_existing_folio_form($form, &$form_state) {  //TODO: There is no form id in original form
+  $form = array();
+  $form['folio_ui_fname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Folio Name'),
+    '#size' => 20,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'folio-ui-fname', 'placeholder' => t('Folio Name')),
+   );
+  $form['folio_ui_pname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Publication Name'),
+    '#size' => 20,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'folio-ui-pname', 'placeholder' => t('Publication Name')),
+   );
+   $form['folio_ui_fnumber'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Folio Number'),
+    '#size' => 20,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'folio-ui-fnumber', 'placeholder' => t('Folio Number')),
+   );
+   $form['folio_ui_pdate'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Publication Date'),
+    '#default_value' => date('Y-m-d'),
+    '#size' => 20,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'folio-ui-pdate'),
+    '#theme' => array('dpsbridge_date'),
+   ); 
+  $form['folio_ui_fdesc'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Description'),
+    '#rows' => 4,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'folio-ui-fdesc', 'placeholder' => t('Folio Description')),
+   );
+  $form['accounts'] = array(
+    '#type' => 'select',
+    '#title' => t('DPS Account'),
+    '#options' => array(
+      'amazon' => t('Amazon'),
+      'android' => t('Android'),
+      'apple' => t('Apple'),      
+    ),
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'accounts'),
+   );
+   $form['folio_ui_filter'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Library Filter'),
+    '#size' => 20,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'folio-ui-filter', 'placeholder' => t('Library Filter')),
+   );
+   $form['pubcss'] = array(  // TODO: Select List Dynamically Created.
+    '#type' => 'select',
+    '#title' => t('HTML Resources'),
+    '#options' => array(),
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'pubcss'),
+   );   
+   $form['dimension'] = array(  // TODO: Select List Dynamically Created.
+    '#type' => 'select',
+    '#title' => t('Resolution'),
+    '#options' => array(),
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'dimension'),
+   );
+   
+   $form['folio_ui_fversion'] = array(
+    '#type' => 'select',
+    '#title' => t('Viewer Version'),
+    '#options' => array(
+      '24.0.0' => t('24'),
+      '25.0.0' => t('25'),
+      '26.0.0' => t('26'),
+      '27.0.0' => t('27'),      
+    ),
+    '#default_value' => '27.0.0',
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'folio-ui-fversion'),
+   );     
+   
+   $form['folio_ui_orientation'] = array(
+    '#type' => 'select',
+    '#title' => t('Folio Orientation'),
+    '#options' => array(
+      'Landscape' => t('Horizontal Orientation'),
+      'Portrait' => t('Vertical Orientation'),
+      'Always' => t('Both Orientations'),      
+    ),
+    '#default_value' => 'Landscape',
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'folio-ui-orientation'),
+   );
+   
+   $form['folio_ui_generator'] = array( 
+    '#type' => 'textfield',
+    '#title' => t('TOC & Cover'),
+    '#options' => array(
+      'Generate ToC' => t('Generate ToC Only'),
+      'Generate Cover' => t('Generate Cover Only'),
+      'Generate Both' => t('Generate Both'),
+      'Generate None' => t('Generate None'),      
+    ),
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'folio-ui-generator'),
+   );     
+  return $form;
+}
+
+function dpsbridge_image_form($form, &$form_state) {
+  global $base_url;
+  $form = array();
+  $form['#attributes'] = array('action' => $base_url . '/dpsbridge/img/upload' , 'enctype' => 'multipart/form-data');
+  $form['fname'] = array(
+    '#type' => 'hidden',
+    '#attributes' => array('id' => 'image-ui-fname'),
+   );
+  $form['fid'] = array(
+    '#type' => 'hidden',
+    '#attributes' => array('id' => 'image-ui-fid'),
+   );
+  $form['portrait'] = array(
+    '#type' => 'file',
+    '#attributes' => array('id' => 'portrait-file', 'accept' => 'image/*'),
+   );
+  $form['landscape'] = array(
+    '#type' => 'file',
+    '#attributes' => array('id' => 'landscape-file', 'accept' => 'image/*'),
+   );
   return $form;
 }
 
@@ -505,6 +654,8 @@ function dpsbridge_folio_article_preview() {
     $images = isset($article_node['image']) ? $article_node['image'] : '';
     $videos = isset($article_node['video']) ? $article_node['video'] : '';
     $toc  = '';
+    // Fields from dps node view.
+    $ds_content = $article_node['ds_content'];
     // Create the directory and its default files.
     helper_create_dir(helper_format_title($title));
     // Unzip the selected stylesheet for preview.
@@ -512,11 +663,11 @@ function dpsbridge_folio_article_preview() {
     // Apply the stylesheet framework for preview.
     // Is derivative of Bootstrap framework?
     if (strpos($pubcss, 'Bootstrap') !== FALSE) {
-      helper_style_bootstrap($publication, $title, $author, $kicker, $body, $images, $videos);
+      helper_style_bootstrap($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content);
     }
     // Is derivative of Foundation framework?
     elseif (strpos($pubcss, 'Foundation') !== FALSE) {
-      helper_style_foundation($publication, $title, $author, $kicker, $body, $images, $videos);
+      helper_style_foundation($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content);
     }
     $output['title'] = $title;
   }
@@ -1065,24 +1216,24 @@ function dpsbridge_views_access_denied() {
 /**
  * Implements hook_block_info().
  */
-function dpsbridge_block_info() {
-  $blocks['dpsbridge-block'] = array(
-    'info' => t('Adobe Folio Creator'),
-  );
-  return $blocks;
-}
+//function dpsbridge_block_info() {
+//  $blocks['dpsbridge-block'] = array(
+//    'info' => t('Adobe Folio Creator'),
+//  );
+//  return $blocks;
+//}
 /**
  * Implements hook_block_view().
  */
-function dpsbridge_block_view($delta = '') {
-  switch ($delta) {
-    case 'dpsbridge-block':
-      $block['subject'] = NULL;
-      $block['content'] = theme('dpsbridge');
-      break;
-  }
-  return $block;
-}
+//function dpsbridge_block_view($delta = '') {
+//  switch ($delta) {
+//    case 'dpsbridge-block':
+//      $block['subject'] = NULL;
+//      $block['content'] = theme('dpsbridge');
+//      break;
+//  }
+//  return $block;
+//}
 /**
  * Implements hook_node_info().
  */
@@ -1122,10 +1273,10 @@ function dpsbridge_permission() {
 function dpsbridge_theme() {
   $path = drupal_get_path('module', 'dpsbridge');
   return array(
-    'dpsbridge' => array(
-      'template' => 'dpsbridge',
-      'arguments' => array(),
-    ),
+//    'dpsbridge' => array(
+//      'template' => 'dpsbridge',
+//      'arguments' => array(),
+//    ),
     'dpsbridge_bootstrap_cover' => array(
       'variables' => array(
         'publication' => NULL,
@@ -1147,6 +1298,7 @@ function dpsbridge_theme() {
     ),
     'dpsbridge_bootstrap' => array(
       'variables' => array(
+        'ds_content' => NULL,
         'publication' => NULL,
         'kicker' => NULL,
         'title' => NULL,
@@ -1180,6 +1332,7 @@ function dpsbridge_theme() {
     ),
     'dpsbridge_foundation' => array(
       'variables' => array(
+        'ds_content' => NULL,
         'publication' => NULL,
         'kicker' => NULL,
         'title' => NULL,
@@ -1194,6 +1347,32 @@ function dpsbridge_theme() {
     ),
     'dpsbridge_date' => array(
       'render element' => 'element', 
+    ),
+    'dpsbridge_fpmanage_page' => array(
+      'variables' => array(
+        'folio_listing' => NULL,
+        'folio_edit_form' => NULL,
+        'folio_image_form' => NULL,
+      ),
+      'template' => 'dpsbridge-view-manage',
+      'path' => $path . '/theme',
+    ),
+    'dpsbridge_edit_existing_folio_form' => array(
+      'render element' => 'form',
+       'template' => 'dpsbridge-edit-existing-folio',
+      'path' => $path . '/theme',
+    ),
+    'dpsbridge_image_form' => array(
+      'render element' => 'form',
+       'template' => 'dpsbridge-edit-folio-cover',
+      'path' => $path . '/theme',
+    ),
+    'dpsbridge_fpmanage_page' => array(
+      'variables' => array(
+        'dpsbridge_config' => NULL,
+      ),
+      'template' => 'dpsbridge-view-credential',
+      'path' => $path . '/theme',
     ),
   );
 }

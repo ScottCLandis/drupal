@@ -115,3 +115,44 @@ function dpsbridge_fpselect_page() {
   $output .= '<div id="dialog-status" title="Notice"><div id="status"></div></div>';
   return $output;
 }
+
+
+function dpsbridge_fpmanage_page() {
+  drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge_view_manage_fn.js');
+  
+  $view = views_get_view('folio_management_view');
+  $display = 'page';
+  //set the display
+  $view->set_display($display);
+  $folio_listing = $view->preview($display);
+  
+  $form = drupal_get_form('dpsbridge_edit_existing_folio_form');
+  $folio_edit_form = drupal_render($form);
+  
+  $form = drupal_get_form('dpsbridge_image_form');
+  $folio_image_form = drupal_render($form);
+  
+  $variables = array(
+    'folio_listing' => $folio_listing,
+    'folio_edit_form' => $folio_edit_form,
+    'folio_image_form' => $folio_image_form,
+  );
+  
+  $output = theme('dpsbridge_fpmanage_page', $variables);
+  return $output;
+}
+
+function dpsbridge_credential_page() {
+  $view = views_get_view('dpsbridge_module_config');
+  $display = 'page';
+  //set the display
+  $view->set_display($display);
+  $dpsbridge_config = $view->preview($display);
+  
+  $variables = array(
+    'dpsbridge_config' => $dpsbridge_config,
+  );
+  
+  drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge_view_credential_fn.js');
+  return theme('dpsbridge_fpmanage_page', $variables);
+}

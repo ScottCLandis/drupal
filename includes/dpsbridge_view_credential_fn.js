@@ -212,7 +212,7 @@ function updateFields() {
     Drupal.behaviors.dpsbridge_view_credential_init = {
         attach: function() {
             baseURL = Drupal.settings.dpsbridge.base_url;
-            pathToDir = baseURL = Drupal.settings.dpsbridge.path_to_dir;
+            pathToDir = Drupal.settings.dpsbridge.path_to_dir;
         }
     }
     Drupal.behaviors.dpsbridge_view_credential = {
@@ -348,6 +348,8 @@ function updateFields() {
 	});
 	// initialize the tabs
 	$('#jqueryui-tabs').tabs();
+        generate_form_table_values();
+	generate_form_table_stylesheet();
         }
     }
 })(jQuery);

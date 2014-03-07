@@ -1,3 +1,14 @@
+<?php
+/**
+ * @file
+ * Template for folio config page.
+ *
+ * - $dpsbridge_config
+ * 
+ */
+?>
+
+<?php print $dpsbridge_config; ?>
 <!-- ==================================================
 Overlay for displaying options for testing connectivity 
 =================================================== -->
