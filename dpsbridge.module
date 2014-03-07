@@ -357,7 +357,7 @@ function dpsbridge_edit_existing_folio_form($form, &$form_state) {  //TODO: Ther
    );
    
    $form['folio_ui_generator'] = array( 
-    '#type' => 'textfield',
+    '#type' => 'select',
     '#title' => t('TOC & Cover'),
     '#options' => array(
       'Generate ToC' => t('Generate ToC Only'),
@@ -374,7 +374,8 @@ function dpsbridge_edit_existing_folio_form($form, &$form_state) {  //TODO: Ther
 function dpsbridge_image_form($form, &$form_state) {
   global $base_url;
   $form = array();
-  $form['#attributes'] = array('action' => $base_url . '/dpsbridge/img/upload' , 'enctype' => 'multipart/form-data');
+  $form['#action'] = $base_url . '/dpsbridge/img/upload';
+  $form['#attributes'] = array('enctype' => 'multipart/form-data', 'id' => 'image-form');
   $form['fname'] = array(
     '#type' => 'hidden',
     '#attributes' => array('id' => 'image-ui-fname'),
@@ -385,11 +386,11 @@ function dpsbridge_image_form($form, &$form_state) {
    );
   $form['portrait'] = array(
     '#type' => 'file',
-    '#attributes' => array('id' => 'portrait-file', 'accept' => 'image/*'),
+    '#attributes' => array('name' => 'portrait', 'id' => 'portrait-file', 'accept' => 'image/*'),
    );
   $form['landscape'] = array(
     '#type' => 'file',
-    '#attributes' => array('id' => 'landscape-file', 'accept' => 'image/*'),
+    '#attributes' => array('name' => 'landscape', 'id' => 'landscape-file', 'accept' => 'image/*'),
    );
   return $form;
 }
@@ -568,19 +569,19 @@ function dpsbridge_folio_append() {
  */
 function dpsbridge_folio_cleanup() {
   // List of file names, used to generate HTML Articles and .folio files.
-//  $filenames = isset($_POST['filenames']) ? $_POST['filenames'] : '';
-//  $message  = 'ok';
-//  if (!$filenames) {
-//    $message = '[Error] Missing array containing file metadata!';
-//  }
-//  else {
-//    for ($i = 0; $i < count($filenames); $i++) {
-//      $file = helper_format_title($filenames[$i]);
-//      unlink(dirname(__FILE__) . '/folio/' . $file . '.folio');
-//      helper_rrmdir(dirname(__FILE__) . '/html/' . $file);
-//    }
-//  }
-//  drupal_json_output($message);
+  $filenames = isset($_POST['filenames']) ? $_POST['filenames'] : '';
+  $message  = 'ok';
+  if (!$filenames) {
+    $message = '[Error] Missing array containing file metadata!';
+  }
+  else {
+    for ($i = 0; $i < count($filenames); $i++) {
+      $file = helper_format_title($filenames[$i]);
+      unlink(dirname(__FILE__) . '/folio/' . $file . '.folio');
+      helper_rrmdir(dirname(__FILE__) . '/html/' . $file);
+    }
+  }
+  drupal_json_output($message);
   drupal_exit();
 }
 /**
@@ -599,6 +600,7 @@ function dpsbridge_folio_clone_node() {
     $folio = node_load($fid);
     unset($folio->nid);
     unset($folio->vid);
+    $folio->title = 'Clone ' . $folio->title;
     $folio->field_folio_product_id['und'][0]['value'] = '';
     $folio->field_folio_status['und'][0]['value'] = 'Not uploaded';
     $folio->field_folio_sync_status['und'][0]['value'] = 'Not Sync';
@@ -1135,7 +1137,7 @@ function dpsbridge_img_upload() {
       $portrait_path = drupal_get_path('module', 'dpsbridge') . '/images/portrait/' . helper_format_title($fname) . '_' . $portrait_fn;
       /* $portraitFake = '/sites/all/modules/dpsbridge/images/portrait/'.helper_format_title($fname).'_'.$portrait_fn;*/
       move_uploaded_file($portrait_url, $portrait_path);
-      $node->field_folio_portrait_url['und'][0]['value'] = $landscape_path;
+      $node->field_folio_portrait_url['und'][0]['value'] = $portrait_path;
     }
     node_save_action($node);
   }
@@ -1367,7 +1369,7 @@ function dpsbridge_theme() {
        'template' => 'dpsbridge-edit-folio-cover',
       'path' => $path . '/theme',
     ),
-    'dpsbridge_fpmanage_page' => array(
+    'dpsbridge_credential_page' => array(
       'variables' => array(
         'dpsbridge_config' => NULL,
       ),

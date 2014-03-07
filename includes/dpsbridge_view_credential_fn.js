@@ -100,6 +100,8 @@ function generate_form_table() {
  *   and insert into the form table.
  * ======================================== */
 function generate_form_table_values() {
+    if (!jQuery('#edit-credential-table').hasClass('processed')) {
+        jQuery('#edit-credential-table').addClass('processed');
 	jQuery.ajax({
 		url: baseURL+"/dpsbridge/dps/credentials/pull",
 		type: "POST",
@@ -116,14 +118,17 @@ function generate_form_table_values() {
 			jQuery('#apple_pass').val(output['apple']['pass']);
 			helper_generate_dimensions('apple_dimension', output['apple']['dimension'], true);
 		}
-	})
+	});
+    }
 }
 /* ========================================================= *
  * Attempts to read the current available local stylesheets,
  *   The local storage folder is @ /dpsbridge/styles.
  * ========================================================= */
 function generate_form_table_stylesheet() {
-	var styleText = '';
+    var styleText = '';
+    if (!jQuery('#stylesheets').hasClass('processed')) {
+        jQuery('#stylesheets').addClass('processed');
 	jQuery.ajax({
 		url: baseURL+"/dpsbridge/stylesheet/read",
 		type: "POST",
@@ -139,6 +144,7 @@ function generate_form_table_stylesheet() {
 			}
 		}
 	});
+    }
 }
 /* ================================================== *
  * Given the targeted dimension and the account type,
@@ -212,7 +218,7 @@ function updateFields() {
     Drupal.behaviors.dpsbridge_view_credential_init = {
         attach: function() {
             baseURL = Drupal.settings.dpsbridge.base_url;
-            pathToDir = Drupal.settings.dpsbridge.path_to_dir;
+            pathToDir = '/' + Drupal.settings.dpsbridge.path_to_dir;
         }
     }
     Drupal.behaviors.dpsbridge_view_credential = {

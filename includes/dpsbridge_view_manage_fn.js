@@ -241,9 +241,9 @@ function imageUI_update() {
 		type: "POST",
 		data: { "nodeID":fid },
 		success: function(output) {
-			jQuery('#portrait').attr('src', output['portrait']);
-			jQuery('#landscape').attr('src', output['landscape']);
-			jQuery('#image').attr('src', output['landscape']);
+			jQuery('#portrait').attr('src', '/' + output['portrait']);
+			jQuery('#landscape').attr('src', '/' + output['landscape']);
+			jQuery('#image').attr('src', '/' + output['landscape']);
 			helper_show_status("Successfully uploaded image.");
 		}
 	});
@@ -391,8 +391,8 @@ function profileUI(folioNodeID, toggle) {
 		    androidDimensions = output['androidDimensions'];
 		    appleDimensions   = output['appleDimensions'];
 			offsetIndex = 0;
-			var landscapeImg = (output['landscape'] != '')?output['landscape']:'http://placehold.it/300x400&text=Cover+Landscape';
-			var portraitImg = (output['portrait'] != '')?output['portrait']:'http://placehold.it/400x300&text=Cover+Portrait';
+			var landscapeImg = (output['landscape'] != '')? '/' + output['landscape']:'http://placehold.it/300x400&text=Cover+Landscape';
+			var portraitImg = (output['portrait'] != '')? '/' + output['portrait']:'http://placehold.it/400x300&text=Cover+Portrait';
 			// insert new attributes into the current overlay
 			jQuery('#portrait').attr('src', portraitImg);
 			jQuery('#landscape').attr('src', landscapeImg);
@@ -570,7 +570,7 @@ function replaceHREF(ahref, toggle) {
     Drupal.behaviors.dpsbridge_view_credential_init = {
         attach: function() {
             baseURL = Drupal.settings.dpsbridge.base_url;
-            pathToDir = Drupal.settings.dpsbridge.path_to_dir;
+            pathToDir = '/' + Drupal.settings.dpsbridge.path_to_dir;
         }
     }
     Drupal.behaviors.dpsbridge_view_select = {
