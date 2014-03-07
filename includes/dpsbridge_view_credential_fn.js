@@ -1,4 +1,3 @@
-<script>
 var apikey,            // Folio Producer API key 
 	apisec,            // Folio Producer API secret
 	amazon_id,         // Amazon - Folio Producer user ID
@@ -10,8 +9,8 @@ var apikey,            // Folio Producer API key
 	apple_id,          // Apple - Folio Producer user ID
 	apple_pass,        // Apple - Folio Producer user password
 	apple_dimension,   // Apple - available dimensions
-	baseURL = "<?= $GLOBALS['base_url'] ?>",
-  pathToDir = "<?= drupal_get_path('module', 'dpsbridge') ?>";
+	baseURL = "",
+        pathToDir = "";
 /* =================================================== *
  * Given the account type,
  *   call helper to connect to Folio Producer,
@@ -36,7 +35,7 @@ function connectivity(Account) {
  * ========================================================= */
 function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
 	helper_show_status('Attempting to connect to Folio Producer, please wait...');
-	$.ajax({
+	jQuery.ajax({
 		url: pathToDir+"/fp_connect.php",
 		type: "POST",
 		data: {
@@ -44,7 +43,7 @@ function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
 			"Password"  :AdobePass, // Folio Producer user password
 			"APIKey"    :APIKey,    // Folio Producer API key
 			"APISecret" :APISecret, // Folio Producer API secret
-			"Test"		:toggle,    // toggle for stating that this is a test
+			"Test"		:toggle    // toggle for stating that this is a test
 		},
 		success: function(output) {
 			if (output === 'ok')
@@ -66,7 +65,7 @@ function dps_credentials() {
 	var android_target_dimension = helper_array_to_string(android_dimension);
 	var apple_target_dimension = helper_array_to_string(apple_dimension);
 
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/dps/credentials/add",
 		type: "POST",
 		data: { 
@@ -80,7 +79,7 @@ function dps_credentials() {
 			"android_dimension":android_target_dimension,
 			"apple_id"         :apple_id.val(),
 			"apple_pass"       :apple_pass.val(),
-			"apple_dimension"  :apple_target_dimension,
+			"apple_dimension"  :apple_target_dimension
 		},
 		success: function(output) {
 			if (output === 'ok')
@@ -94,28 +93,28 @@ function dps_credentials() {
  * Generate the form table via JQuery
  * ================================== */
 function generate_form_table() {
-	$('.view-dpsbridge-dps-folio-module-config').append("");
+	jQuery('.view-dpsbridge-dps-folio-module-config').append("");
 }
 /* ======================================== *
  * Load user credentaisl from the database,
  *   and insert into the form table.
  * ======================================== */
 function generate_form_table_values() {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/dps/credentials/pull",
 		type: "POST",
 		success: function(output) {
-			$('#apikey').val(output['apikey']);
-			$('#apisec').val(output['apisec']);
-			$('#amazon_id').val(output['amazon']['id']);
-			$('#amazon_pass').val(output['amazon']['pass']);
-			helper_generate_dimensions('amazon_dimension', output['amazon']['dimension'], TRUE);
-			$('#android_id').val(output['android']['id']);
-			$('#android_pass').val(output['android']['pass']);
-			helper_generate_dimensions('android_dimension', output['android']['dimension'], TRUE);
-			$('#apple_id').val(output['apple']['id']);
-			$('#apple_pass').val(output['apple']['pass']);
-			helper_generate_dimensions('apple_dimension', output['apple']['dimension'], TRUE);
+			jQuery('#apikey').val(output['apikey']);
+			jQuery('#apisec').val(output['apisec']);
+			jQuery('#amazon_id').val(output['amazon']['id']);
+			jQuery('#amazon_pass').val(output['amazon']['pass']);
+			helper_generate_dimensions('amazon_dimension', output['amazon']['dimension'], true);
+			jQuery('#android_id').val(output['android']['id']);
+			jQuery('#android_pass').val(output['android']['pass']);
+			helper_generate_dimensions('android_dimension', output['android']['dimension'], true);
+			jQuery('#apple_id').val(output['apple']['id']);
+			jQuery('#apple_pass').val(output['apple']['pass']);
+			helper_generate_dimensions('apple_dimension', output['apple']['dimension'], true);
 		}
 	})
 }
@@ -125,7 +124,7 @@ function generate_form_table_values() {
  * ========================================================= */
 function generate_form_table_stylesheet() {
 	var styleText = '';
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/stylesheet/read",
 		type: "POST",
 		success: function(output) {
@@ -134,9 +133,9 @@ function generate_form_table_stylesheet() {
 					styleText = output[i];
 				else // removes the derivatives for viewing purposes
 					styleText = output[i].split(/-/)[1];
-				$("#stylesheets").append("<tr id='style-"+output[i]+"'><td value='"+output[i]+"'>"+styleText+"</td></tr>");
-				$("#stylesheet-delete").append("<option value='"+output[i]+"'>"+styleText+"</option>");
-				$("#stylesheet-download").append("<option value='"+output[i]+"'>"+styleText+"</option>");
+				jQuery("#stylesheets").append("<tr id='style-"+output[i]+"'><td value='"+output[i]+"'>"+styleText+"</td></tr>");
+				jQuery("#stylesheet-delete").append("<option value='"+output[i]+"'>"+styleText+"</option>");
+				jQuery("#stylesheet-download").append("<option value='"+output[i]+"'>"+styleText+"</option>");
 			}
 		}
 	});
@@ -146,25 +145,25 @@ function generate_form_table_stylesheet() {
  *   insert the dimension in numerical order.
  * ================================================== */
 function insertDimension(accountTypeID, dimension) {
-	var account = $('#'+accountTypeID+' option');
+	var account = jQuery('#'+accountTypeID+' option');
 	for (var i = 0; i < account.length; i++) {
 		current = account[i].value.split(' x ');
 		target  = dimension.split(' x ');
 		if (parseInt(target[0]) <= parseInt(current[0])) {
-			$('#'+accountTypeID).eq(i).prepend('<option value="'+dimension+'">'+dimension+'</option>');
+			jQuery('#'+accountTypeID).eq(i).prepend('<option value="'+dimension+'">'+dimension+'</option>');
 			return;
 		}
 	}
-	$('#'+accountTypeID+':last').append('<option value="'+dimension+'">'+dimension+'</option>');
+	jQuery('#'+accountTypeID+':last').append('<option value="'+dimension+'">'+dimension+'</option>');
 }
 /* ========================================= *
  * Attempts to logout of the Folio Producer,
  *   and clean the PHP Session
  * ========================================= */
 function logout() {
-	$.ajax({
+	jQuery.ajax({
 		url: pathToDir+"/fp_logout.php",
-		type: "POST",
+		type: "POST"
 	})
 }
 /* ======================================= *
@@ -172,17 +171,17 @@ function logout() {
  *   display the dimensions accordingly.
  * ======================================= */
 function refreshDimensions() {
-	var account = $('#account-type-delete :selected')
-	$('#dimension-list').empty();
+	var account = jQuery('#account-type-delete :selected')
+	jQuery('#dimension-list').empty();
 	switch(account.val()) {
 		case 'amazon':
-			helper_generate_dimensions('dimension-list', $('#amazon_dimension option'), false);
+			helper_generate_dimensions('dimension-list', jQuery('#amazon_dimension option'), false);
 			break;
 		case 'android':
-			helper_generate_dimensions('dimension-list', $('#android_dimension option'), false);
+			helper_generate_dimensions('dimension-list', jQuery('#android_dimension option'), false);
 			break;
 		case 'apple':
-			helper_generate_dimensions('dimension-list', $('#apple_dimension option'), false);
+			helper_generate_dimensions('dimension-list', jQuery('#apple_dimension option'), false);
 			break;
 	}
 }
@@ -191,30 +190,39 @@ function refreshDimensions() {
  *   in preparation for API calls
  * ============================== */
 function updateFields() {
-	apikey            = $('#apikey');
-	apisec            = $('#apisec');
-	amazon_id         = $('#amazon_id');
-	amazon_pass       = $('#amazon_pass');
-	amazon_dimension  = $('#amazon_dimension option');
-	android_id        = $('#android_id');
-	android_pass      = $('#android_pass');
-	android_dimension = $('#android_dimension option');
-	apple_id          = $('#apple_id');
-	apple_pass        = $('#apple_pass');
-	apple_dimension   = $('#apple_dimension option');
+	apikey            = jQuery('#apikey');
+	apisec            = jQuery('#apisec');
+	amazon_id         = jQuery('#amazon_id');
+	amazon_pass       = jQuery('#amazon_pass');
+	amazon_dimension  = jQuery('#amazon_dimension option');
+	android_id        = jQuery('#android_id');
+	android_pass      = jQuery('#android_pass');
+	android_dimension = jQuery('#android_dimension option');
+	apple_id          = jQuery('#apple_id');
+	apple_pass        = jQuery('#apple_pass');
+	apple_dimension   = jQuery('#apple_dimension option');
 }
+
 /* /-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\ *
  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
  * Constructing the Jquery UI Overlay Windows *
  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
  * \-/\-/\-/\-/\-/\-/\-/\-/\-/\-/\-/\-/\-/\-/ */
-$(function() {
+(function ($) {
+    Drupal.behaviors.dpsbridge_view_credential_init = {
+        attach: function() {
+            baseURL = Drupal.settings.dpsbridge.base_url;
+            pathToDir = baseURL = Drupal.settings.dpsbridge.path_to_dir;
+        }
+    }
+    Drupal.behaviors.dpsbridge_view_credential = {
+        attach: function() {
 	// dialog box for checking credentials
 	$("#dialog-option-connectivity").dialog({
 		autoOpen:false, height:325, width:350, modal:true,
 		buttons: {
 			Close: function() {
-				$(this).dialog("close"); }},
+				$(this).dialog("close"); }}
 	});
 	// dialog box for adding dimensions
 	$("#dialog-option-dimension-add").dialog({
@@ -235,7 +243,7 @@ $(function() {
 					helper_show_status('Please enter desired dimension length and width.');
 				}},
 			Close: function() {
-				$(this).dialog("close"); }},
+				$(this).dialog("close"); }}
 	});
 	// dialog box for deleting dimensions
 	$("#dialog-option-dimension-delete").dialog({
@@ -295,7 +303,7 @@ $(function() {
 					$(this).dialog("close");
 				} },
 			Close: function() {
-				$(this).dialog("close"); }},
+				$(this).dialog("close"); }}
 	});
 	// dialog box for deleting stylesheets
 	$("#dialog-option-stylesheet-delete").dialog({
@@ -318,7 +326,7 @@ $(function() {
 				}
 				$(this).dialog("close"); },
 			Close: function() {
-				$(this).dialog("close"); }},
+				$(this).dialog("close"); }}
 	});
 	// dialog box for deleting stylesheets
 	$("#dialog-option-stylesheet-download").dialog({
@@ -329,16 +337,17 @@ $(function() {
 				helper_download_file(baseURL, pathToDir+'/styles/'+stylesheet+'/HTMLResources.zip', 'HTMLResources', '0');
 				$(this).dialog("close"); },
 			Close: function() {
-				$(this).dialog("close"); }},
+				$(this).dialog("close"); }}
 	});
 	// dialog box for showing any messages
 	$("#dialog-status").dialog({
 		autoOpen:false, modal:true,
 		buttons: {
 			Close: function() {
-				$(this).dialog("close"); }},
+				$(this).dialog("close"); }}
 	});
 	// initialize the tabs
 	$('#jqueryui-tabs').tabs();
-});
-</script>
+        }
+    }
+})(jQuery);

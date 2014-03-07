@@ -1,19 +1,18 @@
-<script>
 var fid = '', // set to Folio node ID when opening the edit panel 
     previewFileName   = '',
     amazonDimensions  = '',
     androidDimensions = '',
     appleDimensions   = '',
-  	offsetIndex = 0,
-    baseURL     = "<?= $GLOBALS['base_url'] ?>",
-    pathToDir   = "<?= drupal_get_path('module', 'dpsbridge') ?>";
+    offsetIndex = 0,
+    baseURL     = "",
+    pathToDir   = "";
 /* ==================================================== *
  * Given the folio node ID,
  *   pull the account type from the Folio node,
  *   then the account credentials using the account type
  * ==================================================== */
 function acquire_account_credentials(folioNodeID, filenames) {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/pull-accounts",
 		type: "POST",
 		data: { "folioNodeID":folioNodeID },
@@ -37,7 +36,7 @@ function acquire_account_credentials(folioNodeID, filenames) {
  *   (The .folio files are stored at /dpsbridge/folio/)
  * ============================================ */
 function generate_folio(folioNodeID, filenames) {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/generate-folios",
 		type: "POST",
 		data: { "filenames":filenames },
@@ -53,7 +52,7 @@ function generate_folio(folioNodeID, filenames) {
  *   (The HTML articles are stored at /dpsbridge/html/)
  * ================================================= */
 function generate_html(folioNodeID) {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/generate-HTML",
 		type: "POST",
 		data: { "folioNodeID":folioNodeID },
@@ -70,7 +69,7 @@ function generate_html(folioNodeID) {
  * =========================================== */
 function generate_selected_html(articleNodeID) {
 	helper_show_status('Generating HTML Stacks...');
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/generate-selected-HTML",
 		type: "POST",
 		data: {
@@ -79,7 +78,7 @@ function generate_selected_html(articleNodeID) {
 		success: function(output) {
 			if (output['message'] = 'ok') {
 				helper_download_file(baseURL, output['destination'], output['filename'], '1');
-				$('#dialog-status').dialog('close');
+				jQuery('#dialog-status').dialog('close');
 			} else {
 				helper_show_status(output['message']);
 			}
@@ -91,7 +90,7 @@ function generate_selected_html(articleNodeID) {
  *   toggles the overlay window if checkboxes are selected
  * ========================================================== */
 function get_selected(toggle) {
-	var selectedFolio = $('.views-table tr input:checked');
+	var selectedFolio = jQuery('.views-table tr input:checked');
 	if (!selectedFolio.val()) {
 		helper_show_status("Please select a folio first!");
 	} else {
@@ -114,7 +113,7 @@ function get_selected(toggle) {
  *   attempts to login to Folio Producer via the API.
  * ================================================= */
 function fp_connect(accountMeta, folioMeta, filenames) {
-	$.ajax({
+	jQuery.ajax({
 		url: pathToDir+"/fp_connect.php",
 		type: "POST",
 		data: {
@@ -144,7 +143,7 @@ function fp_connect(accountMeta, folioMeta, filenames) {
  *   attempts to create a folio in the Folio Producer via the API
  * ============================================================= */
 function fp_create(accountMeta, folioMeta, filenames) {
-	$.ajax({
+	jQuery.ajax({
 		url: pathToDir+"/fp_create.php",
 		type: "POST",
 		data: {
@@ -156,7 +155,7 @@ function fp_create(accountMeta, folioMeta, filenames) {
 			"dimension"			:folioMeta['dimension'],
 			"folioIntent" 		:folioMeta['orientation'],
 			"targetViewer"		:folioMeta['viewer'],
-			"filters"			:folioMeta['filter'], },
+			"filters"			:folioMeta['filter'] },
 		success: function(output) {
 			helper_update_status("Uploading to \""+folioMeta['folioName']+"\", please wait (a while)...");
 			folioMeta['productID'] = output;
@@ -169,9 +168,9 @@ function fp_create(accountMeta, folioMeta, filenames) {
  *   and clean the PHP Session
  * ========================================= */
 function fp_logout() {
-	$.ajax({
+	jQuery.ajax({
 		url: pathToDir+"/fp_logout.php",
-		type: "POST",
+		type: "POST"
 	});
 }
 /* =================================================== *
@@ -183,7 +182,7 @@ function fp_logout() {
  * =================================================== */
 function fp_sync(folioID, folioName, credentials, articles, isAds, alienated, uploadDate) {
 	helper_update_status("Syncing with the Folio Producer, Please wait...");
-	$.ajax({
+	jQuery.ajax({
 		url: pathToDir+"/fp_connect.php",
 		type: "POST",
 		data: {
@@ -191,7 +190,7 @@ function fp_sync(folioID, folioName, credentials, articles, isAds, alienated, up
 			"AdobeID"   :credentials['adobeID'],
 			"Password"  :credentials['password'],
 			"APIKey"    :credentials['apiKey'],
-			"APISecret" :credentials['apiSecret'], },
+			"APISecret" :credentials['apiSecret'] },
 		success: function(output) {
 			fp_logout();
 			output = JSON.parse(output);
@@ -210,7 +209,7 @@ function fp_sync(folioID, folioName, credentials, articles, isAds, alienated, up
  *   attempts to upload the HTML Resources, Cover, and Articles.
  * ================================================================== */
 function fp_upload(accountMeta, folioMeta, filenames) {
-	$.ajax({
+	jQuery.ajax({
 		url: pathToDir+"/fp_upload.php",
 		type: "POST",
 		data: {
@@ -237,14 +236,14 @@ function fp_upload(accountMeta, folioMeta, filenames) {
  *   Update the image url(s) on the current webpage using JQUERY on success.
  * ======================================================================== */
 function imageUI_update() {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/pull-content",
 		type: "POST",
-		data: { "nodeID":fid, },
+		data: { "nodeID":fid },
 		success: function(output) {
-			$('#portrait').attr('src', output['portrait']);
-			$('#landscape').attr('src', output['landscape']);
-			$('#image').attr('src', output['landscape']);
+			jQuery('#portrait').attr('src', output['portrait']);
+			jQuery('#landscape').attr('src', output['landscape']);
+			jQuery('#image').attr('src', output['landscape']);
 			helper_show_status("Successfully uploaded image.");
 		}
 	});
@@ -254,7 +253,7 @@ function imageUI_update() {
  *   in the folio node (Drupal node)
  * ======================================= */
 function node_status_update(folioNodeID, folioID) {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/update-status",
 		type: "POST",
 		data: {
@@ -269,7 +268,7 @@ function node_status_update(folioNodeID, folioID) {
  * Update the upload timestamp for the given folio node ID
  * ======================================================= */
 function node_status_timestamp(folioNodeID) {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/update-timestamp",
 		type: "POST",
 		data: { "folioNodeID" :folioNodeID },
@@ -290,11 +289,11 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 	// display all Drupal and non-Drupal articles that were previously stored in Drupal
 	for (var i = 0; i < drupalArticles.length; i++) {
 		var articleID = drupalArticles[i]['target_id'];
-		$.ajax({
+		jQuery.ajax({
 			url: baseURL+"/dpsbridge/folio/pull-article",
 			type: "POST",
 			async: false,
-			data: { "nodeID":articleID, },
+			data: { "nodeID":articleID },
 			success: function(output) {
 				var html = '', checked = '';
 				if (isAds[i] == true) // check the checkbox if the article is an ad
@@ -338,7 +337,7 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 					html += "</tr>\n";
 					index++;
 				}
-				$('#articles-wrapper').append(html);
+				jQuery('#articles-wrapper').append(html);
 			}
 		});
 	}
@@ -348,7 +347,7 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 		if (fpArticles[n]['articleMetadata']['assetFormat'] == 'Auto')
 			continue;
 		// insert non-Drupal articles that hasn't been added to Drupal database
-		if ($('#article-row-id-'+fpArticles[n]['id']).length == 0) {
+		if (jQuery('#article-row-id-'+fpArticles[n]['id']).length == 0) {
 			var sortNumber  = (fpArticles[n]['articleMetadata']['sortNumber']/1000)-offsetIndex;
 			var sortOrder   = Math.floor(sortNumber);
 			html  = "<tr id='article-row-id-"+fpArticles[n]['id']+"'>\n";
@@ -363,14 +362,14 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 			html += "<td><span class='ui-icon ui-icon-check'></span></td>\n";
 			html += "</tr>\n";
 			if (sortOrder <= 0)
-				$('#articleSortIndex-1').parent().before(html);
+				jQuery('#articleSortIndex-1').parent().before(html);
 			else
-				$('#articleSortIndex-'+sortOrder).parent().after(html);
+				jQuery('#articleSortIndex-'+sortOrder).parent().after(html);
 		}
 	}
 	// refreshes the stylesheets
-	$('#dialog-status').dialog('close');
-	$('#dialog-edit-folio').dialog('option', 'title', folioName).dialog('open');
+	jQuery('#dialog-status').dialog('close');
+	jQuery('#dialog-edit-folio').dialog('option', 'title', folioName).dialog('open');
 }
 /* =========================================================================== *
  * Pulls all information regarding the targeted Folio node from the database,
@@ -380,8 +379,8 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 function profileUI(folioNodeID, toggle) {
 	fid = folioNodeID;
 	helper_show_status("Pulling content, please wait...", 400, 225);
-	$('#articles-wrapper').empty();
-	$.ajax({
+	jQuery('#articles-wrapper').empty();
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/pull-content",
 		type: "POST",
 		data: { 
@@ -395,33 +394,33 @@ function profileUI(folioNodeID, toggle) {
 			var landscapeImg = (output['landscape'] != '')?output['landscape']:'http://placehold.it/300x400&text=Cover+Landscape';
 			var portraitImg = (output['portrait'] != '')?output['portrait']:'http://placehold.it/400x300&text=Cover+Portrait';
 			// insert new attributes into the current overlay
-			$('#portrait').attr('src', portraitImg);
-			$('#landscape').attr('src', landscapeImg);
-			$('#image').attr('src', landscapeImg);
-			$('#image-ui-fid').val(folioNodeID);
-			$('#image-ui-fname').val(output['title']);
+			jQuery('#portrait').attr('src', portraitImg);
+			jQuery('#landscape').attr('src', landscapeImg);
+			jQuery('#image').attr('src', landscapeImg);
+			jQuery('#image-ui-fid').val(folioNodeID);
+			jQuery('#image-ui-fname').val(output['title']);
 			if (toggle == 'full') { // toggle for opening the Folio edit UI
-				$("#folio-ui-fname").val(output['title']);
-				$("#folio-ui-pname").val(output['pubName']);
-				$("#folio-ui-fnumber").val(output['folioNum']);
-				$("#folio-ui-pdate").val(output['pubDate']);
-				$("#folio-ui-fdesc").val(output['folioDesc']);
-				$("#folio-ui-filter").val(output['filter']);
-				$('#folio-ui-fversion').val(output['folioVer']);
-				$('#folio-ui-orientation').val(output['orientation']);
-				$('#folio-ui-generator').val(output['autoToggle']);
-				$('#accounts').val(output['accounts']);
+				jQuery("#folio-ui-fname").val(output['title']);
+				jQuery("#folio-ui-pname").val(output['pubName']);
+				jQuery("#folio-ui-fnumber").val(output['folioNum']);
+				jQuery("#folio-ui-pdate").val(output['pubDate']);
+				jQuery("#folio-ui-fdesc").val(output['folioDesc']);
+				jQuery("#folio-ui-filter").val(output['filter']);
+				jQuery('#folio-ui-fversion').val(output['folioVer']);
+				jQuery('#folio-ui-orientation').val(output['orientation']);
+				jQuery('#folio-ui-generator').val(output['autoToggle']);
+				jQuery('#accounts').val(output['accounts']);
 				// updates the dimension field depending on the default account choice
 				refreshDimensions();
-				$('#dimension').val(output['dimension']);
+				jQuery('#dimension').val(output['dimension']);
 				if (output['status'] == 'Uploaded') { // disable account & dimension selection if published
-					$('#accounts').attr('disabled', 'disabled');
-					$('#dimension').attr('disabled', 'disabled');
-					$('#folio-ui-orientation').attr('disabled', 'disabled');
+					jQuery('#accounts').attr('disabled', 'disabled');
+					jQuery('#dimension').attr('disabled', 'disabled');
+					jQuery('#folio-ui-orientation').attr('disabled', 'disabled');
 				} else { // re-enable account & dimension selection if not published
-					$('#accounts').removeAttr('disabled');
-					$('#dimension').removeAttr('disabled');
-					$('#folio-ui-orientation').removeAttr('disabled');
+					jQuery('#accounts').removeAttr('disabled');
+					jQuery('#dimension').removeAttr('disabled');
+					jQuery('#folio-ui-orientation').removeAttr('disabled');
 				}
 				if (landscapeImg || portraitImg)
 					offsetIndex++;
@@ -449,11 +448,11 @@ function profileUI(folioNodeID, toggle) {
 					);
 				}
 				readStylesheets();
-				$('#pubcss').val(output['pubCSS']);
-				$('.overridecss').val(output['pubCSS']);
+				jQuery('#pubcss').val(output['pubCSS']);
+				jQuery('.overridecss').val(output['pubCSS']);
 			} else if (toggle == 'half') { // toggle for opening the image edit UI
-				$('#dialog-status').dialog('close');
-				$('#dialog-edit-cover').dialog('option', 'title', output['title']).dialog('open');
+				jQuery('#dialog-status').dialog('close');
+				jQuery('#dialog-edit-cover').dialog('option', 'title', output['title']).dialog('open');
 			}
 		}
 	});
@@ -464,18 +463,18 @@ function profileUI(folioNodeID, toggle) {
  *   Open the option UI dialog box for selecting the dimension size and mode upon success.
  * ====================================================================================== */
 function previewOptions(previewID, filename) {
-	var pname  = $("#folio-ui-pname").val(), 
-		pubcss = $("#pubcss").val();
+	var pname  = jQuery("#folio-ui-pname").val(), 
+		pubcss = jQuery("#pubcss").val();
 		previewFileName = filename;
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/preview-article",
 		type: "POST",
 		data: { 
 			"previewID"	:previewID,
 			"pname"		:pname,
-			"pubcss"	:pubcss, },
+			"pubcss"	:pubcss },
 		success: function(output) {
-			$('#dialog-iframe-preview-option').dialog('option', 'title', output['title']).dialog('open');
+			jQuery('#dialog-iframe-preview-option').dialog('option', 'title', output['title']).dialog('open');
 		}
 	});
 }
@@ -486,7 +485,7 @@ function previewOptions(previewID, filename) {
  * ============================================================================ */
 function previewArticle(orientation) {
 	var windows_width, windows_height, previewURL,
-		preview_dimension = $('#preview-dimension :selected').val(),
+		preview_dimension = jQuery('#preview-dimension :selected').val(),
 		preview_token = preview_dimension.split(',');
 	if (orientation == "landscape") { // view landscape mode
 		windows_width = preview_token[0];
@@ -504,7 +503,7 @@ function previewArticle(orientation) {
  * ========================================================= */
 function readStylesheets() {
 	var styleText = '';
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/stylesheet/read",
 		type: "POST",
 		async: false,
@@ -514,8 +513,8 @@ function readStylesheets() {
 					styleText = output[i];
 				else // removes the derivatives for viewing purposes
 					styleText = output[i].split(/-/)[1];
-				$("#pubcss").append($("<option></option>").attr("value", output[i]).text(styleText));
-				//$(".overridecss").append($("<option></option>").attr("value", output[i]).text(styleText));
+				jQuery("#pubcss").append(jQuery("<option></option>").attr("value", output[i]).text(styleText));
+				//jQuery(".overridecss").append(jQuery("<option></option>").attr("value", output[i]).text(styleText));
 			}
 		}
 	});
@@ -525,8 +524,8 @@ function readStylesheets() {
  *   display the dimensions accordingly.
  * ======================================= */
 function refreshDimensions() {
-	var account = $('#accounts :selected')
-	$('#dimension').empty();
+	var account = jQuery('#accounts :selected')
+	jQuery('#dimension').empty();
 	switch(account.val()) {
 		case 'amazon':
 			helper_generate_dimensions('dimension', amazonDimensions, true);
@@ -545,7 +544,7 @@ function refreshDimensions() {
  *   recursively remove all HTML article folders and .folio files.
  * ============================================================= */
 function removePreviewFile() {
-	$.ajax({
+	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/preview-delete",
 		type: "POST",
 		data: { "filename":previewFileName }
@@ -561,142 +560,152 @@ function replaceHREF(ahref, toggle) {
 		ahref[i].href = 'javascript:profileUI('+url.substring(url.indexOf('/node')+6, url.indexOf('/edit?'))+', "'+toggle+'")';
 	}
 }
+
 /* /-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\ *
  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
  * Constructing the Jquery UI Overlay Windows *
  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
  * \-/\-/\-/\-/\-/\-/\-/\-/\-/\-/\-/\-/\-/\-/ */
-$(function() {
-	var fname 	    = $("#folio-ui-fname"),
-		pname 	    = $("#folio-ui-pname"),
-		fnumber     = $("#folio-ui-fnumber"),
-		pdate       = $("#folio-ui-pdate"),
-		fdesc	    = $("#folio-ui-fdesc"),
-		filter 	    = $("#folio-ui-filter");
-		fversion    = $('#folio-ui-fversion'),
-		orientation = $('#folio-ui-orientation'),
-		autoToggle  = $('#folio-ui-generator'),
-		image 	    = $('#image'),
-		portrait    = $('#portrait'),
-		landscape   = $('#landscape');
-	// JQUERY UI: dialog box functionality for editing cover images
-	$("#dialog-edit-cover").dialog({
-		autoOpen:false, height:525, width:570, modal:true,
-		buttons: {
-			Save: function() {
-				var form = document.getElementById('image-form');
-				var formData = new FormData(form);
-			 	var xhr = new XMLHttpRequest();
-			 	xhr.open('POST', form.getAttribute('action'), false);
-				xhr.send(formData);
-				imageUI_update();
-				$(this).dialog("close"); },
-			Cancel: function() { $(this).dialog("close"); }},
-	});
-	// JQUERY UI: dialog box functionality for editing folio
-	$("#dialog-edit-folio").dialog({
-		autoOpen:false, height:666, width:1100, modal:true,
-		buttons: {
-			"Export Selected Articles as HTML stacks": function() {
-				var articleID  = '';
-				    checkboxes = $('.article-index input');
-				for (var n = 0; n < checkboxes.length; n++)
-					if (checkboxes[n].checked)
-						articleID += checkboxes[n].value+',';
-				if (articleID)
-					generate_selected_html(articleID);
-				else
-					helper_show_status("Please select an article first!");
-			},
-			"Remove Selected Articles from Folio": function() {
-				var indexes           = $('td.sortable-index'),
-				    checkboxes        = $('.article-index input');
-				for (var i = 0; i < checkboxes.length; i++)
-					if (checkboxes[i].checked)
-						$('#article-row-id-'+checkboxes[i].value).remove();
-				for (var n = 0; n < indexes.length; n++)
-					indexes[n].innerHTML = n+1; 
-			},
-			"Save": function() {
-				var ads      = "",
-					articles = "",
-					indexes    = $('.article-index input'),
-					isad 	   = $('.is-ad input'),
-					dimension  = $('#dimension :selected'),
-					pubcss     = $('#pubcss'),
-					toccss     = $('#toccss'),
-					account    = $('#accounts :selected');
-				// appends the current articles from folio
-				for (var i = 0; i < indexes.length; i++) {
-					articles += indexes[i].value+",";
-				}
-				for (var n = 0; n < isad.length; n++)
-					ads += (isad[n].checked)?"1,":"0,";
-				// attempts to save the metadata to the selected Folio node
-				$.ajax({
-					url: baseURL+"/dpsbridge/folio/update",
-					type: "POST",
-					data: {
-						"fid"         :fid,
-						"fname"       :fname.val(),
-						"pname"       :pname.val(),
-						"fnumber"     :fnumber.val(),
-						"pdate"       :pdate.val(),
-						"fdesc"       :fdesc.val(),
-						"dimension"   :dimension.val(),
-						"orientation" :orientation.val(),
-						"autoToggle"  :autoToggle.val(),
-						"filter"      :filter.val(),
-						"fversion"    :fversion.val(),
-						"pubcss"      :pubcss.val(),
-						"toccss"      :toccss.val(),
-						"isads"       :ads,
-						"accounts"    :account.val(),
-						"articles"    :articles, },
-					success: function(output) {
-						if (output === 'ok')
-							window.location = baseURL+"/admin/config/content/fpmanage";
-						else
-							helper_show_status("Failed to update '"+fname.val()+"'<br/><br/>:: "+output, 400, 300);
-					},
-					error: function (e, status) {
-						helper_show_status(e.responseText);
-					}
-				});
-				$(this).dialog("close");
-			},
-			Cancel: function() { $(this).dialog("close"); }
-		},
-	});
-	// JQUERY UI: dialog box functionality for providing previewing option (landscape or portrait)
-	$("#dialog-iframe-preview-option").dialog({
-		autoOpen:false, height:400, width:375, modal:true,
-		buttons: {
-			Back: function() {
-				removePreviewFile();
-				$(this).dialog("close"); }},
-		close: function() { removePreviewFile(); }
-	});
-	// JQUERY UI: dialog box functionality for providing previewing option (landscape or portrait)
-	$("#dialog-status").dialog({
-		autoOpen:false, modal:true,
-		buttons: {
-			Close: function() {
-				$(this).dialog("close"); }},
-	});
-	// JQUERY UI: auto sort the table
-	$("#sortable-table tbody").sortable({
-		update: function(event, ui) {
-			$('#sortable-table tbody tr').each(function() {
-				$(this).children('td.sortable-index').html($(this).index()+1); }); },
-	});
-	// JQUERY UI: auto resizing the dialog boxes depending on the size of the browser
-	$(window).resize(function() {
-    	$("#dialog-edit-folio").dialog("option", "width", "auto");
-    	$("#dialog-edit-cover").dialog("option", "width", "auto");
-    	$("#dialog-iframe-preview-option").dialog("option", "width", "auto");
-	});
-	
-	$("#jqueryui-tabs").tabs();
-});
-</script>
+(function ($) {
+    Drupal.behaviors.dpsbridge_view_credential_init = {
+        attach: function() {
+            baseURL = Drupal.settings.dpsbridge.base_url;
+            pathToDir = baseURL = Drupal.settings.dpsbridge.path_to_dir;
+        }
+    }
+    Drupal.behaviors.dpsbridge_view_select = {
+        attach: function() {
+            var fname 	    = $("#folio-ui-fname"),
+                    pname 	    = $("#folio-ui-pname"),
+                    fnumber     = $("#folio-ui-fnumber"),
+                    pdate       = $("#folio-ui-pdate"),
+                    fdesc	    = $("#folio-ui-fdesc"),
+                    filter 	    = $("#folio-ui-filter");
+                    fversion    = $('#folio-ui-fversion'),
+                    orientation = $('#folio-ui-orientation'),
+                    autoToggle  = $('#folio-ui-generator'),
+                    image 	    = $('#image'),
+                    portrait    = $('#portrait'),
+                    landscape   = $('#landscape');
+            // JQUERY UI: dialog box functionality for editing cover images
+            $("#dialog-edit-cover").dialog({
+                    autoOpen:false, height:525, width:570, modal:true,
+                    buttons: {
+                            Save: function() {
+                                    var form = document.getElementById('image-form');
+                                    var formData = new FormData(form);
+                                    var xhr = new XMLHttpRequest();
+                                    xhr.open('POST', form.getAttribute('action'), false);
+                                    xhr.send(formData);
+                                    imageUI_update();
+                                    $(this).dialog("close"); },
+                            Cancel: function() { $(this).dialog("close"); }}
+            });
+            // JQUERY UI: dialog box functionality for editing folio
+            $("#dialog-edit-folio").dialog({
+                    autoOpen:false, height:666, width:1100, modal:true,
+                    buttons: {
+                            "Export Selected Articles as HTML stacks": function() {
+                                    var articleID  = '';
+                                        checkboxes = $('.article-index input');
+                                    for (var n = 0; n < checkboxes.length; n++)
+                                            if (checkboxes[n].checked)
+                                                    articleID += checkboxes[n].value+',';
+                                    if (articleID)
+                                            generate_selected_html(articleID);
+                                    else
+                                            helper_show_status("Please select an article first!");
+                            },
+                            "Remove Selected Articles from Folio": function() {
+                                    var indexes           = $('td.sortable-index'),
+                                        checkboxes        = $('.article-index input');
+                                    for (var i = 0; i < checkboxes.length; i++)
+                                            if (checkboxes[i].checked)
+                                                    $('#article-row-id-'+checkboxes[i].value).remove();
+                                    for (var n = 0; n < indexes.length; n++)
+                                            indexes[n].innerHTML = n+1; 
+                            },
+                            "Save": function() {
+                                    var ads      = "",
+                                            articles = "",
+                                            indexes    = $('.article-index input'),
+                                            isad 	   = $('.is-ad input'),
+                                            dimension  = $('#dimension :selected'),
+                                            pubcss     = $('#pubcss'),
+                                            toccss     = $('#toccss'),
+                                            account    = $('#accounts :selected');
+                                    // appends the current articles from folio
+                                    for (var i = 0; i < indexes.length; i++) {
+                                            articles += indexes[i].value+",";
+                                    }
+                                    for (var n = 0; n < isad.length; n++)
+                                            ads += (isad[n].checked)?"1,":"0,";
+                                    // attempts to save the metadata to the selected Folio node
+                                    $.ajax({
+                                            url: baseURL+"/dpsbridge/folio/update",
+                                            type: "POST",
+                                            data: {
+                                                    "fid"         :fid,
+                                                    "fname"       :fname.val(),
+                                                    "pname"       :pname.val(),
+                                                    "fnumber"     :fnumber.val(),
+                                                    "pdate"       :pdate.val(),
+                                                    "fdesc"       :fdesc.val(),
+                                                    "dimension"   :dimension.val(),
+                                                    "orientation" :orientation.val(),
+                                                    "autoToggle"  :autoToggle.val(),
+                                                    "filter"      :filter.val(),
+                                                    "fversion"    :fversion.val(),
+                                                    "pubcss"      :pubcss.val(),
+                                                    "toccss"      :toccss.val(),
+                                                    "isads"       :ads,
+                                                    "accounts"    :account.val(),
+                                                    "articles"    :articles },
+                                            success: function(output) {
+                                                    if (output === 'ok')
+                                                            window.location = baseURL+"/admin/config/content/fpmanage";
+                                                    else
+                                                            helper_show_status("Failed to update '"+fname.val()+"'<br/><br/>:: "+output, 400, 300);
+                                            },
+                                            error: function (e, status) {
+                                                    helper_show_status(e.responseText);
+                                            }
+                                    });
+                                    $(this).dialog("close");
+                            },
+                            Cancel: function() { $(this).dialog("close"); }
+                    }
+            });
+            // JQUERY UI: dialog box functionality for providing previewing option (landscape or portrait)
+            $("#dialog-iframe-preview-option").dialog({
+                    autoOpen:false, height:400, width:375, modal:true,
+                    buttons: {
+                            Back: function() {
+                                    removePreviewFile();
+                                    $(this).dialog("close"); }},
+                    close: function() { removePreviewFile(); }
+            });
+            // JQUERY UI: dialog box functionality for providing previewing option (landscape or portrait)
+            $("#dialog-status").dialog({
+                    autoOpen:false, modal:true,
+                    buttons: {
+                            Close: function() {
+                                    $(this).dialog("close"); }}
+            });
+            // JQUERY UI: auto sort the table
+            $("#sortable-table tbody").sortable({
+                    update: function(event, ui) {
+                            $('#sortable-table tbody tr').each(function() {
+                                    $(this).children('td.sortable-index').html($(this).index()+1); }); }
+            });
+            // JQUERY UI: auto resizing the dialog boxes depending on the size of the browser
+            $(window).resize(function() {
+            $("#dialog-edit-folio").dialog("option", "width", "auto");
+            $("#dialog-edit-cover").dialog("option", "width", "auto");
+            $("#dialog-iframe-preview-option").dialog("option", "width", "auto");
+            });
+
+            $("#jqueryui-tabs").tabs();
+        }
+    }
+})(jQuery);
