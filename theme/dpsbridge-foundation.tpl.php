@@ -78,6 +78,7 @@
       </div>
     </div>
   </div>
+  <?php print drupal_render($ds_content); ?>
   <script type='text/javascript'>document.write('<script src=' + ('__proto__' in {} ? '../HTMLResources/js/vendor/zepto' : '../HTMLResources/js/vendor/jquery') + '.js><\/script>')</script>
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/foundation.js'></script>
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/foundation.orbit.js'></script>

@@ -313,7 +313,8 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
         // Images from the article.
         $article_metadata['image'],
         // Videos from the article.
-        $article_metadata['video']
+        $article_metadata['video'],
+        $article_metadata['ds_content']
     );
   }
   else {
@@ -325,7 +326,8 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
         $article_metadata['kicker'],
         $article_metadata['body'],
         $article_metadata['image'],
-        $article_metadata['video']
+        $article_metadata['video'],
+        $article_metadata['ds_content']
     );
   }
 }
@@ -489,6 +491,11 @@ function helper_pull_node($node_id) {
   $container = array();
   // Loads the node from the database.
   $node = node_load($node_id);
+  
+  // Pull fields from dps node view.
+  $node_display = node_view($node, 'dps');
+  $container['ds_content'] = isset($node_display) ? $node_display : array();
+  
   // Loads the image urls from the database.
   $images = array();
   $img_list = "";
