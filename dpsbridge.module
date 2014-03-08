@@ -49,13 +49,13 @@ function dpsbridge_menu() {
     'weight' => -9,
   );
   $items['admin/config/content/fpselect'] = array(
-    'title' => 'Folio Article Selection', 
+    'title' => 'Folio Article Selection',
     'description' => "Create Folio by selected content.",
     'page callback' => 'dpsbridge_fpselect_page',
     'access arguments' => array('folio_article_permission'),
     'file' => 'dpsbridge.admin.inc',
     'weight' => -8,
-  );   
+  );
   $items['dpsbridge/dps/credentials/add'] = array(
     'title' => 'Updates the Adobe DPS Credentials',
     'page callback' => 'dpsbridge_dps_credentials_add',
@@ -184,11 +184,14 @@ function dpsbridge_menu() {
   return $items;
 }
 
+/**
+ * Implements Add New Articles To Folio Form.
+ */
 function dpsbridge_add_new_articles_to_folio_form($form, &$form_state) {
   $form = array();
   $form['folio_info'] = array(
     '#type' => 'fieldset',
-    '#collapsible' => FALSE, 
+    '#collapsible' => FALSE,
     '#collapsed' => FALSE,
   );
   $form['folio_info']['fname'] = array(
@@ -197,22 +200,22 @@ function dpsbridge_add_new_articles_to_folio_form($form, &$form_state) {
     '#size' => 20,
     '#required' => TRUE,
     '#attributes' => array('id' => 'fname', 'placeholder' => t('Folio Name')),
-   );
+  );
   $form['folio_info']['pname'] = array(
     '#type' => 'textfield',
     '#title' => t('Publication Name'),
     '#size' => 20,
     '#required' => TRUE,
     '#attributes' => array('id' => 'pname', 'placeholder' => t('Publication Name')),
-   );
-   $form['folio_info']['fnumber'] = array(
+  );
+  $form['folio_info']['fnumber'] = array(
     '#type' => 'textfield',
     '#title' => t('Folio Number'),
     '#size' => 20,
     '#required' => TRUE,
     '#attributes' => array('id' => 'fnumber', 'placeholder' => t('Folio Number')),
-   );
-   $form['folio_info']['pdate'] = array(
+  );
+  $form['folio_info']['pdate'] = array(
     '#type' => 'textfield',
     '#title' => t('Publication Date'),
     '#default_value' => date('Y-m-d'),
@@ -220,25 +223,28 @@ function dpsbridge_add_new_articles_to_folio_form($form, &$form_state) {
     '#required' => TRUE,
     '#attributes' => array('id' => 'pdate'),
     '#theme' => array('dpsbridge_date'),
-   );
+  );
   return $form;
 }
 
 /**
  * Implements hook_entity_info_alter().
  */
-function dpsbridge_entity_info_alter(&$entity_info){
+function dpsbridge_entity_info_alter(&$entity_info) {
   $entity_info['node']['view modes']['dps'] = array(
     'label' => t('DPS'),
     'custom settings' => TRUE,
-  ); 
+  );
 }
 
+/**
+ * Implements Add Existing Articles To Folio Form.
+ */
 function dpsbridge_add_existing_articles_to_folio_form($form, &$form_state) {
   $form = array();
   $form['folio_info'] = array(
     '#type' => 'fieldset',
-    '#collapsible' => FALSE, 
+    '#collapsible' => FALSE,
     '#collapsed' => FALSE,
   );
   $fp_nodes_all = node_load_multiple(array(), array('type' => 'folios'));
@@ -252,12 +258,14 @@ function dpsbridge_add_existing_articles_to_folio_form($form, &$form_state) {
     '#options' => $options,
     '#required' => TRUE,
     '#attributes' => array('id' => 'fid'),
-   );
-
+  );
   return $form;
 }
 
-function dpsbridge_edit_existing_folio_form($form, &$form_state) {  //TODO: There is no form id in original form
+/**
+ * Implements Edit Existing Folio Form.
+ */
+function dpsbridge_edit_existing_folio_form($form, &$form_state) {
   $form = array();
   $form['folio_ui_fname'] = array(
     '#type' => 'textfield',
@@ -265,22 +273,22 @@ function dpsbridge_edit_existing_folio_form($form, &$form_state) {  //TODO: Ther
     '#size' => 20,
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-fname', 'placeholder' => t('Folio Name')),
-   );
+  );
   $form['folio_ui_pname'] = array(
     '#type' => 'textfield',
     '#title' => t('Publication Name'),
     '#size' => 20,
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-pname', 'placeholder' => t('Publication Name')),
-   );
-   $form['folio_ui_fnumber'] = array(
+  );
+  $form['folio_ui_fnumber'] = array(
     '#type' => 'textfield',
     '#title' => t('Folio Number'),
     '#size' => 20,
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-fnumber', 'placeholder' => t('Folio Number')),
-   );
-   $form['folio_ui_pdate'] = array(
+  );
+  $form['folio_ui_pdate'] = array(
     '#type' => 'textfield',
     '#title' => t('Publication Date'),
     '#default_value' => date('Y-m-d'),
@@ -288,110 +296,123 @@ function dpsbridge_edit_existing_folio_form($form, &$form_state) {  //TODO: Ther
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-pdate'),
     '#theme' => array('dpsbridge_date'),
-   ); 
+  );
   $form['folio_ui_fdesc'] = array(
     '#type' => 'textarea',
     '#title' => t('Description'),
     '#rows' => 4,
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-fdesc', 'placeholder' => t('Folio Description')),
-   );
+  );
   $form['accounts'] = array(
     '#type' => 'select',
     '#title' => t('DPS Account'),
     '#options' => array(
       'amazon' => t('Amazon'),
       'android' => t('Android'),
-      'apple' => t('Apple'),      
+      'apple' => t('Apple'),
     ),
     '#required' => TRUE,
     '#attributes' => array('id' => 'accounts'),
-   );
-   $form['folio_ui_filter'] = array(
+  );
+  $form['folio_ui_filter'] = array(
     '#type' => 'textfield',
     '#title' => t('Library Filter'),
     '#size' => 20,
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-filter', 'placeholder' => t('Library Filter')),
-   );
-   $form['pubcss'] = array(  // TODO: Select List Dynamically Created.
+  );
+  // HTML Resources Select List is Update by jQuery.
+  $form['pubcss'] = array(
     '#type' => 'select',
     '#title' => t('HTML Resources'),
     '#options' => array(),
     '#required' => TRUE,
     '#attributes' => array('id' => 'pubcss'),
-   );   
-   $form['dimension'] = array(  // TODO: Select List Dynamically Created.
+  );
+  // Resolution Select List is Update by jQuery.
+  $form['dimension'] = array(
     '#type' => 'select',
     '#title' => t('Resolution'),
     '#options' => array(),
     '#required' => TRUE,
     '#attributes' => array('id' => 'dimension'),
-   );
-   
-   $form['folio_ui_fversion'] = array(
+  );
+  $form['folio_ui_fversion'] = array(
     '#type' => 'select',
     '#title' => t('Viewer Version'),
     '#options' => array(
       '24.0.0' => t('24'),
       '25.0.0' => t('25'),
       '26.0.0' => t('26'),
-      '27.0.0' => t('27'),      
+      '27.0.0' => t('27'),
     ),
     '#default_value' => '27.0.0',
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-fversion'),
-   );     
-   
-   $form['folio_ui_orientation'] = array(
+  );
+  $form['folio_ui_orientation'] = array(
     '#type' => 'select',
     '#title' => t('Folio Orientation'),
     '#options' => array(
       'Landscape' => t('Horizontal Orientation'),
       'Portrait' => t('Vertical Orientation'),
-      'Always' => t('Both Orientations'),      
+      'Always' => t('Both Orientations'),
     ),
     '#default_value' => 'Landscape',
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-orientation'),
-   );
-   
-   $form['folio_ui_generator'] = array( 
+  );
+  $form['folio_ui_generator'] = array(
     '#type' => 'select',
     '#title' => t('TOC & Cover'),
     '#options' => array(
       'Generate ToC' => t('Generate ToC Only'),
       'Generate Cover' => t('Generate Cover Only'),
       'Generate Both' => t('Generate Both'),
-      'Generate None' => t('Generate None'),      
+      'Generate None' => t('Generate None'),
     ),
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-generator'),
-   );     
+  );
   return $form;
 }
 
+/**
+ * Implements Image Form.
+ */
 function dpsbridge_image_form($form, &$form_state) {
   global $base_url;
   $form = array();
   $form['#action'] = $base_url . '/dpsbridge/img/upload';
-  $form['#attributes'] = array('enctype' => 'multipart/form-data', 'id' => 'image-form');
+  $form['#attributes'] = array(
+    'enctype' => 'multipart/form-data',
+    'id' => 'image-form',
+  );
   $form['fname'] = array(
     '#type' => 'hidden',
     '#attributes' => array('id' => 'image-ui-fname'),
-   );
+  );
   $form['fid'] = array(
     '#type' => 'hidden',
     '#attributes' => array('id' => 'image-ui-fid'),
-   );
+  );
   $form['portrait'] = array(
     '#type' => 'file',
-    '#attributes' => array('name' => 'portrait', 'id' => 'portrait-file', 'accept' => 'image/*'),
-   );
+    '#attributes' => array(
+      'name' => 'portrait',
+      'id' => 'portrait-file',
+      'accept' => 'image/*',
+    ),
+  );
   $form['landscape'] = array(
     '#type' => 'file',
-    '#attributes' => array('name' => 'landscape', 'id' => 'landscape-file', 'accept' => 'image/*'),
-   );
+    '#attributes' => array(
+      'name' => 'landscape',
+      'id' => 'landscape-file',
+      'accept' => 'image/*',
+    ),
+  );
   return $form;
 }
 
@@ -1258,7 +1279,7 @@ function dpsbridge_permission() {
     'administer dpsbridge' => array(
       'title' => t('Administer DPS Bridge'),
       'description' => t('Allow users to add and edit Folio Producer credentials.'),
-    ),    
+    ),
     'folio_article_permission' => array(
       'title' => t('Folio Article Selection View'),
       'description' => t('Allow users to add articles to a folio.'),
@@ -1348,7 +1369,7 @@ function dpsbridge_theme() {
       'path' => $path . '/theme',
     ),
     'dpsbridge_date' => array(
-      'render element' => 'element', 
+      'render element' => 'element',
     ),
     'dpsbridge_fpmanage_page' => array(
       'variables' => array(
@@ -1361,12 +1382,12 @@ function dpsbridge_theme() {
     ),
     'dpsbridge_edit_existing_folio_form' => array(
       'render element' => 'form',
-       'template' => 'dpsbridge-edit-existing-folio',
+      'template' => 'dpsbridge-edit-existing-folio',
       'path' => $path . '/theme',
     ),
     'dpsbridge_image_form' => array(
       'render element' => 'form',
-       'template' => 'dpsbridge-edit-folio-cover',
+      'template' => 'dpsbridge-edit-folio-cover',
       'path' => $path . '/theme',
     ),
     'dpsbridge_credential_page' => array(
@@ -1477,17 +1498,24 @@ function dpsbridge_node_delete($node) {
   }
 }
 
-
 /**
  * Theme function for number field in form.
  * 
- * @param type $variables
+ * @param array $variables
+ *   Variables passed to the theming function.
+ * 
  * @return string
+ *   Returned themed date string.
  */
 function theme_dpsbridge_date($variables) {
   $element = $variables['element'];
   $element['#attributes']['type'] = 'date';
-  element_set_attributes($element, array('id', 'name', 'value', 'size', 'maxlength'));
+  element_set_attributes($element, array(
+    'id',
+    'name',
+    'value',
+    'size',
+    'maxlength'));
   _form_set_class($element, array('form-text'));
 
   $extra = '';

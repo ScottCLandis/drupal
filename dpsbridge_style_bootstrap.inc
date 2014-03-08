@@ -17,7 +17,6 @@
  * @param string $dimension
  *   The targeted folio dimension.
  */
-
 function helper_style_bootstrap_cover($publication, $landscape, $portrait, $dimension) {
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
   $variables = array(
@@ -82,7 +81,7 @@ function helper_style_bootstrap($publication, $title, $author, $kicker, $body, $
   $filename = helper_format_title($title);
   $paragraphs = isset($body['und'][0]['safe_value']) ? $body['und'][0]['safe_value'] : '';
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
-  
+
   $variables = array(
     'ds_content' => $ds_content,
     'publication' => $publication,
@@ -101,5 +100,3 @@ function helper_style_bootstrap($publication, $title, $author, $kicker, $body, $
   $toc_img = helper_format_thumbnail($GLOBALS['base_url'] . '/' . $directory . $filename . '/' . $filename . '.html');
   helper_save_img($toc_img, $filename . '/toc.png');
 }
-
-

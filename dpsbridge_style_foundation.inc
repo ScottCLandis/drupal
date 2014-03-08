@@ -99,4 +99,3 @@ function helper_style_foundation($publication, $title, $author, $kicker, $body, 
   $toc_img = helper_format_thumbnail($GLOBALS['base_url'] . '/' . $directory . $filename . '/' . $filename . '.html');
   helper_save_img($toc_img, $filename . '/toc.png');
 }
-

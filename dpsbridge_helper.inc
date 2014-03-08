@@ -345,25 +345,7 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
 function helper_include_goodies($toggle) {
   drupal_add_css('http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', 'external');
   drupal_add_css(drupal_get_path('module', 'dpsbridge') . '/includes/override.css');
-  drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/jquery.js');
-  drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/jqueryui.js');
   drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge.js');
-  switch ($toggle) {
-    // For the configuration page.
-    case 'config':
-      require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_credential_fn.inc';
-      break;
-
-    // For the management page.
-    case 'manage':
-//      require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_manage_fn.inc';
-      break;
-
-    // For the selection page.
-    case 'select':
-      require_once drupal_get_path('module', 'dpsbridge') . '/dpsbridge_view_select_fn.inc';
-      break;
-  }
 }
 /**
  * Helper method for saving the given image url, to the predefined image path.
@@ -491,11 +473,11 @@ function helper_pull_node($node_id) {
   $container = array();
   // Loads the node from the database.
   $node = node_load($node_id);
-  
+
   // Pull fields from dps node view.
   $node_display = node_view($node, 'dps');
   $container['ds_content'] = isset($node_display) ? $node_display : array();
-  
+
   // Loads the image urls from the database.
   $images = array();
   $img_list = "";
