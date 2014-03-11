@@ -50,7 +50,7 @@
         <?php // If there are only one image.
         if (count($images) == 1) {
         ?>
-          <img src='" . helper_linkImg($filename, $images[0]) . "' width='100%' /><br/>
+          <img src='" . dpsbridge_helper_linkImg($filename, $images[0]) . "' width='100%' /><br/>
         <?php 
         }
         // Creates a slideshow if there are multiple images.
@@ -67,7 +67,7 @@
             <?php for ($q = 0; $q < count($images); $q++) { ?>
             <!-- TODO: Use jQuery to add class=active to first div -->
             <div class='item'>
-              <img src='<?php print helper_linkImg($filename, $images[$q]); ?>' alt=''>
+              <img src='<?php print dpsbridge_helper_linkImg($filename, $images[$q]); ?>' alt=''>
               <div class='carousel-caption'>Some Caption Here</div>
             </div>
             <?php } ?>
@@ -86,7 +86,7 @@
       ?>
           <div id='videoArea' class='col-lg-6 col-12'>
           <div class='flex-video row'>
-          <iframe width='420' height='315' src='<?php helper_format_url($videos); ?>' frameborder='0' allowfullscreen></iframe>
+          <iframe width='420' height='315' src='<?php dpsbridge_helper_format_url($videos); ?>' frameborder='0' allowfullscreen></iframe>
           </div>
           </div>
       <?php

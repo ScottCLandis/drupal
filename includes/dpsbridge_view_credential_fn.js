@@ -34,7 +34,7 @@ function connectivity(Account) {
  * Helper method for testing the Folio Producer credentials.
  * ========================================================= */
 function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
-	helper_show_status('Attempting to connect to Folio Producer, please wait...');
+	dpsbridge_helper_show_status('Attempting to connect to Folio Producer, please wait...');
 	jQuery.ajax({
 		url: pathToDir+"/fp_connect.php",
 		type: "POST",
@@ -47,9 +47,9 @@ function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
 		},
 		success: function(output) {
 			if (output === 'ok')
-				helper_show_status("<strong><em>"+type+"</em></strong><br/><br/>-Folio Producer API authentication successful!<br/><br/>- Login successful!<br/><br/>- Test completed!", 350, 400);
+				dpsbridge_helper_show_status("<strong><em>"+type+"</em></strong><br/><br/>-Folio Producer API authentication successful!<br/><br/>- Login successful!<br/><br/>- Test completed!", 350, 400);
 			else
-				helper_show_status("<strong><em>"+type+"</em></strong><br/><br/>:: "+output, 600, 250);
+				dpsbridge_helper_show_status("<strong><em>"+type+"</em></strong><br/><br/>:: "+output, 600, 250);
 			logout();
 		}
 	});
@@ -59,11 +59,11 @@ function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
  * =============================================== */
 function dps_credentials() {
 	updateFields();
-	helper_show_status('Updating credentials, please wait...');
+	dpsbridge_helper_show_status('Updating credentials, please wait...');
 	// call helper to convert the array of dimensions into a string, separated by commas
-	var amazon_target_dimension = helper_array_to_string(amazon_dimension);
-	var android_target_dimension = helper_array_to_string(android_dimension);
-	var apple_target_dimension = helper_array_to_string(apple_dimension);
+	var amazon_target_dimension = dpsbridge_helper_array_to_string(amazon_dimension);
+	var android_target_dimension = dpsbridge_helper_array_to_string(android_dimension);
+	var apple_target_dimension = dpsbridge_helper_array_to_string(apple_dimension);
 
 	jQuery.ajax({
 		url: baseURL+"/dpsbridge/dps/credentials/add",
@@ -83,9 +83,9 @@ function dps_credentials() {
 		},
 		success: function(output) {
 			if (output === 'ok')
-				helper_show_status('Credentials have been successfully updated!');
+				dpsbridge_helper_show_status('Credentials have been successfully updated!');
 			else
-				helper_show_status(output);
+				dpsbridge_helper_show_status(output);
 		}
 	})
 }
@@ -110,13 +110,13 @@ function generate_form_table_values() {
 			jQuery('#apisec').val(output['apisec']);
 			jQuery('#amazon_id').val(output['amazon']['id']);
 			jQuery('#amazon_pass').val(output['amazon']['pass']);
-			helper_generate_dimensions('amazon_dimension', output['amazon']['dimension'], true);
+			dpsbridge_helper_generate_dimensions('amazon_dimension', output['amazon']['dimension'], true);
 			jQuery('#android_id').val(output['android']['id']);
 			jQuery('#android_pass').val(output['android']['pass']);
-			helper_generate_dimensions('android_dimension', output['android']['dimension'], true);
+			dpsbridge_helper_generate_dimensions('android_dimension', output['android']['dimension'], true);
 			jQuery('#apple_id').val(output['apple']['id']);
 			jQuery('#apple_pass').val(output['apple']['pass']);
-			helper_generate_dimensions('apple_dimension', output['apple']['dimension'], true);
+			dpsbridge_helper_generate_dimensions('apple_dimension', output['apple']['dimension'], true);
 		}
 	});
     }
@@ -181,13 +181,13 @@ function refreshDimensions() {
 	jQuery('#dimension-list').empty();
 	switch(account.val()) {
 		case 'amazon':
-			helper_generate_dimensions('dimension-list', jQuery('#amazon_dimension option'), false);
+			dpsbridge_helper_generate_dimensions('dimension-list', jQuery('#amazon_dimension option'), false);
 			break;
 		case 'android':
-			helper_generate_dimensions('dimension-list', jQuery('#android_dimension option'), false);
+			dpsbridge_helper_generate_dimensions('dimension-list', jQuery('#android_dimension option'), false);
 			break;
 		case 'apple':
-			helper_generate_dimensions('dimension-list', jQuery('#apple_dimension option'), false);
+			dpsbridge_helper_generate_dimensions('dimension-list', jQuery('#apple_dimension option'), false);
 			break;
 	}
 }
@@ -246,7 +246,7 @@ function updateFields() {
 					$('#dwidth').val('');
 					$(this).dialog("close");
 				} else {
-					helper_show_status('Please enter desired dimension length and width.');
+					dpsbridge_helper_show_status('Please enter desired dimension length and width.');
 				}},
 			Close: function() {
 				$(this).dialog("close"); }}
@@ -260,7 +260,7 @@ function updateFields() {
 					dimensions = $('#dimension-list :selected');
 				// check if all available dimensions are selected, to prevent deletion of all available dimensions
 				if (dimensions.length >= $('#'+desiredAccount.val()+'_dimension option').length) {
-					helper_show_status('At least 1 dimension has to exist per account type!');
+					dpsbridge_helper_show_status('At least 1 dimension has to exist per account type!');
 				} else if (dimensions.length > 0) { // if user has selected dimension(s) < availalbe dimensions
 					// delete the selected dimension(s) from the selected account type
 					for (var i = 0; i < dimensions.length; i++) {
@@ -268,7 +268,7 @@ function updateFields() {
 					}
 					$(this).dialog("close");
 				} else { // if user hasn't selected any dimensions
-					helper_show_status('Please select dimension(s) to delete.');
+					dpsbridge_helper_show_status('Please select dimension(s) to delete.');
 				} },
 			Close: function() {
 				$(this).dialog("close"); }},
@@ -284,11 +284,11 @@ function updateFields() {
 				var filename = $('#filename').val(),
 					derivative = $('#derivative :selected').val();
 				if (!filename) {
-					helper_show_status("Please enter a filename!");
+					dpsbridge_helper_show_status("Please enter a filename!");
 				} else if (!derivative) {
-					helper_show_status("Please select the derivative of this stylesheet!");
+					dpsbridge_helper_show_status("Please select the derivative of this stylesheet!");
 				} else if (filename == 'Bootstrap' || filename == 'Foundation') {
-					helper_show_status("Cannot override the stocked Bootstrap or Foundation stylesheet!");
+					dpsbridge_helper_show_status("Cannot override the stocked Bootstrap or Foundation stylesheet!");
 				} else {
 					// sends the zip file via XML-HTTP-Request
 					var form = document.getElementById('stylesheet-form'),
@@ -304,7 +304,7 @@ function updateFields() {
 						$("#stylesheet-delete").append("<option value='"+derivative+"-"+response[1]+"'>"+response[1]+"</option>");
 						$("#stylesheet-download").append("<option value='"+derivative+"-"+response[1]+"'>"+response[1]+"</option>");
 					} else {
-						helper_show_status(response[0]+' '+response[1]);
+						dpsbridge_helper_show_status(response[0]+' '+response[1]);
 					}
 					$(this).dialog("close");
 				} },
@@ -319,9 +319,9 @@ function updateFields() {
 				var stylesheetNum = $('#stylesheet-delete option').length,
 					stylesheet = $('#stylesheet-delete :selected').val();
 				if (stylesheetNum <= 1) { // must have at least 1 stylesheet
-					helper_show_status("Must have at least 1 stylesheet available at all times!");
+					dpsbridge_helper_show_status("Must have at least 1 stylesheet available at all times!");
 				} else if (stylesheet == 'Bootstrap' || stylesheet == 'Foundation') { // cannot delete Bootstrap or Foundation stylesheet
-					helper_show_status("Cannot delete the stocked Bootstrap or Foundation stylesheet!");
+					dpsbridge_helper_show_status("Cannot delete the stocked Bootstrap or Foundation stylesheet!");
 				} else {
 					// deletes the stylesheet from local directory
 					$.ajax({ url: baseURL+"/dpsbridge/stylesheet/delete", type: "POST", data: {'filename':stylesheet} });
@@ -340,7 +340,7 @@ function updateFields() {
 		buttons: {
 			Download: function() {
 				var stylesheet = $('#stylesheet-download :selected').val();
-				helper_download_file(baseURL, pathToDir+'/styles/'+stylesheet+'/HTMLResources.zip', 'HTMLResources', '0');
+				dpsbridge_helper_download_file(baseURL, pathToDir+'/styles/'+stylesheet+'/HTMLResources.zip', 'HTMLResources', '0');
 				$(this).dialog("close"); },
 			Close: function() {
 				$(this).dialog("close"); }}

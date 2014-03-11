@@ -51,5 +51,3 @@ if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
 		echo ' - Folio Creation Failed: <br/>Missing one or more of the following: Folio name, Magazine title, Resolution Width & Height!';
 	}
 }
-
-?>

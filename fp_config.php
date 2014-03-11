@@ -79,5 +79,3 @@ class FPConfig extends Settings
 		}
 	}
 }
-
-?>

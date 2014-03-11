@@ -448,9 +448,9 @@ function dpsbridge_dps_credentials_add() {
   $apple_user = '343';
   $message  = 'ok';
   // Calls helper method to create/update each of the account types.
-  helper_credential_update($amazon_user, $amazon_id, $amazon_pass, $amazon_dimension, $apikey, $apisec);
-  helper_credential_update($android_user, $android_id, $android_pass, $android_dimension, $apikey, $apisec);
-  helper_credential_update($apple_user, $apple_id, $apple_pass, $apple_dimension, $apikey, $apisec);
+  dpsbridge_helper_credential_update($amazon_user, $amazon_id, $amazon_pass, $amazon_dimension, $apikey, $apisec);
+  dpsbridge_helper_credential_update($android_user, $android_id, $android_pass, $android_dimension, $apikey, $apisec);
+  dpsbridge_helper_credential_update($apple_user, $apple_id, $apple_pass, $apple_dimension, $apikey, $apisec);
 
   drupal_json_output($message);
   drupal_exit();
@@ -558,7 +558,7 @@ function dpsbridge_folio_add() {
     node_save_action($folio);
     // Calls helper method to update
     // folio-to-articles and articles-to-folio references.
-    helper_folio_append($folio->nid, $articles);
+    dpsbridge_helper_folio_append($folio->nid, $articles);
   }
   drupal_json_output($message);
   drupal_exit();
@@ -578,7 +578,7 @@ function dpsbridge_folio_append() {
   }
   else {
     // Calls helper method to append the articles to an existing folio node.
-    helper_folio_append($fid, $articles);
+    dpsbridge_helper_folio_append($fid, $articles);
   }
   drupal_json_output($message);
   drupal_exit();
@@ -597,9 +597,9 @@ function dpsbridge_folio_cleanup() {
   }
   else {
     for ($i = 0; $i < count($filenames); $i++) {
-      $file = helper_format_title($filenames[$i]);
+      $file = dpsbridge_helper_format_title($filenames[$i]);
       unlink(dirname(__FILE__) . '/folio/' . $file . '.folio');
-      helper_rrmdir(dirname(__FILE__) . '/html/' . $file);
+      dpsbridge_helper_rrmdir(dirname(__FILE__) . '/html/' . $file);
     }
   }
   drupal_json_output($message);
@@ -668,7 +668,7 @@ function dpsbridge_folio_article_preview() {
     $output['message'] = '[Error] Missing Article node ID, Publication Name, or Publication Stylesheet!';
   }
   else {
-    $article_node  = helper_pull_node($preview_id);
+    $article_node  = dpsbridge_helper_pull_node($preview_id);
     $publication  = $pname;
     $title  = isset($article_node['title']) ? $article_node['title'] : '';
     $author = isset($article_node['author']) ? $article_node['author'] : '';
@@ -680,17 +680,17 @@ function dpsbridge_folio_article_preview() {
     // Fields from dps node view.
     $ds_content = $article_node['ds_content'];
     // Create the directory and its default files.
-    helper_create_dir(helper_format_title($title));
+    dpsbridge_helper_create_dir(dpsbridge_helper_format_title($title));
     // Unzip the selected stylesheet for preview.
-    $result = helper_extract_stylesheet($pubcss);
+    $result = dpsbridge_helper_extract_stylesheet($pubcss);
     // Apply the stylesheet framework for preview.
     // Is derivative of Bootstrap framework?
     if (strpos($pubcss, 'Bootstrap') !== FALSE) {
-      helper_style_bootstrap($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content);
+      dpsbridge_helper_style_bootstrap($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content);
     }
     // Is derivative of Foundation framework?
     elseif (strpos($pubcss, 'Foundation') !== FALSE) {
-      helper_style_foundation($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content);
+      dpsbridge_helper_style_foundation($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content);
     }
     $output['title'] = $title;
   }
@@ -713,9 +713,9 @@ function dpsbridge_folio_article_delete() {
   else {
     $directory = drupal_get_path("module", "dpsbridge") . '/html/';
     // Calls helper to recursively remove the generated HTML article folder.
-    helper_rrmdir($directory . $filename);
+    dpsbridge_helper_rrmdir($directory . $filename);
     // Calls helper to recursively remove the unzipped HTML resources folder.
-    helper_rrmdir($directory . 'HTMLResources');
+    dpsbridge_helper_rrmdir($directory . 'HTMLResources');
   }
   drupal_json_output($message);
   drupal_exit();
@@ -736,7 +736,7 @@ function dpsbridge_folio_generate_folios() {
         continue;
       }
       // Locations of targeted HTML article folder to designated .folio file.
-      $filename    = helper_format_title($filenames[$i]);
+      $filename    = dpsbridge_helper_format_title($filenames[$i]);
       $directory   = drupal_get_path('module', 'dpsbridge');
       $source      = $directory . '/html/' . $filename;
       $destination = $directory . '/folio/' . $filename . ".folio";
@@ -759,7 +759,7 @@ function dpsbridge_folio_generate_folios() {
 function dpsbridge_folio_generate_html() {
   // @param string $folio_node_id ..folio node ID.
   $folio_node_id = isset($_POST['folioNodeID']) ? $_POST['folioNodeID'] : '';
-  $folio_node = helper_pull_content($folio_node_id);
+  $folio_node = dpsbridge_helper_pull_content($folio_node_id);
   $article_list = $folio_node['articles'];
   $file_list = array();
   $offset = 1;
@@ -769,7 +769,7 @@ function dpsbridge_folio_generate_html() {
     if ($folio_node['autoToggle'] == 'Generate Cover' || $folio_node['autoToggle'] == 'Generate Both') {
       array_push($file_list, 'Cover');
       // Calls helper to generate HTML cover article folder.
-      helper_generate_html(
+      dpsbridge_helper_generate_html(
         array(
           'title'  => 'Cover',
           'author' => 'Generated',
@@ -794,15 +794,15 @@ function dpsbridge_folio_generate_html() {
       array_push($file_list, '');
       continue;
     }
-    $article_node  = helper_pull_node($article_list[$n]['target_id']);
+    $article_node  = dpsbridge_helper_pull_node($article_list[$n]['target_id']);
     // Calls helper to generate HTML article folder.
-    helper_generate_html($article_node, $folio_node, $folio_node['isAds'][$n]);
+    dpsbridge_helper_generate_html($article_node, $folio_node, $folio_node['isAds'][$n]);
     array_push($file_list, $article_node['title']);
   }
   // Generate the ToC if the toggle is set to auto-generate the ToC.
   if ($folio_node['autoToggle'] == 'Generate ToC' || $folio_node['autoToggle'] == 'Generate Both') {
     // Calls helper to generate HTML ToC folder.
-    helper_generate_html(
+    dpsbridge_helper_generate_html(
       array(
         'title'  => 'Table of Contents',
         'author' => 'Generated',
@@ -833,7 +833,7 @@ function dpsbridge_folio_generate_selected_html() {
     // Stores the generated file names, used to delete later.
     $filenames = array();
     // Calls helper to pull folio node metadata.
-    $folio_node = helper_pull_content($folio_node_id);
+    $folio_node = dpsbridge_helper_pull_content($folio_node_id);
     // Get local path.
     $current_dir = drupal_get_path('module', 'dpsbridge');
     // Loops through each article node ID.
@@ -842,11 +842,11 @@ function dpsbridge_folio_generate_selected_html() {
         continue;
       }
       // Calls helper to pull article node metadata.
-      $article_node = helper_pull_node($article_node_id[$i]);
+      $article_node = dpsbridge_helper_pull_node($article_node_id[$i]);
       // Calls helper to generate HTML article folder.
-      helper_generate_html($article_node, $folio_node, $folio_node['isAds']);
+      dpsbridge_helper_generate_html($article_node, $folio_node, $folio_node['isAds']);
       // Calls helper to format the article title.
-      $filename = helper_format_title($article_node['title']);
+      $filename = dpsbridge_helper_format_title($article_node['title']);
       // Stores the file name.
       $filenames[] = $filename;
     }
@@ -858,7 +858,7 @@ function dpsbridge_folio_generate_selected_html() {
     exec($zipper);
     // Delete the generated HTML article folders.
     for ($n = 0; $n < count($filenames); $n++) {
-      helper_rrmdir($current_dir . '/html/' . $filenames[$n]);
+      dpsbridge_helper_rrmdir($current_dir . '/html/' . $filenames[$n]);
     }
   }
   drupal_json_output($message);
@@ -971,7 +971,7 @@ function dpsbridge_folio_pull_article() {
   // @return array containing the article metadata.
   $node_id = isset($_POST['nodeID']) ? $_POST['nodeID'] : '';
   // Call helper method to pull article metadata associated with the article ID.
-  $container = helper_pull_article($node_id);
+  $container = dpsbridge_helper_pull_article($node_id);
   drupal_json_output($container);
   drupal_exit();
 }
@@ -984,7 +984,7 @@ function dpsbridge_folio_pull_content() {
   $node_id    = isset($_POST['nodeID']) ? $_POST['nodeID'] : '';
   $toggle    = isset($_POST['toggle']) ? $_POST['toggle'] : '';
   // Call helper method to pull folio metadata associated with the folio ID.
-  $container = helper_pull_content($node_id, $toggle);
+  $container = dpsbridge_helper_pull_content($node_id, $toggle);
   drupal_json_output($container);
   drupal_exit();
 }
@@ -1147,16 +1147,16 @@ function dpsbridge_img_upload() {
     if ($landscape && !$landscape['error']) {
       $landscape_fn  = $landscape['name'];
       $landscape_url = $landscape['tmp_name'];
-      $landscape_path = drupal_get_path('module', 'dpsbridge') . '/images/landscape/' . helper_format_title($fname) . '_' . $landscape_fn;
-      /* $landscapeFake = '/sites/all/modules/dpsbridge/images/landscape/'.helper_format_title($fname).'_'.$landscape_fn;*/
+      $landscape_path = drupal_get_path('module', 'dpsbridge') . '/images/landscape/' . dpsbridge_helper_format_title($fname) . '_' . $landscape_fn;
+      /* $landscapeFake = '/sites/all/modules/dpsbridge/images/landscape/'.dpsbridge_helper_format_title($fname).'_'.$landscape_fn;*/
       move_uploaded_file($landscape_url, $landscape_path);
       $node->field_folio_landscape_url['und'][0]['value'] = $landscape_path;
     }
     if ($portrait && !$portrait['error']) {
       $portrait_fn  = $portrait['name'];
       $portrait_url = $portrait['tmp_name'];
-      $portrait_path = drupal_get_path('module', 'dpsbridge') . '/images/portrait/' . helper_format_title($fname) . '_' . $portrait_fn;
-      /* $portraitFake = '/sites/all/modules/dpsbridge/images/portrait/'.helper_format_title($fname).'_'.$portrait_fn;*/
+      $portrait_path = drupal_get_path('module', 'dpsbridge') . '/images/portrait/' . dpsbridge_helper_format_title($fname) . '_' . $portrait_fn;
+      /* $portraitFake = '/sites/all/modules/dpsbridge/images/portrait/'.dpsbridge_helper_format_title($fname).'_'.$portrait_fn;*/
       move_uploaded_file($portrait_url, $portrait_path);
       $node->field_folio_portrait_url['und'][0]['value'] = $portrait_path;
     }
@@ -1195,7 +1195,7 @@ function dpsbridge_stylesheet_delete() {
   }
   else {
     $directory = drupal_get_path('module', 'dpsbridge') . '/styles/';
-    helper_rrmdir($directory . $filename);
+    dpsbridge_helper_rrmdir($directory . $filename);
   }
   drupal_json_output($message);
   drupal_exit();
@@ -1209,7 +1209,7 @@ function dpsbridge_stylesheet_upload() {
   // of (Foundation or Bootstrap)
   // @param file   zipfile .....the url to the uploaded zip file (containing
   // the stylesheet)
-  $filename   = isset($_POST['filename']) ? helper_format_title($_POST['filename'], '_') : '';
+  $filename   = isset($_POST['filename']) ? dpsbridge_helper_format_title($_POST['filename'], '_') : '';
   $derivative = isset($_POST['derivative']) ? $_POST['derivative'] : '';
   $zipfile    = isset($_FILES['zipfile']) ? $_FILES['zipfile'] : '';
   $message    = 'ok-';

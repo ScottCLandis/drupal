@@ -103,5 +103,3 @@ class FPHelper
 		return $this->fp->request('POST', 'folios/'.$folio_id.'/previews/'.$orientation, '', $url);
 	}
 }
-
-?>

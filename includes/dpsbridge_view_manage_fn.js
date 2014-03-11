@@ -18,14 +18,14 @@ function acquire_account_credentials(folioNodeID, filenames) {
 		data: { "folioNodeID":folioNodeID },
 		success: function(output) {
 			if (!output['folioMeta']['dimension']) {
-				helper_show_status("Please select a resolution for the folio!");
-				helper_delete_files(baseURL, filenames);
+				dpsbridge_helper_show_status("Please select a resolution for the folio!");
+				dpsbridge_helper_delete_files(baseURL, filenames);
 			} else if (output['message'] == 'ok') {
-				helper_update_status("Connecting to Folio Producer ("+output['account']['type']+" account)...");
+				dpsbridge_helper_update_status("Connecting to Folio Producer ("+output['account']['type']+" account)...");
 				fp_connect(output['account'], output['folioMeta'], filenames);
 			} else {
-				helper_show_status(output['message']);
-				helper_delete_files(baseURL, filenames);
+				dpsbridge_helper_show_status(output['message']);
+				dpsbridge_helper_delete_files(baseURL, filenames);
 			}
 		}
 	});
@@ -41,7 +41,7 @@ function generate_folio(folioNodeID, filenames) {
 		type: "POST",
 		data: { "filenames":filenames },
 		success: function(output) {
-			helper_update_status("Acquiring account credentials...");
+			dpsbridge_helper_update_status("Acquiring account credentials...");
 			acquire_account_credentials(folioNodeID, filenames);
 		}
 	});
@@ -57,7 +57,7 @@ function generate_html(folioNodeID) {
 		type: "POST",
 		data: { "folioNodeID":folioNodeID },
 		success: function(output) {
-			helper_update_status("Generating Folios...");
+			dpsbridge_helper_update_status("Generating Folios...");
 			generate_folio(folioNodeID, output);
 		}
 	});
@@ -68,7 +68,7 @@ function generate_html(folioNodeID) {
  *   and store it at /dpsbridge/html_stacks/
  * =========================================== */
 function generate_selected_html(articleNodeID) {
-	helper_show_status('Generating HTML Stacks...');
+	dpsbridge_helper_show_status('Generating HTML Stacks...');
 	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/generate-selected-HTML",
 		type: "POST",
@@ -77,10 +77,10 @@ function generate_selected_html(articleNodeID) {
 			"articleNodeID" :articleNodeID },
 		success: function(output) {
 			if (output['message'] = 'ok') {
-				helper_download_file(baseURL, output['destination'], output['filename'], '1');
+				dpsbridge_helper_download_file(baseURL, output['destination'], output['filename'], '1');
 				jQuery('#dialog-status').dialog('close');
 			} else {
-				helper_show_status(output['message']);
+				dpsbridge_helper_show_status(output['message']);
 			}
 		}
 	});
@@ -92,17 +92,17 @@ function generate_selected_html(articleNodeID) {
 function get_selected(toggle) {
 	var selectedFolio = jQuery('.views-table tr input:checked');
 	if (!selectedFolio.val()) {
-		helper_show_status("Please select a folio first!");
+		dpsbridge_helper_show_status("Please select a folio first!");
 	} else {
 		switch(toggle) {
 			case 'clone':
-				helper_folio_clone(baseURL, selectedFolio.val());
+				dpsbridge_helper_folio_clone(baseURL, selectedFolio.val());
 				break;
 			case 'delete':
-				helper_delete_node(baseURL, selectedFolio.val());
+				dpsbridge_helper_delete_node(baseURL, selectedFolio.val());
 				break;
 			case 'upload':
-				helper_show_status('Generating HTML articles...', 600, 500);
+				dpsbridge_helper_show_status('Generating HTML articles...', 600, 500);
 				generate_html(selectedFolio.val());
 				break;
 		}
@@ -124,15 +124,15 @@ function fp_connect(accountMeta, folioMeta, filenames) {
 		success: function(output) {
 			if (output == 'ok') {
 				if (folioMeta['productID'] && folioMeta['status'] == 'Uploaded') {
-					helper_update_status("Updating \""+folioMeta['folioName']+"\", please wait (a while)...");
+					dpsbridge_helper_update_status("Updating \""+folioMeta['folioName']+"\", please wait (a while)...");
 					fp_upload(accountMeta, folioMeta, filenames);
 				} else {
-					helper_update_status("Creating \""+folioMeta['folioName']+"\"...");
+					dpsbridge_helper_update_status("Creating \""+folioMeta['folioName']+"\"...");
 					fp_create(accountMeta, folioMeta, filenames);
 				}
 			} else {
-				helper_show_status('Session error, please try again!');
-				helper_delete_files(baseURL, filenames);
+				dpsbridge_helper_show_status('Session error, please try again!');
+				dpsbridge_helper_delete_files(baseURL, filenames);
 				fp_logout();
 			}
 		}
@@ -157,7 +157,7 @@ function fp_create(accountMeta, folioMeta, filenames) {
 			"targetViewer"		:folioMeta['viewer'],
 			"filters"			:folioMeta['filter'] },
 		success: function(output) {
-			helper_update_status("Uploading to \""+folioMeta['folioName']+"\", please wait (a while)...");
+			dpsbridge_helper_update_status("Uploading to \""+folioMeta['folioName']+"\", please wait (a while)...");
 			folioMeta['productID'] = output;
 			fp_upload(accountMeta, folioMeta, filenames);
 		}
@@ -181,7 +181,7 @@ function fp_logout() {
  *     aka not HTML Articles, into the existing table
  * =================================================== */
 function fp_sync(folioID, folioName, credentials, articles, isAds, alienated, uploadDate) {
-	helper_update_status("Syncing with the Folio Producer, Please wait...");
+	dpsbridge_helper_update_status("Syncing with the Folio Producer, Please wait...");
 	jQuery.ajax({
 		url: pathToDir+"/fp_connect.php",
 		type: "POST",
@@ -195,11 +195,11 @@ function fp_sync(folioID, folioName, credentials, articles, isAds, alienated, up
 			fp_logout();
 			output = JSON.parse(output);
 			if (!output['status']) {
-				helper_show_status('Session error, please try again!');
+				dpsbridge_helper_show_status('Session error, please try again!');
 			} else if (output['status'] == 'ok') {
-				helper_pull_articles(folioName, articles, isAds, alienated, uploadDate, output['articles']);
+				dpsbridge_helper_pull_articles(folioName, articles, isAds, alienated, uploadDate, output['articles']);
 			} else {
-				helper_show_status(output);
+				dpsbridge_helper_show_status(output);
 			}
 		}
 	});
@@ -222,8 +222,8 @@ function fp_upload(accountMeta, folioMeta, filenames) {
 			"status"	:folioMeta['status'],
 			"style"     :folioMeta['stylesheet'] },
 		success: function(output) {
-			helper_delete_files(baseURL, filenames);
-			helper_update_status(output);
+			dpsbridge_helper_delete_files(baseURL, filenames);
+			dpsbridge_helper_update_status(output);
 			if (folioMeta['status'] != 'Uploaded')
 				node_status_update(folioMeta['folioNodeID'], folioMeta['productID']);
 			else
@@ -244,7 +244,7 @@ function imageUI_update() {
 			jQuery('#portrait').attr('src', '/' + output['portrait']);
 			jQuery('#landscape').attr('src', '/' + output['landscape']);
 			jQuery('#image').attr('src', '/' + output['landscape']);
-			helper_show_status("Successfully uploaded image.");
+			dpsbridge_helper_show_status("Successfully uploaded image.");
 		}
 	});
 }
@@ -274,7 +274,7 @@ function node_status_timestamp(folioNodeID) {
 		data: { "folioNodeID" :folioNodeID },
 		success: function(output) {
 			fp_logout();
-			helper_update_status("Redirecting in 5 seconds...");
+			dpsbridge_helper_update_status("Redirecting in 5 seconds...");
 			setTimeout(function() { window.location = baseURL+"/admin/config/content/fpmanage"; }, 5000);
 		}
 	});
@@ -284,7 +284,7 @@ function node_status_timestamp(folioNodeID) {
  *   generates the new table row for each article node,
  *   appends it to the table body with id 'articles-wrapper'
  * ============================================================================ */
-function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, uploadDate, fpArticles) {
+function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, uploadDate, fpArticles) {
 	var alienatedCount = 0, index = 1;
 	// display all Drupal and non-Drupal articles that were previously stored in Drupal
 	for (var i = 0; i < drupalArticles.length; i++) {
@@ -300,7 +300,7 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 					checked = "checked";
 				if (output.length === 0) { // create a locked row if the content is not from Drupal
 					// makes sure to not show non-Drupal articles that has been deleted from Folio Producer
-					var exist = helper_check_article_by_id(fpArticles, alienatedID[alienatedCount]);
+					var exist = dpsbridge_helper_check_article_by_id(fpArticles, alienatedID[alienatedCount]);
 					if (exist) { 
 						html += "<tr id='article-row-id-"+alienatedID[alienatedCount]+"'>\n";
 						html += "<td class='article-index'><input type='hidden' value='"+alienatedID[alienatedCount]+"' /><span class='ui-icon ui-icon-locked'></span></td>\n";
@@ -319,7 +319,7 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 					alienatedCount++;
 				} else { // create a editable row if the content is from Drupal
 					// check if the Drupal article is up in Folio Producer (true if so, false otherwise)
-					var exist = helper_check_article_by_name(fpArticles, output['filename']);
+					var exist = dpsbridge_helper_check_article_by_name(fpArticles, output['filename']);
 					html += "<tr id='article-row-id-"+articleID+"'>\n";
 					html += "<td class='article-index'><input type='checkbox' value='"+articleID+"' /></td>\n";
 					html += "<td><span class='ui-icon ui-icon-arrow-4'></span></td>\n";
@@ -374,11 +374,11 @@ function helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, upl
 /* =========================================================================== *
  * Pulls all information regarding the targeted Folio node from the database,
  *   update all fields on the UI dialog box to the newly pulled Folio node,
- *   calls helper_pull_articles() to pull individual articles content
+ *   calls dpsbridge_helper_pull_articles() to pull individual articles content
  * =========================================================================== */
 function profileUI(folioNodeID, toggle) {
 	fid = folioNodeID;
-	helper_show_status("Pulling content, please wait...", 400, 225);
+	dpsbridge_helper_show_status("Pulling content, please wait...", 400, 225);
 	jQuery('#articles-wrapper').empty();
 	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/pull-content",
@@ -425,7 +425,7 @@ function profileUI(folioNodeID, toggle) {
 				if (landscapeImg || portraitImg)
 					offsetIndex++;
 				//for (var n = 0; n < output['articles'].length; n++)
-				//	helper_pull_articles(output['articles'][n]['target_id'], n+1, output['isAds'][n], output['alienated'], output['uploadDate'], '');
+				//	dpsbridge_helper_pull_articles(output['articles'][n]['target_id'], n+1, output['isAds'][n], output['alienated'], output['uploadDate'], '');
 				// sync with the Folio Producer
 				if (output['pubID']) {
 					fp_sync(
@@ -438,7 +438,7 @@ function profileUI(folioNodeID, toggle) {
 						output['uploadDate']
 					);
 				} else {
-					helper_pull_articles(
+					dpsbridge_helper_pull_articles(
 						output['title'],
 						output['articles'], 
 						output['isAds'], 
@@ -528,14 +528,14 @@ function refreshDimensions() {
 	jQuery('#dimension').empty();
 	switch(account.val()) {
 		case 'amazon':
-			helper_generate_dimensions('dimension', amazonDimensions, true);
+			dpsbridge_helper_generate_dimensions('dimension', amazonDimensions, true);
 			break;
 		case 'android':
-			helper_generate_dimensions('dimension', androidDimensions, true);
+			dpsbridge_helper_generate_dimensions('dimension', androidDimensions, true);
 			break;
 		case 'apple':
 		default:
-			helper_generate_dimensions('dimension', appleDimensions, true);
+			dpsbridge_helper_generate_dimensions('dimension', appleDimensions, true);
 			break;
 	}
 }
@@ -614,7 +614,7 @@ function replaceHREF(ahref, toggle) {
                                     if (articleID)
                                             generate_selected_html(articleID);
                                     else
-                                            helper_show_status("Please select an article first!");
+                                            dpsbridge_helper_show_status("Please select an article first!");
                             },
                             "Remove Selected Articles from Folio": function() {
                                     var indexes           = $('td.sortable-index'),
@@ -665,10 +665,10 @@ function replaceHREF(ahref, toggle) {
                                                     if (output === 'ok')
                                                             window.location = baseURL+"/admin/config/content/fpmanage";
                                                     else
-                                                            helper_show_status("Failed to update '"+fname.val()+"'<br/><br/>:: "+output, 400, 300);
+                                                            dpsbridge_helper_show_status("Failed to update '"+fname.val()+"'<br/><br/>:: "+output, 400, 300);
                                             },
                                             error: function (e, status) {
-                                                    helper_show_status(e.responseText);
+                                                    dpsbridge_helper_show_status(e.responseText);
                                             }
                                     });
                                     $(this).dialog("close");

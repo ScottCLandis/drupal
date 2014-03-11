@@ -17,7 +17,7 @@
  * @param array $folio_node_array 
  *   Array containing a list of article node ID's
  */
-function helper_check_existence($article_id, $folio_node_array) {
+function dpsbridge_helper_check_existence($article_id, $folio_node_array) {
   for ($i = 0; $i < count($folio_node_array); $i++) {
     if ($article_id == $folio_node_array[$i]['target_id']) {
       return TRUE;
@@ -39,7 +39,7 @@ function helper_check_existence($article_id, $folio_node_array) {
  * @param string $filename
  *   Filtered Article name, used as folder and file name.
  */
-function helper_create_dir($filename) {
+function dpsbridge_helper_create_dir($filename) {
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
   if (!file_exists($directory . '/' . $filename)) {
     mkdir($directory . $filename);
@@ -72,7 +72,7 @@ function helper_create_dir($filename) {
  * @param string $secret
  *   Adobe DPS API secret
  */
-function helper_credential_update($uid, $id, $pass, $dimension, $key, $secret) {
+function dpsbridge_helper_credential_update($uid, $id, $pass, $dimension, $key, $secret) {
   $user = user_load($uid);
   if (!$id || !$pass) {
     user_delete($uid);
@@ -110,7 +110,7 @@ function helper_credential_update($uid, $id, $pass, $dimension, $key, $secret) {
  * @param string $stylesheet
  *   Name of the stylesheet to unzip.
  */
-function helper_extract_stylesheet($stylesheet) {
+function dpsbridge_helper_extract_stylesheet($stylesheet) {
   $stylesheet  = str_replace(" ", "\ ", $stylesheet);
   $directory   = drupal_get_path("module", "dpsbridge");
   $source      = $directory . "/styles/" . $stylesheet . "/HTMLResources.zip";
@@ -128,7 +128,7 @@ function helper_extract_stylesheet($stylesheet) {
  * @return string 
  *   Containing the URL to the saved snapshot
  */
-function helper_format_thumbnail($url) {
+function dpsbridge_helper_format_thumbnail($url) {
   $img_url  = theme('shrinktheweb_image', array('url' => $url));
   $pattern = '<img src="([\w:\/.]+)" />';
   preg_match($pattern, $img_url, $formatted_url);
@@ -148,7 +148,7 @@ function helper_format_thumbnail($url) {
  * @return string
  *   Containing the embedded video URL.
  */
-function helper_format_url($url) {
+function dpsbridge_helper_format_url($url) {
   $pattern = '/v=([\w]+)(&)*/';
   preg_match($pattern, $url, $formated_url);
   return 'http://youtube.com/embed/' . $formated_url[1];
@@ -161,7 +161,7 @@ function helper_format_url($url) {
  * @param array $articles
  *   List of article node ID's.
  */
-function helper_folio_append($fid, $articles) {
+function dpsbridge_helper_folio_append($fid, $articles) {
   $articles = explode(',', $articles);
   $folio = node_load($fid);
   for ($i = 0; $i < count($articles); $i++) {
@@ -170,7 +170,7 @@ function helper_folio_append($fid, $articles) {
       continue;
     }
     // If article already exists within the folio node.
-    if (helper_check_existence($articles[$i], $folio->field_folio_reference['und'])) {
+    if (dpsbridge_helper_check_existence($articles[$i], $folio->field_folio_reference['und'])) {
       continue;
     }
     // Appends the folio reference to the article.
@@ -195,7 +195,7 @@ function helper_folio_append($fid, $articles) {
  * @return string
  *   Containing the formatted filename without any special characters.
  */
-function helper_format_title($filename, $replacement = '') {
+function dpsbridge_helper_format_title($filename, $replacement = '') {
   $noises = array('.', '?', ' ', ':', '/', ',', '\'');
   $formatted = str_replace($noises, $replacement, $filename);
   return $formatted;
@@ -204,15 +204,15 @@ function helper_format_title($filename, $replacement = '') {
  * Helper method for generating the HTML article folder.
  * 
  * Make calls to the following:
- *  - helper_create_dir() ............creates the HTML article structure
- *  - helper_writePKG() ..............writes to the pkgproperties.xml file
- *  - helper_writeFolioXML() .........writes to the Folio.xml file
- *  - helper_style_bootstrap_toc() ...TOC page with Bootstrap layout
- *  - helper_style_bootstrap_cover() .cover page with Bootstrap layout
- *  - helper_style_bootstrap() .......article page with Bootstrap layout
- *  - helper_style_foundation_toc() ..TOC page with Foundation layout
- *  - helper_style_foundation_cover() cover page with Foundation layout
- *  - helper_style_foundation() ......article page with Foundation layout
+ *  - dpsbridge_helper_create_dir() ............creates the HTML article structure
+ *  - dpsbridge_helper_writePKG() ..............writes to the pkgproperties.xml file
+ *  - dpsbridge_helper_writeFolioXML() .........writes to the Folio.xml file
+ *  - dpsbridge_helper_style_bootstrap_toc() ...TOC page with Bootstrap layout
+ *  - dpsbridge_helper_style_bootstrap_cover() .cover page with Bootstrap layout
+ *  - dpsbridge_helper_style_bootstrap() .......article page with Bootstrap layout
+ *  - dpsbridge_helper_style_foundation_toc() ..TOC page with Foundation layout
+ *  - dpsbridge_helper_style_foundation_cover() cover page with Foundation layout
+ *  - dpsbridge_helper_style_foundation() ......article page with Foundation layout
  * 
  * @param array $article_metadata
  *   A list of metadata fields pertaining to the article node.
@@ -223,16 +223,16 @@ function helper_format_title($filename, $replacement = '') {
  * @param array $article_list
  *   A list of article names, used for generating the ToC
  */
-function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $article_list = '') {
+function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $article_list = '') {
   // Filter the title to create the folder & filename.
-  $filename = helper_format_title($article_metadata['title']);
+  $filename = dpsbridge_helper_format_title($article_metadata['title']);
   // Create the directory and its default files.
-  helper_create_dir($filename);
+  dpsbridge_helper_create_dir($filename);
   // Write to the PKGProperties.xml.
-  helper_writepkg($filename);
+  dpsbridge_helper_writepkg($filename);
 
   // Write to the Folio.xml.
-  helper_writefolioxml(
+  dpsbridge_helper_writefolioxml(
       // The title of the article.
       $article_metadata['title'],
       // The author of the article.
@@ -260,14 +260,14 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
   if ($article_list != '') {
     // Generate the Table of Contents wiht Bootstrap stylesheet.
     if ($folio_metadata['pubCSS'] == 'Bootstrap') {
-      helper_style_bootstrap_toc(
+      dpsbridge_helper_style_bootstrap_toc(
           $folio_metadata['pubName'],
           $article_list
       );
     }
     // Generate the Table of Contents with Foundation stylesheet.
     else {
-      helper_style_foundation_toc(
+      dpsbridge_helper_style_foundation_toc(
           $folio_metadata['pubName'],
           $article_list
       );
@@ -276,7 +276,7 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
   elseif (isset($article_metadata['cover']) && $article_metadata['cover']) {
     // Generate the cover article with Bootstrap stylesheet.
     if ($folio_metadata['tocCSS'] == 'Bootstrap') {
-      helper_style_bootstrap_cover(
+      dpsbridge_helper_style_bootstrap_cover(
           // Publication name.
           $folio_metadata['pubName'],
           // Preview landscape image.
@@ -289,7 +289,7 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
     }
     // Generate the cover article with Foundation stylesheet.
     else {
-      helper_style_foundation_cover(
+      dpsbridge_helper_style_foundation_cover(
           $folio_metadata['pubName'],
           $folio_metadata['landscape'],
           $folio_metadata['portrait'],
@@ -299,7 +299,7 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
   }
   elseif ($folio_metadata['pubCSS'] == 'Bootstrap') {
     // Generate the HTML article with Bootstrap stylesheet.
-    helper_style_bootstrap(
+    dpsbridge_helper_style_bootstrap(
         // Publication name.
         $folio_metadata['pubName'],
         // Title of the article.
@@ -319,7 +319,7 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
   }
   else {
     // Generate the HTML article with Foundation stylesheet.
-    helper_style_foundation(
+    dpsbridge_helper_style_foundation(
         $folio_metadata['pubName'],
         $article_metadata['title'],
         $article_metadata['author'],
@@ -342,7 +342,7 @@ function helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $
  * @param string $toggle
  *   Includes the respective javascript depending on the view page.
  */
-function helper_include_goodies($toggle) {
+function dpsbridge_helper_include_goodies($toggle) {
   drupal_add_css('http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', 'external');
   drupal_add_css(drupal_get_path('module', 'dpsbridge') . '/includes/override.css');
   drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge.js');
@@ -357,10 +357,10 @@ function helper_include_goodies($toggle) {
  * @param string $images
  *   New name of the saved image.
  */
-function helper_link_img($filename, $images) {
+function dpsbridge_helper_link_img($filename, $images) {
   $parsed    = explode('/', $images);
   $img_name  = $parsed[count($parsed) - 1];
-  helper_save_img($images, $filename . '/' . $img_name);
+  dpsbridge_helper_save_img($images, $filename . '/' . $img_name);
   return $img_name;
 }
 
@@ -373,12 +373,12 @@ function helper_link_img($filename, $images) {
  * @return array
  *   Containing the article metadata.
  */
-function helper_pull_article($node_id) {
+function dpsbridge_helper_pull_article($node_id) {
   $container = array();
   $node      = node_load($node_id);
   if ($node->type != 'folios') {
     $container['title']     = isset($node->title) ? $node->title : '';
-    $container['filename']  = isset($node->title) ? helper_format_title($node->title) : '';
+    $container['filename']  = isset($node->title) ? dpsbridge_helper_format_title($node->title) : '';
     $container['tags']      = isset($node->field_tags) ? $node->field_tags : '';
     $container['type']      = isset($node->type) ? $node->type : '';
     $container['modified']  = isset($node->changed) ? gmdate("m/d/Y - H:i", $node->changed) : '';
@@ -398,7 +398,7 @@ function helper_pull_article($node_id) {
  * @return array 
  *   Containing the folio metadata.
  */
-function helper_pull_content($node_id, $toggle = '') {
+function dpsbridge_helper_pull_content($node_id, $toggle = '') {
 
   // Load folio metadata.
   $container = array();
@@ -469,7 +469,7 @@ function helper_pull_content($node_id, $toggle = '') {
  * @return array
  *   Containing the article metadata.
  */
-function helper_pull_node($node_id) {
+function dpsbridge_helper_pull_node($node_id) {
   $container = array();
   // Loads the node from the database.
   $node = node_load($node_id);
@@ -530,7 +530,7 @@ function helper_pull_node($node_id) {
  * @param string $lang
  *   Language of the folio node.
  */
-function helper_reference_check($container, $target, $lang) {
+function dpsbridge_helper_reference_check($container, $target, $lang) {
   for ($i = 0; $i < count($container); $i++) {
     if ($container[$lang][$i]['target_id'] == $target) {
       return TRUE;
@@ -544,10 +544,10 @@ function helper_reference_check($container, $target, $lang) {
  * @param string $directory
  *   Name of the directory to be deleted.
  */
-function helper_rrmdir($directory) {
+function dpsbridge_helper_rrmdir($directory) {
   foreach (glob($directory . '/*') as $item) {
     if (is_dir($item)) {
-      helper_rrmdir($item);
+      dpsbridge_helper_rrmdir($item);
     }
     else {
       unlink($item);
@@ -563,7 +563,7 @@ function helper_rrmdir($directory) {
  * @param string $filename
  *   Path to save the image (@ /dpsbridge/html/[filename]/).
  */
-function helper_save_img($img_url, $filename) {
+function dpsbridge_helper_save_img($img_url, $filename) {
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
   $img = file_get_contents($img_url);
   file_put_contents($directory . $filename, $img);
@@ -583,7 +583,7 @@ function helper_save_img($img_url, $filename) {
  * @return string
  *   Url of the scaled image.
  */
-function helper_scale_img($img_url, $newwidth, $newheight, $orientation) {
+function dpsbridge_helper_scale_img($img_url, $newwidth, $newheight, $orientation) {
   header('Content-Type: image/jpeg');
   // Get the current sizes.
   list($width, $height) = getimagesize($img_url);
@@ -631,10 +631,10 @@ function helper_scale_img($img_url, $newwidth, $newheight, $orientation) {
  * @param string $orientation
  *   The article orientation, default to both orientations.
  */
-function helper_writefolioxml($title, $author, $mag_title, $folio_num, $desc, $kicker, $tags, $is_ads, $version, $dimension, $orientation = 'Always') {
+function dpsbridge_helper_writefolioxml($title, $author, $mag_title, $folio_num, $desc, $kicker, $tags, $is_ads, $version, $dimension, $orientation = 'Always') {
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
   $date = date('Y-m-d\TH:i:s');
-  $filename = helper_format_title($title);
+  $filename = dpsbridge_helper_format_title($title);
   $targeted = explode(' x ', $dimension);
   $width = $targeted[1];
   $height = $targeted[0];
@@ -699,7 +699,7 @@ function helper_writefolioxml($title, $author, $mag_title, $folio_num, $desc, $k
  * @param string $filename
  *   Same as the article name.
  */
-function helper_writepkg($filename) {
+function dpsbridge_helper_writepkg($filename) {
   $directory   = drupal_get_path('module', 'dpsbridge') . '/html/';
   $current_date = date('Y-m-d\TH:i:s');
   // Generate the content of the pkgproperties.xml.

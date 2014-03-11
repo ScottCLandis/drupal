@@ -285,5 +285,3 @@ class FPLibrary
 		$this->params = $data;
 	}
 }
-
-?>

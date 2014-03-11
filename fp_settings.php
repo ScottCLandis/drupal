@@ -68,4 +68,3 @@ abstract class Settings
         return isset(self::$public[$key]);
     }
 }
-?>

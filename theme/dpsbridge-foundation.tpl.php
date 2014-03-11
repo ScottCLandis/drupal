@@ -44,7 +44,7 @@
           <?php
           // If there are only one image.
           if (count($images) == 1) {?>
-            <img src='<?php print helper_link_img($filename, $images[0]); ?>' width='100%' /><br/>
+            <img src='<?php print dpsbridge_helper_link_img($filename, $images[0]); ?>' width='100%' /><br/>
           <?php
           }
           // Creates a slideshow if there are multiple images.
@@ -53,7 +53,7 @@
             <?php 
             for ($q = 0; $q < count($images); $q++) { ?>
               <li>
-                <img src='<?php print helper_link_img($filename, $images[$q]); ?>' />
+                <img src='<?php print dpsbridge_helper_link_img($filename, $images[$q]); ?>' />
                 <div class='orbit-caption'>Some caption here</div>
               </li>
             <?php 
@@ -69,7 +69,7 @@
       elseif ($videos) {?>
         <div id='videoArea' class='large-6 small-12 columns'>
           <div class='flex-video row'>
-            <iframe width='420' height='315' src='" . helper_format_url($videos) . "' frameborder='0' allowfullscreen></iframe>
+            <iframe width='420' height='315' src='" . dpsbridge_helper_format_url($videos) . "' frameborder='0' allowfullscreen></iframe>
           </div>
         </div>
       <?php

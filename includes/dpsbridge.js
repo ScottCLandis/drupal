@@ -4,7 +4,7 @@
  *   convert it to string of values separated by commas
  * @param {array} dimensionArray ..the array list of values
  */
-function helper_array_to_string(dimensionArray) {
+function dpsbridge_helper_array_to_string(dimensionArray) {
 	var dimensionString = "";
 	for (var i = 0; i < dimensionArray.length; i++)
 		dimensionString += dimensionArray[i].value+",";
@@ -17,7 +17,7 @@ function helper_array_to_string(dimensionArray) {
  * @param {string} articleID ...single article ID
  * @return {string} name of the non-Drupal article if found, empty string otherwise
  */
-function helper_check_article_by_id(articleList, articleID) {
+function dpsbridge_helper_check_article_by_id(articleList, articleID) {
 	for (var i = 0; i < articleList.length; i++) {
 		if (articleList[i]['id'] == articleID) {
 			article = new Array();
@@ -34,7 +34,7 @@ function helper_check_article_by_id(articleList, articleID) {
  * @param {string} article .....single article name
  * @return {boolean} true if found, false otherwise
  */
-function helper_check_article_by_name(articleList, article) {
+function dpsbridge_helper_check_article_by_name(articleList, article) {
 	for (var i = 0; i < articleList.length; i++)
 		if (articleList[i]['name'] == article)
 			return true;
@@ -46,7 +46,7 @@ function helper_check_article_by_name(articleList, article) {
  *   and appends each to the designated tag.
  *   Toggle is for the different type of dimension array.
  * ===================================================== */
-function helper_generate_dimensions(id, dimensions, toggle) {
+function dpsbridge_helper_generate_dimensions(id, dimensions, toggle) {
 	for (var i = 0; i < dimensions.length; i++) {
 		if (dimensions[i] == '') // do nothing if array is empty
 			continue;
@@ -63,7 +63,7 @@ function helper_generate_dimensions(id, dimensions, toggle) {
  * @param {string} baseURL ......the webhost base URL
  * @param {string} folioNodeID ..the folio node ID
  */
-function helper_folio_clone(baseURL, folioNodeID) {
+function dpsbridge_helper_folio_clone(baseURL, folioNodeID) {
 	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/clone-node",
 		type: "POST",
@@ -72,7 +72,7 @@ function helper_folio_clone(baseURL, folioNodeID) {
 			if (output === 'ok')
 				window.location = baseURL+"/admin/config/content/fpmanage";
 			else
-				helper_show_status(output);
+				dpsbridge_helper_show_status(output);
 		}
 	});
 }
@@ -82,7 +82,7 @@ function helper_folio_clone(baseURL, folioNodeID) {
  * @param {string} baseURL ...the webhost base URL
  * @param {array} filenames ..the array list of file names
  */
-function helper_delete_files(baseURL, filenames) {
+function dpsbridge_helper_delete_files(baseURL, filenames) {
 	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/clean-up",
 		type: "POST",
@@ -95,7 +95,7 @@ function helper_delete_files(baseURL, filenames) {
  * @param {string} baseURL ..the webhost base URL
  * @param {string} nodeID ...the node ID
  */
-function helper_delete_node(baseURL, nodeID) {
+function dpsbridge_helper_delete_node(baseURL, nodeID) {
 	jQuery.ajax({
 		url: baseURL+"/dpsbridge/folio/delete-node",
 		type: "POST",
@@ -104,7 +104,7 @@ function helper_delete_node(baseURL, nodeID) {
 			if (output === 'ok')
 				window.location = baseURL+"/admin/config/content/fpmanage";
 			else
-				helper_show_status(output);
+				dpsbridge_helper_show_status(output);
 		}
 	});
 }
@@ -115,7 +115,7 @@ function helper_delete_node(baseURL, nodeID) {
  * @param {string} filename ..the name of the targeted file
  * @param {string} toggle ....trigger to delete the selected file
  */
-function helper_download_file(baseURL, filepath, filename, toggle) {
+function dpsbridge_helper_download_file(baseURL, filepath, filename, toggle) {
 	jQuery('#dialog-upload-status').dialog('close');
 	jQuery('<form>').attr('method', 'post')
 			   .attr('action', baseURL+'/dpsbridge/folio/download-selected')
@@ -132,7 +132,7 @@ function helper_download_file(baseURL, filepath, filename, toggle) {
  * @param {string} width ....the width of the dialog box
  * @param {string} height ...the height of the dialog box
  */
-function helper_show_status(message, width, height) {
+function dpsbridge_helper_show_status(message, width, height) {
 	width  = (width)?width:350;
 	height = (height)?height:200;
 	jQuery('#status').empty();
@@ -145,7 +145,7 @@ function helper_show_status(message, width, height) {
  *   append to the status dialog box.
  * @param {string} message ..the message for the dialog box
  */
-function helper_update_status(message) {
+function dpsbridge_helper_update_status(message) {
 	jQuery('#status').append("<p>"+message+"</p>\n");
 }
 

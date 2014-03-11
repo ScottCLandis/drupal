@@ -26,14 +26,14 @@ if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
 	// if given a landscape image, scale and upload it as cover preview landscape image
 	if ($landscape) {
 		$landscape 	        = substr($landscape, stripos($landscape, 'images'));
-		$landscape_temp_url = helper_scale_img($landscape, $width, $height, 'landscape');
+		$landscape_temp_url = dpsbridge_helper_scale_img($landscape, $width, $height, 'landscape');
 		$fp->upload_cover($folio_id, 'landscape', $landscape_temp_url);
 		unlink($landscape_temp_url);
 	}
 	// if given a portrait image, scale and upload it as cover preview portrait image
 	if ($portrait) {
 		$portrait          = substr($portrait, stripos($portrait, 'images'));
-		$portrait_temp_url = helper_scale_img($portrait, $height, $width, 'portrait');
+		$portrait_temp_url = dpsbridge_helper_scale_img($portrait, $height, $width, 'portrait');
 		$fp->upload_cover($folio_id, 'portrait', $portrait_temp_url);
 		unlink($portrait_temp_url);
 	}
@@ -78,7 +78,7 @@ if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
 				$alienatedArrayCounter++;
 				continue;
 			}
-			$sourcePath	= 'folio/'.helper_format_title($filenames[$i]).'.folio';
+			$sourcePath	= 'folio/'.dpsbridge_helper_format_title($filenames[$i]).'.folio';
 			$response = $fp->upload_article($folio_id, array('sortOrder' => intval($adjustedSortOrder)), $sourcePath);
 			// locking the article
 			//$fp->update_article($folio_id, $response['articleInfo']['id'], array('locked' => 'true'));
@@ -94,5 +94,3 @@ if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
 		echo " - Failed: Articles <br/> :: Missing one or more of the following: Folio ID, article name, sort order, and target viewer!";
 	}
 }
-
-?>

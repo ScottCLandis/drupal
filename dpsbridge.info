@@ -1,6 +1,5 @@
 name = "DPS Bridge"
 description = "This module will convert the contents from selected page(s) into HTML format and upload it into Adobe Folio Producer."
-version = 7.x-1.0
 package = "Adobe DPS"
 core = 7.x
 
