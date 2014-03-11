@@ -7,7 +7,7 @@
 function dpsbridge_helper_array_to_string(dimensionArray) {
   var dimensionString = "";
   for (var i = 0; i < dimensionArray.length; i++)
-    dimensionString += dimensionArray[i].value+",";
+    dimensionString += dimensionArray[i].value + ",";
   return dimensionString;
 }
 /**
@@ -51,9 +51,9 @@ function dpsbridge_helper_generate_dimensions(id, dimensions, toggle) {
     if (dimensions[i] == '') // do nothing if array is empty
       continue;
     if (toggle) // for inputing the dimension values on load
-      jQuery('#'+id).append('<option value="'+dimensions[i]+'">'+dimensions[i]+'</option>');
+      jQuery('#' + id).append('<option value="' + dimensions[i] + '">' + dimensions[i] + '</option>');
     else // for the delete dimensions window
-      jQuery('#'+id).append('<option value="'+dimensions[i].value+'">'+dimensions[i].value+'</option>');
+      jQuery('#' + id).append('<option value="' + dimensions[i].value + '">' + dimensions[i].value + '</option>');
   }
 }
 /**
@@ -65,12 +65,12 @@ function dpsbridge_helper_generate_dimensions(id, dimensions, toggle) {
  */
 function dpsbridge_helper_folio_clone(baseURL, folioNodeID) {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/clone-node",
+    url: baseURL + "/dpsbridge/folio/clone-node",
     type: "POST",
     data: { "fid":folioNodeID },
     success: function(output) {
       if (output === 'ok')
-        window.location = baseURL+"/admin/config/content/fpmanage";
+        window.location = baseURL + "/admin/config/content/fpmanage";
       else
         dpsbridge_helper_show_status(output);
     }
@@ -84,7 +84,7 @@ function dpsbridge_helper_folio_clone(baseURL, folioNodeID) {
  */
 function dpsbridge_helper_delete_files(baseURL, filenames) {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/clean-up",
+    url: baseURL + "/dpsbridge/folio/clean-up",
     type: "POST",
     data: { "filenames":filenames }
   });
@@ -97,12 +97,12 @@ function dpsbridge_helper_delete_files(baseURL, filenames) {
  */
 function dpsbridge_helper_delete_node(baseURL, nodeID) {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/delete-node",
+    url: baseURL + "/dpsbridge/folio/delete-node",
     type: "POST",
     data: { "fid":nodeID },
     success: function(output) {
       if (output === 'ok')
-        window.location = baseURL+"/admin/config/content/fpmanage";
+        window.location = baseURL + "/admin/config/content/fpmanage";
       else
         dpsbridge_helper_show_status(output);
     }
@@ -118,10 +118,10 @@ function dpsbridge_helper_delete_node(baseURL, nodeID) {
 function dpsbridge_helper_download_file(baseURL, filepath, filename, toggle) {
   jQuery('#dialog-upload-status').dialog('close');
   jQuery('<form>').attr('method', 'post')
-         .attr('action', baseURL+'/dpsbridge/folio/download-selected')
-         .append('<input name="filename" value="'+filename+'" />')
-         .append('<input name="destination" value="'+filepath+'" />')
-         .append('<input name="toggle" value="'+toggle+'" />')
+         .attr('action', baseURL + '/dpsbridge/folio/download-selected')
+         .append('<input name="filename" value="' + filename + '" />')
+         .append('<input name="destination" value="' + filepath + '" />')
+         .append('<input name="toggle" value="' + toggle + '" />')
          .submit();
 }
 /**
@@ -136,7 +136,7 @@ function dpsbridge_helper_show_status(message, width, height) {
   width  = (width)?width:350;
   height = (height)?height:200;
   jQuery('#status').empty();
-  jQuery('#status').append("<br/><p>"+message+"</p>\n");
+  jQuery('#status').append("<br/><p>" + message + "</p>\n");
   jQuery('#dialog-status').dialog('open').dialog("option", "width", width).dialog("option", "height", height);
 }
 
@@ -146,6 +146,6 @@ function dpsbridge_helper_show_status(message, width, height) {
  * @param {string} message ..the message for the dialog box
  */
 function dpsbridge_helper_update_status(message) {
-  jQuery('#status').append("<p>"+message+"</p>\n");
+  jQuery('#status').append("<p>" + message + "</p>\n");
 }
 

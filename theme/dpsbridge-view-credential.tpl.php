@@ -4,7 +4,6 @@
  * Template for folio config page.
  *
  * - $dpsbridge_config
- * 
  */
 ?>
 
@@ -50,7 +49,7 @@ Overlay for deleting dimensions
 Overlay for adding stylesheet
 ========================= -->
 <div id="dialog-option-stylesheet-add" title="Add stylesheet">
-  <form id="stylesheet-form" action="<?= $GLOBALS['base_url'] ?>/dpsbridge/stylesheet/upload" method="POST" enctype="multipart/form-data"><br/>
+  <form id="stylesheet-form" action="<?php echo $GLOBALS['base_url'] ?>/dpsbridge/stylesheet/upload" method="POST" enctype="multipart/form-data"><br/>
     <label for="filename">Enter file name:</label>
     <input id="filename" name="filename" type="text" size="40" />
     <label for="zipfile">Select HTMLResource.zip file:</label>

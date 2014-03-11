@@ -10,7 +10,7 @@ var apikey,            // Folio Producer API key
   apple_pass,        // Apple - Folio Producer user password
   apple_dimension,   // Apple - available dimensions
   baseURL = "",
-        pathToDir = "";
+  pathToDir = "";
 /* =================================================== *
  * Given the account type,
  *   call helper to connect to Folio Producer,
@@ -36,7 +36,7 @@ function connectivity(Account) {
 function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
   dpsbridge_helper_show_status('Attempting to connect to Folio Producer, please wait...');
   jQuery.ajax({
-    url: pathToDir+"/fp_connect.php",
+    url: pathToDir + "/fp_connect.php",
     type: "POST",
     data: {
       "AdobeID"   :AdobeID,   // Folio Producer user ID
@@ -47,9 +47,9 @@ function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
     },
     success: function(output) {
       if (output === 'ok')
-        dpsbridge_helper_show_status("<strong><em>"+type+"</em></strong><br/><br/>-Folio Producer API authentication successful!<br/><br/>- Login successful!<br/><br/>- Test completed!", 350, 400);
+        dpsbridge_helper_show_status("<strong><em>" + type + "</em></strong><br/><br/>-Folio Producer API authentication successful!<br/><br/>- Login successful!<br/><br/>- Test completed!", 350, 400);
       else
-        dpsbridge_helper_show_status("<strong><em>"+type+"</em></strong><br/><br/>:: "+output, 600, 250);
+        dpsbridge_helper_show_status("<strong><em>" + type + "</em></strong><br/><br/>:: " + output, 600, 250);
       logout();
     }
   });
@@ -66,7 +66,7 @@ function dps_credentials() {
   var apple_target_dimension = dpsbridge_helper_array_to_string(apple_dimension);
 
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/dps/credentials/add",
+    url: baseURL + "/dpsbridge/dps/credentials/add",
     type: "POST",
     data: { 
       "apikey"           :apikey.val(),
@@ -103,7 +103,7 @@ function generate_form_table_values() {
     if (!jQuery('#edit-credential-table').hasClass('processed')) {
         jQuery('#edit-credential-table').addClass('processed');
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/dps/credentials/pull",
+    url: baseURL + "/dpsbridge/dps/credentials/pull",
     type: "POST",
     success: function(output) {
       jQuery('#apikey').val(output['apikey']);
@@ -130,7 +130,7 @@ function generate_form_table_stylesheet() {
     if (!jQuery('#stylesheets').hasClass('processed')) {
         jQuery('#stylesheets').addClass('processed');
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/stylesheet/read",
+    url: baseURL + "/dpsbridge/stylesheet/read",
     type: "POST",
     success: function(output) {
       for (var i = 0; i < output.length; i++) {
@@ -138,9 +138,9 @@ function generate_form_table_stylesheet() {
           styleText = output[i];
         else // removes the derivatives for viewing purposes
           styleText = output[i].split(/-/)[1];
-        jQuery("#stylesheets").append("<tr id='style-"+output[i]+"'><td value='"+output[i]+"'>"+styleText+"</td></tr>");
-        jQuery("#stylesheet-delete").append("<option value='"+output[i]+"'>"+styleText+"</option>");
-        jQuery("#stylesheet-download").append("<option value='"+output[i]+"'>"+styleText+"</option>");
+        jQuery("#stylesheets").append("<tr id='style-" + output[i] + "'><td value='" + output[i] + "'>" + styleText + "</td></tr>");
+        jQuery("#stylesheet-delete").append("<option value='" + output[i] + "'>" + styleText + "</option>");
+        jQuery("#stylesheet-download").append("<option value='" + output[i] + "'>" + styleText + "</option>");
       }
     }
   });
@@ -151,16 +151,16 @@ function generate_form_table_stylesheet() {
  *   insert the dimension in numerical order.
  * ================================================== */
 function insertDimension(accountTypeID, dimension) {
-  var account = jQuery('#'+accountTypeID+' option');
+  var account = jQuery('#' + accountTypeID + ' option');
   for (var i = 0; i < account.length; i++) {
     current = account[i].value.split(' x ');
     target  = dimension.split(' x ');
     if (parseInt(target[0]) <= parseInt(current[0])) {
-      jQuery('#'+accountTypeID).eq(i).prepend('<option value="'+dimension+'">'+dimension+'</option>');
+      jQuery('#' + accountTypeID).eq(i).prepend('<option value="' + dimension + '">' + dimension + '</option>');
       return;
     }
   }
-  jQuery('#'+accountTypeID+':last').append('<option value="'+dimension+'">'+dimension+'</option>');
+  jQuery('#' + accountTypeID + ':last').append('<option value="' + dimension + '">' + dimension + '</option>');
 }
 /* ========================================= *
  * Attempts to logout of the Folio Producer,
@@ -168,7 +168,7 @@ function insertDimension(accountTypeID, dimension) {
  * ========================================= */
 function logout() {
   jQuery.ajax({
-    url: pathToDir+"/fp_logout.php",
+    url: pathToDir + "/fp_logout.php",
     type: "POST"
   })
 }
@@ -240,7 +240,7 @@ function updateFields() {
           dimensionWidth  = $('#dwidth');  // input width
         if (dimensionLength.val() && dimensionWidth.val()) {
           // calls helper method to insert the dimension in numerical order
-          insertDimension(desiredAccount.val(), dimensionLength.val()+' x '+dimensionWidth.val());
+          insertDimension(desiredAccount.val(), dimensionLength.val() + ' x ' + dimensionWidth.val());
           // clean the text fields
           $('#dlength').val('');
           $('#dwidth').val('');
@@ -259,12 +259,12 @@ function updateFields() {
         var desiredAccount = $('#account-type-delete :selected'),
           dimensions = $('#dimension-list :selected');
         // check if all available dimensions are selected, to prevent deletion of all available dimensions
-        if (dimensions.length >= $('#'+desiredAccount.val()+'_dimension option').length) {
+        if (dimensions.length >= $('#' + desiredAccount.val() + '_dimension option').length) {
           dpsbridge_helper_show_status('At least 1 dimension has to exist per account type!');
         } else if (dimensions.length > 0) { // if user has selected dimension(s) < availalbe dimensions
           // delete the selected dimension(s) from the selected account type
           for (var i = 0; i < dimensions.length; i++) {
-            $('#'+desiredAccount.val()+'_dimension option[value="'+dimensions[i].value+'"]').remove();
+            $('#' + desiredAccount.val() + '_dimension option[value="' + dimensions[i].value + '"]').remove();
           }
           $(this).dialog("close");
         } else { // if user hasn't selected any dimensions
@@ -300,11 +300,11 @@ function updateFields() {
           response = response.replace(/\n/, '').replace(/\"/g, '');
           response = response.split(/-/);
           if (response[0] == "ok" || response[0] == "↵ok") {
-            $("#stylesheets").append("<tr id='style-"+derivative+"-"+response[1]+"'><td value='"+derivative+"-"+response[1]+"'>"+response[1]+"</td></tr>");
-            $("#stylesheet-delete").append("<option value='"+derivative+"-"+response[1]+"'>"+response[1]+"</option>");
-            $("#stylesheet-download").append("<option value='"+derivative+"-"+response[1]+"'>"+response[1]+"</option>");
+            $("#stylesheets").append("<tr id='style-" + derivative + "-" + response[1] + "'><td value='" + derivative + "-" + response[1] + "'>" + response[1] + "</td></tr>");
+            $("#stylesheet-delete").append("<option value='" + derivative + "-" + response[1] + "'>" + response[1] + "</option>");
+            $("#stylesheet-download").append("<option value='" + derivative + "-" + response[1] + "'>" + response[1] + "</option>");
           } else {
-            dpsbridge_helper_show_status(response[0]+' '+response[1]);
+            dpsbridge_helper_show_status(response[0] + ' ' + response[1]);
           }
           $(this).dialog("close");
         } },
@@ -324,11 +324,11 @@ function updateFields() {
           dpsbridge_helper_show_status("Cannot delete the stocked Bootstrap or Foundation stylesheet!");
         } else {
           // deletes the stylesheet from local directory
-          $.ajax({ url: baseURL+"/dpsbridge/stylesheet/delete", type: "POST", data: {'filename':stylesheet} });
+          $.ajax({ url: baseURL + "/dpsbridge/stylesheet/delete", type: "POST", data: {'filename':stylesheet} });
           // remove stylesheet from view
-          $("#style-"+stylesheet).remove();
-          $("#stylesheet-delete option[value="+stylesheet+"]").remove();
-          $("#stylesheet-download option[value="+stylesheet+"]").remove();
+          $("#style-" + stylesheet).remove();
+          $("#stylesheet-delete option[value=" + stylesheet + "]").remove();
+          $("#stylesheet-download option[value=" + stylesheet + "]").remove();
         }
         $(this).dialog("close"); },
       Close: function() {
@@ -340,7 +340,7 @@ function updateFields() {
     buttons: {
       Download: function() {
         var stylesheet = $('#stylesheet-download :selected').val();
-        dpsbridge_helper_download_file(baseURL, pathToDir+'/styles/'+stylesheet+'/HTMLResources.zip', 'HTMLResources', '0');
+        dpsbridge_helper_download_file(baseURL, pathToDir + '/styles/' + stylesheet + '/HTMLResources.zip', 'HTMLResources', '0');
         $(this).dialog("close"); },
       Close: function() {
         $(this).dialog("close"); }}

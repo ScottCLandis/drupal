@@ -13,7 +13,7 @@ var fid = '', // set to Folio node ID when opening the edit panel
  * ==================================================== */
 function acquire_account_credentials(folioNodeID, filenames) {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/pull-accounts",
+    url: baseURL + "/dpsbridge/folio/pull-accounts",
     type: "POST",
     data: { "folioNodeID":folioNodeID },
     success: function(output) {
@@ -21,7 +21,7 @@ function acquire_account_credentials(folioNodeID, filenames) {
         dpsbridge_helper_show_status("Please select a resolution for the folio!");
         dpsbridge_helper_delete_files(baseURL, filenames);
       } else if (output['message'] == 'ok') {
-        dpsbridge_helper_update_status("Connecting to Folio Producer ("+output['account']['type']+" account)...");
+        dpsbridge_helper_update_status("Connecting to Folio Producer (" + output['account']['type'] + " account)...");
         fp_connect(output['account'], output['folioMeta'], filenames);
       } else {
         dpsbridge_helper_show_status(output['message']);
@@ -37,7 +37,7 @@ function acquire_account_credentials(folioNodeID, filenames) {
  * ============================================ */
 function generate_folio(folioNodeID, filenames) {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/generate-folios",
+    url: baseURL + "/dpsbridge/folio/generate-folios",
     type: "POST",
     data: { "filenames":filenames },
     success: function(output) {
@@ -53,7 +53,7 @@ function generate_folio(folioNodeID, filenames) {
  * ================================================= */
 function generate_html(folioNodeID) {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/generate-HTML",
+    url: baseURL + "/dpsbridge/folio/generate-HTML",
     type: "POST",
     data: { "folioNodeID":folioNodeID },
     success: function(output) {
@@ -70,7 +70,7 @@ function generate_html(folioNodeID) {
 function generate_selected_html(articleNodeID) {
   dpsbridge_helper_show_status('Generating HTML Stacks...');
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/generate-selected-HTML",
+    url: baseURL + "/dpsbridge/folio/generate-selected-HTML",
     type: "POST",
     data: {
       "folioNodeID"   :fid,
@@ -114,7 +114,7 @@ function get_selected(toggle) {
  * ================================================= */
 function fp_connect(accountMeta, folioMeta, filenames) {
   jQuery.ajax({
-    url: pathToDir+"/fp_connect.php",
+    url: pathToDir + "/fp_connect.php",
     type: "POST",
     data: {
       "AdobeID"   :accountMeta['adobeID'],
@@ -124,10 +124,10 @@ function fp_connect(accountMeta, folioMeta, filenames) {
     success: function(output) {
       if (output == 'ok') {
         if (folioMeta['productID'] && folioMeta['status'] == 'Uploaded') {
-          dpsbridge_helper_update_status("Updating \""+folioMeta['folioName']+"\", please wait (a while)...");
+          dpsbridge_helper_update_status("Updating \"" + folioMeta['folioName'] + "\", please wait (a while)...");
           fp_upload(accountMeta, folioMeta, filenames);
         } else {
-          dpsbridge_helper_update_status("Creating \""+folioMeta['folioName']+"\"...");
+          dpsbridge_helper_update_status("Creating \"" + folioMeta['folioName'] + "\"...");
           fp_create(accountMeta, folioMeta, filenames);
         }
       } else {
@@ -144,7 +144,7 @@ function fp_connect(accountMeta, folioMeta, filenames) {
  * ============================================================= */
 function fp_create(accountMeta, folioMeta, filenames) {
   jQuery.ajax({
-    url: pathToDir+"/fp_create.php",
+    url: pathToDir + "/fp_create.php",
     type: "POST",
     data: {
       "folioName"      :folioMeta['folioName'],
@@ -157,7 +157,7 @@ function fp_create(accountMeta, folioMeta, filenames) {
       "targetViewer"    :folioMeta['viewer'],
       "filters"      :folioMeta['filter'] },
     success: function(output) {
-      dpsbridge_helper_update_status("Uploading to \""+folioMeta['folioName']+"\", please wait (a while)...");
+      dpsbridge_helper_update_status("Uploading to \"" + folioMeta['folioName'] + "\", please wait (a while)...");
       folioMeta['productID'] = output;
       fp_upload(accountMeta, folioMeta, filenames);
     }
@@ -169,7 +169,7 @@ function fp_create(accountMeta, folioMeta, filenames) {
  * ========================================= */
 function fp_logout() {
   jQuery.ajax({
-    url: pathToDir+"/fp_logout.php",
+    url: pathToDir + "/fp_logout.php",
     type: "POST"
   });
 }
@@ -183,7 +183,7 @@ function fp_logout() {
 function fp_sync(folioID, folioName, credentials, articles, isAds, alienated, uploadDate) {
   dpsbridge_helper_update_status("Syncing with the Folio Producer, Please wait...");
   jQuery.ajax({
-    url: pathToDir+"/fp_connect.php",
+    url: pathToDir + "/fp_connect.php",
     type: "POST",
     data: {
       "folioID"   :folioID,
@@ -210,7 +210,7 @@ function fp_sync(folioID, folioName, credentials, articles, isAds, alienated, up
  * ================================================================== */
 function fp_upload(accountMeta, folioMeta, filenames) {
   jQuery.ajax({
-    url: pathToDir+"/fp_upload.php",
+    url: pathToDir + "/fp_upload.php",
     type: "POST",
     data: {
       "folioID"   :folioMeta['productID'],
@@ -237,7 +237,7 @@ function fp_upload(accountMeta, folioMeta, filenames) {
  * ======================================================================== */
 function imageUI_update() {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/pull-content",
+    url: baseURL + "/dpsbridge/folio/pull-content",
     type: "POST",
     data: { "nodeID":fid },
     success: function(output) {
@@ -254,7 +254,7 @@ function imageUI_update() {
  * ======================================= */
 function node_status_update(folioNodeID, folioID) {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/update-status",
+    url: baseURL + "/dpsbridge/folio/update-status",
     type: "POST",
     data: {
       "folioNodeID" :folioNodeID,
@@ -269,13 +269,13 @@ function node_status_update(folioNodeID, folioID) {
  * ======================================================= */
 function node_status_timestamp(folioNodeID) {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/update-timestamp",
+    url: baseURL + "/dpsbridge/folio/update-timestamp",
     type: "POST",
     data: { "folioNodeID" :folioNodeID },
     success: function(output) {
       fp_logout();
       dpsbridge_helper_update_status("Redirecting in 5 seconds...");
-      setTimeout(function() { window.location = baseURL+"/admin/config/content/fpmanage"; }, 5000);
+      setTimeout(function() { window.location = baseURL + "/admin/config/content/fpmanage"; }, 5000);
     }
   });
 }
@@ -290,7 +290,7 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
   for (var i = 0; i < drupalArticles.length; i++) {
     var articleID = drupalArticles[i]['target_id'];
     jQuery.ajax({
-      url: baseURL+"/dpsbridge/folio/pull-article",
+      url: baseURL + "/dpsbridge/folio/pull-article",
       type: "POST",
       async: false,
       data: { "nodeID":articleID },
@@ -302,13 +302,13 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
           // makes sure to not show non-Drupal articles that has been deleted from Folio Producer
           var exist = dpsbridge_helper_check_article_by_id(fpArticles, alienatedID[alienatedCount]);
           if (exist) { 
-            html += "<tr id='article-row-id-"+alienatedID[alienatedCount]+"'>\n";
-            html += "<td class='article-index'><input type='hidden' value='"+alienatedID[alienatedCount]+"' /><span class='ui-icon ui-icon-locked'></span></td>\n";
+            html += "<tr id='article-row-id-" + alienatedID[alienatedCount] + "'>\n";
+            html += "<td class='article-index'><input type='hidden' value='" + alienatedID[alienatedCount] + "' /><span class='ui-icon ui-icon-locked'></span></td>\n";
             html += "<td><span class='ui-icon ui-icon-arrow-4'></span></td>\n";
-            html += "<td class='sortable-index' style='text-align:center'>"+index+"</td>\n";
+            html += "<td class='sortable-index' style='text-align:center'>" + index + "</td>\n";
             html += "<td><span class='ui-icon ui-icon-locked'></span></td>\n";
-            html += "<td>"+exist['name']+"</td>\n";
-            html += "<td>"+exist['type']+"</td>\n";
+            html += "<td>" + exist['name'] + "</td>\n";
+            html += "<td>" + exist['type'] + "</td>\n";
             //html += "<td><span class='ui-icon ui-icon-locked'></span></td>\n";
             html += "<td><span class='ui-icon ui-icon-locked'></span></td>\n";
             html += "<td class='is-ad'><input type='hidden' /><span class='ui-icon ui-icon-locked'></span></td>\n";
@@ -320,16 +320,16 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
         } else { // create a editable row if the content is from Drupal
           // check if the Drupal article is up in Folio Producer (true if so, false otherwise)
           var exist = dpsbridge_helper_check_article_by_name(fpArticles, output['filename']);
-          html += "<tr id='article-row-id-"+articleID+"'>\n";
-          html += "<td class='article-index'><input type='checkbox' value='"+articleID+"' /></td>\n";
+          html += "<tr id='article-row-id-" + articleID + "'>\n";
+          html += "<td class='article-index'><input type='checkbox' value='" + articleID + "' /></td>\n";
           html += "<td><span class='ui-icon ui-icon-arrow-4'></span></td>\n";
-          html += "<td id='articleSortIndex-"+index+"' class='sortable-index' style='text-align:center'>"+index+"</td>\n";
-          html += "<td><a href='/node/"+articleID+"/edit?destination=admin/config/content/fpmanage'><span class='ui-icon ui-icon-pencil'></span></a></td>\n";
-          html += "<td><a href='javascript:previewOptions("+articleID+", \""+output['filename']+"\")'>"+output['title']+"</a></td>\n";
-          html += "<td>"+output['type']+"</td>\n";
+          html += "<td id='articleSortIndex-" + index + "' class='sortable-index' style='text-align:center'>" + index + "</td>\n";
+          html += "<td><a href='/node/" + articleID + "/edit?destination=admin/config/content/fpmanage'><span class='ui-icon ui-icon-pencil'></span></a></td>\n";
+          html += "<td><a href='javascript:previewOptions(" + articleID + ", \"" + output['filename'] + "\")'>" + output['title'] + "</a></td>\n";
+          html += "<td>" + output['type'] + "</td>\n";
           //html += "<td><select class='overridecss'></select></td>\n";
-          html += "<td>"+output['modified']+"</td>\n";
-          html += "<td class='is-ad'><input type='checkbox' "+checked+"/></td>\n";
+          html += "<td>" + output['modified'] + "</td>\n";
+          html += "<td class='is-ad'><input type='checkbox' " + checked + "/></td>\n";
           if (output['timestamp'] <= uploadDate && exist)
             html += "<td><span class='ui-icon ui-icon-check'></span></td>\n";
           else
@@ -347,16 +347,16 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
     if (fpArticles[n]['articleMetadata']['assetFormat'] == 'Auto')
       continue;
     // insert non-Drupal articles that hasn't been added to Drupal database
-    if (jQuery('#article-row-id-'+fpArticles[n]['id']).length == 0) {
+    if (jQuery('#article-row-id-' + fpArticles[n]['id']).length == 0) {
       var sortNumber  = (fpArticles[n]['articleMetadata']['sortNumber']/1000)-offsetIndex;
       var sortOrder   = Math.floor(sortNumber);
-      html  = "<tr id='article-row-id-"+fpArticles[n]['id']+"'>\n";
-      html += "<td class='article-index'><input type='hidden' value='"+fpArticles[n]['id']+"' /><span class='ui-icon ui-icon-locked'></span></td>\n";
+      html  = "<tr id='article-row-id-" + fpArticles[n]['id'] + "'>\n";
+      html += "<td class='article-index'><input type='hidden' value='" + fpArticles[n]['id'] + "' /><span class='ui-icon ui-icon-locked'></span></td>\n";
       html += "<td><span class='ui-icon ui-icon-arrow-4'></span></td>\n";
-      html += "<td class='sortable-index' style='text-align:center'>"+sortNumber+"</td>\n";
+      html += "<td class='sortable-index' style='text-align:center'>" + sortNumber + "</td>\n";
       html += "<td><span class='ui-icon ui-icon-locked'></span></td>\n";
-      html += "<td>"+fpArticles[n]['articleMetadata']['title']+"</td>\n";
-      html += "<td>"+fpArticles[n]['articleMetadata']['assetFormat']+"</td>\n";
+      html += "<td>" + fpArticles[n]['articleMetadata']['title'] + "</td>\n";
+      html += "<td>" + fpArticles[n]['articleMetadata']['assetFormat'] + "</td>\n";
       html += "<td><span class='ui-icon ui-icon-locked'></span></td>\n";
       html += "<td class='is-ad'><input type='hidden' /><span class='ui-icon ui-icon-locked'></span></td>\n";
       html += "<td><span class='ui-icon ui-icon-check'></span></td>\n";
@@ -364,7 +364,7 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
       if (sortOrder <= 0)
         jQuery('#articleSortIndex-1').parent().before(html);
       else
-        jQuery('#articleSortIndex-'+sortOrder).parent().after(html);
+        jQuery('#articleSortIndex-' + sortOrder).parent().after(html);
     }
   }
   // refreshes the stylesheets
@@ -381,7 +381,7 @@ function profileUI(folioNodeID, toggle) {
   dpsbridge_helper_show_status("Pulling content, please wait...", 400, 225);
   jQuery('#articles-wrapper').empty();
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/pull-content",
+    url: baseURL + "/dpsbridge/folio/pull-content",
     type: "POST",
     data: { 
       "nodeID":folioNodeID,
@@ -467,7 +467,7 @@ function previewOptions(previewID, filename) {
     pubcss = jQuery("#pubcss").val();
     previewFileName = filename;
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/preview-article",
+    url: baseURL + "/dpsbridge/folio/preview-article",
     type: "POST",
     data: { 
       "previewID"  :previewID,
@@ -494,8 +494,8 @@ function previewArticle(orientation) {
     windows_width = preview_token[1];
     windows_height = preview_token[0];
   }
-  previewURL = 'sites/all/modules/dpsbridge/html/'+previewFileName+'/'+previewFileName+'.html';
-  window.open(previewURL, "popup", "width="+windows_width+", height="+windows_height);
+  previewURL = 'sites/all/modules/dpsbridge/html/' + previewFileName + '/' + previewFileName + '.html';
+  window.open(previewURL, "popup", "width=" + windows_width + ", height=" + windows_height);
 }
 /* ========================================================= *
  * Attempts to read the current available local stylesheets,
@@ -504,7 +504,7 @@ function previewArticle(orientation) {
 function readStylesheets() {
   var styleText = '';
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/stylesheet/read",
+    url: baseURL + "/dpsbridge/stylesheet/read",
     type: "POST",
     async: false,
     success: function(output) {
@@ -545,7 +545,7 @@ function refreshDimensions() {
  * ============================================================= */
 function removePreviewFile() {
   jQuery.ajax({
-    url: baseURL+"/dpsbridge/folio/preview-delete",
+    url: baseURL + "/dpsbridge/folio/preview-delete",
     type: "POST",
     data: { "filename":previewFileName }
   })
@@ -557,7 +557,7 @@ function removePreviewFile() {
 function replaceHREF(ahref, toggle) {
   for (var i = 0; i < ahref.length; i++) {
     var url = ahref[i].href;
-    ahref[i].href = 'javascript:profileUI('+url.substring(url.indexOf('/node')+6, url.indexOf('/edit?'))+', "'+toggle+'")';
+    ahref[i].href = 'javascript:profileUI(' + url.substring(url.indexOf('/node')+6, url.indexOf('/edit?')) + ', "' + toggle + '")';
   }
 }
 
@@ -610,7 +610,7 @@ function replaceHREF(ahref, toggle) {
                                         checkboxes = $('.article-index input');
                                     for (var n = 0; n < checkboxes.length; n++)
                                             if (checkboxes[n].checked)
-                                                    articleID += checkboxes[n].value+',';
+                                                    articleID += checkboxes[n].value + ',';
                                     if (articleID)
                                             generate_selected_html(articleID);
                                     else
@@ -621,9 +621,9 @@ function replaceHREF(ahref, toggle) {
                                         checkboxes        = $('.article-index input');
                                     for (var i = 0; i < checkboxes.length; i++)
                                             if (checkboxes[i].checked)
-                                                    $('#article-row-id-'+checkboxes[i].value).remove();
+                                                    $('#article-row-id-' + checkboxes[i].value).remove();
                                     for (var n = 0; n < indexes.length; n++)
-                                            indexes[n].innerHTML = n+1; 
+                                            indexes[n].innerHTML = n + 1; 
                             },
                             "Save": function() {
                                     var ads      = "",
@@ -636,13 +636,13 @@ function replaceHREF(ahref, toggle) {
                                             account    = $('#accounts :selected');
                                     // appends the current articles from folio
                                     for (var i = 0; i < indexes.length; i++) {
-                                            articles += indexes[i].value+",";
+                                            articles += indexes[i].value + ",";
                                     }
                                     for (var n = 0; n < isad.length; n++)
                                             ads += (isad[n].checked)?"1,":"0,";
                                     // attempts to save the metadata to the selected Folio node
                                     $.ajax({
-                                            url: baseURL+"/dpsbridge/folio/update",
+                                            url: baseURL + "/dpsbridge/folio/update",
                                             type: "POST",
                                             data: {
                                                     "fid"         :fid,
@@ -663,9 +663,9 @@ function replaceHREF(ahref, toggle) {
                                                     "articles"    :articles },
                                             success: function(output) {
                                                     if (output === 'ok')
-                                                            window.location = baseURL+"/admin/config/content/fpmanage";
+                                                            window.location = baseURL + "/admin/config/content/fpmanage";
                                                     else
-                                                            dpsbridge_helper_show_status("Failed to update '"+fname.val()+"'<br/><br/>:: "+output, 400, 300);
+                                                            dpsbridge_helper_show_status("Failed to update '" + fname.val() + "'<br/><br/>:: " + output, 400, 300);
                                             },
                                             error: function (e, status) {
                                                     dpsbridge_helper_show_status(e.responseText);
@@ -696,7 +696,7 @@ function replaceHREF(ahref, toggle) {
             $("#sortable-table tbody").sortable({
                     update: function(event, ui) {
                             $('#sortable-table tbody tr').each(function() {
-                                    $(this).children('td.sortable-index').html($(this).index()+1); }); }
+                                    $(this).children('td.sortable-index').html($(this).index() + 1); }); }
             });
             // JQUERY UI: auto resizing the dialog boxes depending on the size of the browser
             $(window).resize(function() {

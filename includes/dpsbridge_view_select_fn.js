@@ -45,9 +45,9 @@ function get_selected(toggle) {
                     autoOpen:false, height:470, width:350, modal:true,
                     buttons: {
                             "Create Folio": function() {
-                                    dpsbridge_helper_show_status("Adding the selected Article(s) to \""+fname.val()+"\", please wait...");
+                                    dpsbridge_helper_show_status("Adding the selected Article(s) to \"" + fname.val() + "\", please wait...");
                                     $.ajax({
-                                            url: baseURL+"/dpsbridge/folio/add",
+                                            url: baseURL + "/dpsbridge/folio/add",
                                             type: "POST",
                                             data: {
                                                     "fname":fname.val(),
@@ -57,7 +57,7 @@ function get_selected(toggle) {
                                                     "articles":articles },
                                             success: function(output) {
                                                     if (output === 'ok')
-                                                            window.location = baseURL+"/admin/config/content/fpmanage";
+                                                            window.location = baseURL + "/admin/config/content/fpmanage";
                                                     else
                                                             dpsbridge_helper_show_status(output);
                                             }
@@ -70,16 +70,16 @@ function get_selected(toggle) {
                     buttons: {
                             "Add to Folio": function() {
                                     var fid = $("#fid :selected")
-                                    dpsbridge_helper_show_status("Adding the selected Article(s) to \""+fid.text()+"\", please wait...");
+                                    dpsbridge_helper_show_status("Adding the selected Article(s) to \"" + fid.text() + "\", please wait...");
                                     $.ajax({
-                                            url: baseURL+"/dpsbridge/folio/append",
+                                            url: baseURL + "/dpsbridge/folio/append",
                                             type: "POST",
                                             data: {
                                                     "fid":fid.val(),
                                                     "articles":articles },
                                             success: function(output) {
                                                     if (output === 'ok')
-                                                            window.location = baseURL+"/admin/config/content/fpmanage";
+                                                            window.location = baseURL + "/admin/config/content/fpmanage";
                                                     else
                                                             dpsbridge_helper_show_status(output);
                                             }
