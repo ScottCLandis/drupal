@@ -43,21 +43,21 @@ class FPLibrary
    */
   private function create_timestamp() {
     if($this->config->timestamp == '') {
-      $this->config->timestamp = round(microtime(true));
+      $this->config->timestamp = round(microtime(TRUE));
     }
   }
   /**
    * Generate URL for webservice
    */
   private function create_url($server, $suffix = '') {
-    if (strpos($server, 'http') === false) {
+    if (strpos($server, 'http') === FALSE) {
       $url = ($this->config->use_ssl) ? 'https' : 'http';
       return $url . '://' . $server . '/webservices/' . $suffix;
     }
     return $server . '/webservices/' . $suffix;
   }
   private function create_distributionurl($server ,$suffix = '') {
-    if (strpos($server,'http') === false) {
+    if (strpos($server,'http') === FALSE) {
       $url = ($this->config->use_ssl) ? 'https' : 'http';
       return $url . '://' . $server . '/'. $suffix;
     }
@@ -78,7 +78,7 @@ class FPLibrary
    */
   private function oauth_signature() {
     $message = $this->oauth_message();
-    $hash = hash_hmac('sha256', $message, $this->config->consumer_secret . '&', false);
+    $hash = hash_hmac('sha256', $message, $this->config->consumer_secret . '&', FALSE);
     $bytes = pack('H*', $hash);
     $base = base64_encode($bytes);
     return urlencode($base);
@@ -91,18 +91,18 @@ class FPLibrary
    * @param  [type]  $filepath    path to file if uploading
    * @param  boolean $is_download set if using the download server
    */
-  public function request($method, $url, $params=array(), $filepath=null, $is_download=false, $is_distribution=false) {
+  public function request($method, $url, $params = array(), $filepath = NULL, $is_download = FALSE, $is_distribution = FALSE) {
     $this->method = $method;
     $this->headers = array(
       'Content-Type: application/json; charset=utf-8',
     );
-    $ready_for_request = false;
+    $ready_for_request = FALSE;
     
     if($is_distribution && isset($_SESSION['distributionTicket'])) {
-      $ready_for_request = true;
+      $ready_for_request = TRUE;
     }
     if(!$is_distribution && isset($_SESSION['ticket'])) {
-      $ready_for_request = true;
+      $ready_for_request = TRUE;
     }
     // If no oAuth then set it up
     if (!$ready_for_request) { 
@@ -120,7 +120,7 @@ class FPLibrary
         );
 
         $this->params = json_encode($credentials);
-        $this->oauth = $this->curl(true);
+        $this->oauth = $this->curl(TRUE);
 /*        echo '<pre>';
         print_r($this->oauth);
         echo '</pre>';
@@ -147,7 +147,7 @@ class FPLibrary
         $this->headers[] = 'Authorization: OAuth oauth_consumer_key="' . $this->config->consumer_key . '", oauth_timestamp="' . $this->config->timestamp . '", oauth_signature_method="HMAC-SHA256", oauth_signature="' . $this->sig . '"';
   
       //  echo 'calling curl now...';
-        $this->oauth = $this->curl(false);
+        $this->oauth = $this->curl(FALSE);
       //  echo '<pre>';
       //  print_r($this->oauth);
       //  echo '</pre>';
@@ -189,7 +189,7 @@ class FPLibrary
         $this->file = $filepath;
         $this->file_upload();
       }
-      $response = $this->curl(false);
+      $response = $this->curl(FALSE);
       if(isset($response['ticket'])) { 
         $_SESSION['ticket'] = $response['ticket'];
       }
@@ -203,16 +203,16 @@ class FPLibrary
    * Run the curl request using the values set in request()
    * @return array Curl output
    */
-  public function curl($is_distribution=false) {
+  public function curl($is_distribution = FALSE) {
     $ch = curl_init();
 
     //print_r($this->url);
     curl_setopt_array($ch, array(
       CURLOPT_URL => $this->url,
-      CURLOPT_RETURNTRANSFER => true,  
+      CURLOPT_RETURNTRANSFER => TRUE,  
       CURLOPT_USERAGENT => $this->config->user_agent,
       CURLOPT_PROXY => $this->config->proxy ? $this->config->proxy : '',
-      CURLOPT_HTTPPROXYTUNNEL => $this->config->proxy ? true : false,
+      CURLOPT_HTTPPROXYTUNNEL => $this->config->proxy ? TRUE : FALSE,
       CURLOPT_PROXYPORT => $this->config->proxy ? '8888' : '',
       CURLOPT_PROXYTYPE => $this->config->proxy ? 'HTTP' : '',
       CURLOPT_HTTPHEADER => $this->headers,
@@ -221,10 +221,10 @@ class FPLibrary
       CURLOPT_SSL_VERIFYPEER => $this->config->curl_ssl_verifypeer,       
     ));
 
-    if ($this->config->curl_capath !== false) {
+    if ($this->config->curl_capath !== FALSE) {
       curl_setopt($ch, CURLOPT_CAPATH, $this->config->curl_capath );
     }
-    if ($this->config->curl_cainfo !== false) {
+    if ($this->config->curl_cainfo !== FALSE) {
       curl_setopt($ch, CURLOPT_CAINFO, $this->config->curl_cainfo );
     }
 
@@ -233,7 +233,7 @@ class FPLibrary
 
         break;
       case 'POST' :
-        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->params);  
         break;
       default :
@@ -247,7 +247,7 @@ class FPLibrary
       return $execute;
     }
     else {
-      return json_decode( $execute ,true );
+      return json_decode($execute, TRUE);
     }
   }  
   /**

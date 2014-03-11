@@ -19,7 +19,7 @@
   $_SESSION['APIKey'] = htmlspecialchars(isset($_POST["APIKey"]) ? $_POST["APIKey"] : '');
   $_SESSION['APISecret'] = htmlspecialchars(isset($_POST["APISecret"]) ? $_POST["APISecret"] : '');
   $folio_id = htmlspecialchars(isset($_POST['folioID']) ? $_POST['folioID'] : '');
-  $isTest = htmlspecialchars(isset($_POST["Test"]) ? $_POST["Test"] : '');
+  $is_test = htmlspecialchars(isset($_POST["Test"]) ? $_POST["Test"] : '');
 
   $fp = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
   $config->fp = $fp;
@@ -31,9 +31,9 @@
   // Create session
   if(!isset($_SESSION['ticket'])) {
     $session = $fp->create_session();
-    $distributionAPI = $fp->create_distribution_session();
-    $distributionInfo = new SimpleXMLElement($distributionAPI);
-    $_SESSION['DistributionID'] = (string) $distributionInfo->accountId;
+    $distribution_api = $fp->create_distribution_session();
+    $distribution_info = new SimpleXMLElement($distribution_api);
+    $_SESSION['DistributionID'] = (string) $distribution_info->accountId;
 
     if($session['status'] != 'ok') {
       if ($session['status'] === 'InvalidLogin') {

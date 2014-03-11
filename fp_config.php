@@ -33,13 +33,13 @@ class FPConfig extends Settings {
   protected function __construct() {
     session_start();
 
-    $preconfigured = false;
+    $preconfigured = FALSE;
     $cconfig = isset($_SESSION['config']) ? $_SESSION['config'] : array();
     if($cconfig || !isset($cconfig['mode'])) {
-      $preconfigured = false;
+      $preconfigured = FALSE;
     }
     else {
-      $preconfigured = true;
+      $preconfigured = TRUE;
     }
 
     parent::__construct('config', $cconfig);
@@ -50,13 +50,13 @@ class FPConfig extends Settings {
       
       if($this->mode == 'release') {
         $this->proxy = '';
-        $this->use_ssl = true;
-        $this->require_ssl = true;
+        $this->use_ssl = TRUE;
+        $this->require_ssl = TRUE;
       }
       else {
-        $this->use_ssl = true;
+        $this->use_ssl = TRUE;
         $this->proxy = ''; //'127.0.0.1';
-        $this->require_ssl = false;
+        $this->require_ssl = FALSE;
       }
     
       if($this->server_family == 'production') {

@@ -32,7 +32,7 @@ class FPHelper
     return $fp_sessiondata;
   }
   public function create_distribution_session() {
-    $fp_sessiondata = $this->fp->request('GET', 'ddp/issueServer/signInWithCredentials?emailAddress=' . $this->fp->config->user_email . '&password=' . $this->fp->config->user_password,array(), '', false, true);
+    $fp_sessiondata = $this->fp->request('GET', 'ddp/issueServer/signInWithCredentials?emailAddress=' . $this->fp->config->user_email . '&password=' . $this->fp->config->user_password, array(), '', FALSE, TRUE);
     //$_SESSION['ticket'] = $fp_sessiondata['ticket'];
     return $fp_sessiondata;
   }
@@ -72,11 +72,11 @@ class FPHelper
     }
     return $this->fp->request('GET', 'folios/' . $folio_id . '/articles' . '?resultData="All"');
   }
-  public function update_article($folio_id, $articleID, $metadata) {
-    if (!isset($folio_id) || !isset($articleID) || !isset($metadata)) {
+  public function update_article($folio_id, $article_id, $metadata) {
+    if (!isset($folio_id) || !isset($article_id) || !isset($metadata)) {
       throw new Exception('Folio ID and parameters required');
     }
-    return $this->fp->request('POST', 'folios/' . $folio_id . '/articles/' . $articleID . '/metadata', $metadata);
+    return $this->fp->request('POST', 'folios/' . $folio_id . '/articles/' . $article_id . '/metadata', $metadata);
   }
   public function upload_article($folio_id, $metadata, $filepath) {
     if (!isset($folio_id) || !isset($filepath)) {
@@ -84,11 +84,11 @@ class FPHelper
     }
     return $this->fp->request('POST', 'folios/' . $folio_id . '/articles/'/*.'?name='.$metadata['name']*/, $metadata, $filepath);
   }
-  public function delete_article($folio_id, $articleID) {
-    if (!isset($folio_id) || !isset($articleID)) {
+  public function delete_article($folio_id, $article_id) {
+    if (!isset($folio_id) || !isset($article_id)) {
       throw new Exception('Folio ID and Article ID required');
     }
-    return $this->fp->request('DELETE', 'folios/' . $folio_id . '/articles/'.$articleID);
+    return $this->fp->request('DELETE', 'folios/' . $folio_id . '/articles/'.$article_id);
   }
 
   public function upload_htmlresources($folio_id, $filepath) {
