@@ -88,24 +88,24 @@ class FPLibrary
 	 * @param  [type]  $method      GET, POST, DELETE
 	 * @param  [type]  $url         API
 	 * @param  array   $params      request parameters
-	 * @param  [type]  $filePath    path to file if uploading
+	 * @param  [type]  $filepath    path to file if uploading
 	 * @param  boolean $is_download set if using the download server
 	 */
-	public function request($method,$url,$params=array(),$filePath=null,$is_download=false,$is_distribution=false) {
+	public function request($method, $url, $params=array(), $filepath=null, $is_download=false, $is_distribution=false) {
 		$this->method = $method;
 		$this->headers = array(
 			'Content-Type: application/json; charset=utf-8',
 		);
-		$readyForRequest = false;
+		$ready_for_request = false;
 		
 		if($is_distribution && isset($_SESSION['distributionTicket'])) {
-			$readyForRequest = true;
+			$ready_for_request = true;
 		}
 		if(!$is_distribution && isset($_SESSION['ticket'])) {
-			$readyForRequest = true;
+			$ready_for_request = true;
 		}
 		// If no oAuth then set it up
-		if (!$readyForRequest) { 
+		if (!$ready_for_request) { 
 		//	echo 'athentication required...';
 			
 			if($is_distribution) {
@@ -118,10 +118,9 @@ class FPLibrary
 					'email'	=> $this->config->user_email,
 					'password'	=> $this->config->user_password
 				);
-				
-				
+
 				$this->params = json_encode($credentials);
-					$this->oauth = $this->curl(true);
+        $this->oauth = $this->curl(true);
 /*				echo '<pre>';
 				print_r($this->oauth);
 				echo '</pre>';
@@ -159,7 +158,8 @@ class FPLibrary
 				$_SESSION['downloadServer'] = $this->oauth['downloadServer'];
 				return $this->oauth;
 			}
-		} else {
+		}
+    else {
 			
 			//echo 'regular request';
 			$this->params = json_encode($params);
@@ -184,9 +184,9 @@ class FPLibrary
 	
 			$this->headers[] = 'Authorization: AdobeAuth ticket="' . $ticket  . '"';
 			
-			if (isset($filePath)) {
+			if (isset($filepath)) {
 				unset($this->headers[0]); // remove content-type
-				$this->file = $filePath;
+				$this->file = $filepath;
 				$this->file_upload();
 			}
 			$response = $this->curl(false);
@@ -211,10 +211,10 @@ class FPLibrary
 			CURLOPT_URL => $this->url,
 			CURLOPT_RETURNTRANSFER => true,  
 			CURLOPT_USERAGENT => $this->config->user_agent,
-			CURLOPT_PROXY => $this->config->proxy?$this->config->proxy:'',
-			CURLOPT_HTTPPROXYTUNNEL => $this->config->proxy?true:false,
-			CURLOPT_PROXYPORT => $this->config->proxy?'8888':'',
-			CURLOPT_PROXYTYPE => $this->config->proxy?'HTTP':'',
+			CURLOPT_PROXY => $this->config->proxy ? $this->config->proxy : '',
+			CURLOPT_HTTPPROXYTUNNEL => $this->config->proxy ? true : false,
+			CURLOPT_PROXYPORT => $this->config->proxy ? '8888' : '',
+			CURLOPT_PROXYTYPE => $this->config->proxy ? 'HTTP' : '',
 			CURLOPT_HTTPHEADER => $this->headers,
 			
 			CURLOPT_SSL_VERIFYHOST => $this->config->curl_ssl_verifyhost ,
@@ -245,7 +245,8 @@ class FPLibrary
 		
 		if($is_distribution) {
 			return $execute;
-		} else {
+		}
+    else {
 			return json_decode( $execute ,true );
 		}
 	}	

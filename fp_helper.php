@@ -39,11 +39,11 @@ class FPHelper
 	public function delete_session() {
 		return $this->fp->request('DELETE', 'sessions');
 	}
-	public function create_folio($folioParams) {
-		if (!isset($folioParams['folioName'])) {
+	public function create_folio($folio_params) {
+		if (!isset($folio_params['folioName'])) {
 			throw new Exception('Folio parameters required');
     }
-		return $this->fp->request('POST', 'folios', $folioParams);
+		return $this->fp->request('POST', 'folios', $folio_params);
 	}
 	public function delete_folio($folio_id) {
 		if (!isset($folio_id)) {
@@ -78,11 +78,11 @@ class FPHelper
     }
 		return $this->fp->request('POST', 'folios/' . $folio_id . '/articles/' . $articleID . '/metadata', $metadata);
 	}
-	public function upload_article($folio_id, $metadata, $filePath) {
-		if (!isset($folio_id) || !isset($filePath)) {
+	public function upload_article($folio_id, $metadata, $filepath) {
+		if (!isset($folio_id) || !isset($filepath)) {
 			throw new Exception('Folio ID and File required');
     }
-		return $this->fp->request('POST', 'folios/' . $folio_id . '/articles/'/*.'?name='.$metadata['name']*/, $metadata, $filePath);
+		return $this->fp->request('POST', 'folios/' . $folio_id . '/articles/'/*.'?name='.$metadata['name']*/, $metadata, $filepath);
 	}
 	public function delete_article($folio_id, $articleID) {
 		if (!isset($folio_id) || !isset($articleID)) {
@@ -91,11 +91,11 @@ class FPHelper
 		return $this->fp->request('DELETE', 'folios/' . $folio_id . '/articles/'.$articleID);
 	}
 
-	public function upload_htmlresources($folio_id, $filePath) {
-		if (!isset($folio_id) || !isset($filePath)) {
+	public function upload_htmlresources($folio_id, $filepath) {
+		if (!isset($folio_id) || !isset($filepath)) {
 			throw new Exception('Folio ID and File required');
     }
-		return $this->fp->request('POST', 'folios/' . $folio_id . '/htmlresources', '', $filePath);
+		return $this->fp->request('POST', 'folios/' . $folio_id . '/htmlresources', '', $filepath);
 	}
 
 	public function upload_cover($folio_id, $orientation, $url) {
