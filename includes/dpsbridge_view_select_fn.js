@@ -36,10 +36,10 @@ function get_selected(toggle) {
     Drupal.behaviors.dpsbridge_view_select = {
         attach: function() {
             baseURL = Drupal.settings.dpsbridge.base_url;
-            var fname 	= $("#fname"),
-                    pname 	= $("#pname"),
+            var fname   = $("#fname"),
+                    pname   = $("#pname"),
                     fnumber = $("#fnumber"),
-                    pdate 	= $("#pdate");
+                    pdate   = $("#pdate");
 
             $("#dialog-new").dialog({
                     autoOpen:false, height:470, width:350, modal:true,

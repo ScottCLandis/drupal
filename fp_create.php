@@ -11,53 +11,53 @@ $config = FPConfig::Instance();
 require_once dirname(__FILE__) . '/fp_helper.php';
 
 if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
-	echo "Please provide Adobe ID and password!";
+  echo "Please provide Adobe ID and password!";
 } else {
-	$fp = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
-	$folio_name = isset($_POST["folioName"]) ? $_POST["folioName"] : '';
-	$magazine_title = isset($_POST["magazineTitle"]) ? $_POST["magazineTitle"] : '';
-	$folio_number = isset($_POST["folioNumber"]) ? $_POST["folioNumber"] : '';
-	$folio_description = isset($_POST["folioDescription"]) ? $_POST["folioDescription"] : '';
-	$publication_date = isset($_POST["publicationDate"]) ? date('Y-m-d\TH:i:s',strtotime($_POST['publicationDate'])) : '';
-	$dimension = isset($_POST["dimension"]) ? explode(' x ', $_POST["dimension"]) : '';
-	$default_asset_format = isset($_POST["defaultAssetFormat"]) ? $_POST["defaultAssetFormat"] : '';
-	$default_jpeg_quality = isset($_POST["defaultJPEGQuality"]) ? $_POST["defaultJPEGQuality"] : '';
-	$binding_right = isset($_POST["bindingRight"]) ? $_POST["bindingRight"] : '';
-	$locked = isset($_POST["Locked"]) ? $_POST["Locked"] : '';
-	$folio_intent = isset($_POST["folioIntent"]) ? $_POST["folioIntent"] : 'Both';
-	$target_viewer = isset($_POST["targetViewer"]) ? $_POST["targetViewer"] : '20.1.1';
-	$filters = isset($_POST["filters"]) ? $_POST["filters"] : '';
-	$resolution_width = $dimension[0];
-	$resolution_height = $dimension[1];
-	$message = array();
+  $fp = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
+  $folio_name = isset($_POST["folioName"]) ? $_POST["folioName"] : '';
+  $magazine_title = isset($_POST["magazineTitle"]) ? $_POST["magazineTitle"] : '';
+  $folio_number = isset($_POST["folioNumber"]) ? $_POST["folioNumber"] : '';
+  $folio_description = isset($_POST["folioDescription"]) ? $_POST["folioDescription"] : '';
+  $publication_date = isset($_POST["publicationDate"]) ? date('Y-m-d\TH:i:s',strtotime($_POST['publicationDate'])) : '';
+  $dimension = isset($_POST["dimension"]) ? explode(' x ', $_POST["dimension"]) : '';
+  $default_asset_format = isset($_POST["defaultAssetFormat"]) ? $_POST["defaultAssetFormat"] : '';
+  $default_jpeg_quality = isset($_POST["defaultJPEGQuality"]) ? $_POST["defaultJPEGQuality"] : '';
+  $binding_right = isset($_POST["bindingRight"]) ? $_POST["bindingRight"] : '';
+  $locked = isset($_POST["Locked"]) ? $_POST["Locked"] : '';
+  $folio_intent = isset($_POST["folioIntent"]) ? $_POST["folioIntent"] : 'Both';
+  $target_viewer = isset($_POST["targetViewer"]) ? $_POST["targetViewer"] : '20.1.1';
+  $filters = isset($_POST["filters"]) ? $_POST["filters"] : '';
+  $resolution_width = $dimension[0];
+  $resolution_height = $dimension[1];
+  $message = array();
 
-	if ($folio_intent == 'Portrait') {
-		$folio_intent = 'PortraitOnly';
+  if ($folio_intent == 'Portrait') {
+    $folio_intent = 'PortraitOnly';
   }
-	else if ($folio_intent == 'Landscape') {
-		$folio_intent = 'LandscapeOnly';
+  else if ($folio_intent == 'Landscape') {
+    $folio_intent = 'LandscapeOnly';
   }
-	else if ($folio_intent == 'Always') {
-		$folio_intent = 'Both';
+  else if ($folio_intent == 'Always') {
+    $folio_intent = 'Both';
   }
 
-	if ($folio_name && $magazine_title && $folio_number && $resolution_width && $resolution_height) {
-		$params = array(
-			'folioName'	=> $folio_name,
-			'magazineTitle' => $magazine_title,
-			'folioNumber' => $folio_number,
-			'folioDescription' => $folio_description,
-			'publicationDate' => $publication_date,
-			'resolutionWidth' => $resolution_width,
-			'resolutionHeight' => $resolution_height,
-			'targetViewer' => $target_viewer,
-			'folioIntent' => $folio_intent,
-			'Filters' => $filters
-		);
-		$response = $fp->create_folio($params);
-		echo $response['folioID'];
-	}
+  if ($folio_name && $magazine_title && $folio_number && $resolution_width && $resolution_height) {
+    $params = array(
+      'folioName'  => $folio_name,
+      'magazineTitle' => $magazine_title,
+      'folioNumber' => $folio_number,
+      'folioDescription' => $folio_description,
+      'publicationDate' => $publication_date,
+      'resolutionWidth' => $resolution_width,
+      'resolutionHeight' => $resolution_height,
+      'targetViewer' => $target_viewer,
+      'folioIntent' => $folio_intent,
+      'Filters' => $filters
+    );
+    $response = $fp->create_folio($params);
+    echo $response['folioID'];
+  }
   else {
-		echo ' - Folio Creation Failed: <br/>Missing one or more of the following: Folio name, Magazine title, Resolution Width & Height!';
-	}
+    echo ' - Folio Creation Failed: <br/>Missing one or more of the following: Folio name, Magazine title, Resolution Width & Height!';
+  }
 }

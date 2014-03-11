@@ -11,18 +11,18 @@ $config = FPConfig::Instance();
 require_once dirname(__FILE__) . '/fp_helper.php';
 
 if(isset($_SESSION['AdobeID'])) {
-	$fp = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
-	$deleteSession = $fp->delete_session();
+  $fp = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
+  $deleteSession = $fp->delete_session();
 }
 
 $_SESSION = array();
 
 if (ini_get("session.use_cookies")) {
-	$params = session_get_cookie_params();
-	setcookie(session_name(), '', time() - 42000,
-		$params["path"], $params["domain"],
-		$params["secure"], $params["httponly"]
-	);
+  $params = session_get_cookie_params();
+  setcookie(session_name(), '', time() - 42000,
+    $params["path"], $params["domain"],
+    $params["secure"], $params["httponly"]
+  );
 }
 
 session_destroy();

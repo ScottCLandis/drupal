@@ -18,7 +18,7 @@ abstract class Settings {
     if(isset($configData)) {
       $configDataObject = new ArrayObject($configData);
       self::$public = $configDataObject->getArrayCopy();
-    /*	self::$public =array();
+    /*  self::$public =array();
       foreach($configData as $key => $value) {
         self::$public[$key] = $value;
       }*/
@@ -28,23 +28,23 @@ abstract class Settings {
     }
     self::$public['sessionKey'] = $session_key;
   }
-	
+  
   public static function getProtected($key) {
     return isset(self::$protected[$key]) ? self::$protected[$key] : false;
   }
-	
-	public static function getPublicArray() {
-		return self::$public;
-	}
+  
+  public static function getPublicArray() {
+    return self::$public;
+  }
 
   public static function getPublic($key) {
     return isset(self::$public[$key]) ? self::$public[$key] : false;
   }
-	
-	public static function mergePublic($mergeData) {
+  
+  public static function mergePublic($mergeData) {
     self::$public = array_merge(self::$public,$mergeData);
     return self::$public;
-	}
+  }
 
   public static function setProtected($key,$value) {
     self::$protected[$key] = $value;
@@ -63,7 +63,7 @@ abstract class Settings {
     self::$public[$key]=$value;
     $_SESSION[self::$public['sessionKey']]=self::$public;
   }
-	
+  
   public function __isset($key) {
     return isset(self::$public[$key]);
   }

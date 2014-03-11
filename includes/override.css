@@ -1,47 +1,47 @@
 .align-center {
-	text-align:center;
+  text-align:center;
 }
 
 .align-left {
-	float:left;
+  float:left;
 }
 
 .align-right {
-	float:right;
+  float:right;
 }
 
 .file-upload {
-	width:200px;
+  width:200px;
 }
 
 .folio-edit-dialog-articles {
-	height:270px;
-	overflow:scroll;
-	margin-top:0px;
-	margin-bottom:20px;
+  height:270px;
+  overflow:scroll;
+  margin-top:0px;
+  margin-bottom:20px;
 }
 
 .hide {
-	display:none;
+  display:none;
 }
 
 .show {
-	display:block;
+  display:block;
 }
 
 .up-15 {
-	margin-top:-15px;
+  margin-top:-15px;
 }
 
 .down-5 {
-	margin-top:5px;
+  margin-top:5px;
 }
 
 #dialog-new label,
 #dialog-new input,
 #dialog-existing label,
 #dialog-existing select {
-	margin-left:10px;
+  margin-left:10px;
 }
 
 #dialog-new input,
@@ -60,11 +60,11 @@
 #dialog-option-stylesheet-add select,
 #dialog-option-stylesheet-delete select,
 #dialog-option-stylesheet-download select {
-	border:thin solid #BEBFB9;
-	margin-top:10px;
-	margin-bottom:10px;
+  border:thin solid #BEBFB9;
+  margin-top:10px;
+  margin-bottom:10px;
 }
 
 #edit-select {
-	display:none;
+  display:none;
 }
