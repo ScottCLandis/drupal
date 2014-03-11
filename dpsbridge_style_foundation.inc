@@ -79,7 +79,7 @@ function dpsbridge_helper_style_foundation_toc($publication, $article_names) {
 function dpsbridge_helper_style_foundation($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content) {
   $slideshow = "";
   $filename = dpsbridge_helper_format_title($title);
-  $paragraphs = isset($body['und'][0]['safe_value']) ? $body['und'][0]['safe_value'] : '';
+  $paragraphs = isset($body[LANGUAGE_NONE][0]['safe_value']) ? $body[LANGUAGE_NONE][0]['safe_value'] : '';
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
   $variables = array(
     'ds_content' => $ds_content,

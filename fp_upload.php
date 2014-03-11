@@ -1,22 +1,28 @@
 <?php
 
-require_once dirname(__FILE__).'/fp_config.php';
+/**
+ * @file
+ * fp_config.php
+ * Folio Producer Config file.
+ */
+
+require_once dirname(__FILE__) . '/fp_config.php';
 $config = FPConfig::Instance();
-require_once dirname(__FILE__).'/fp_helper.php';
-require_once dirname(__FILE__).'/dpsbridge_helper.inc';
+require_once dirname(__FILE__) . '/fp_helper.php';
+require_once dirname(__FILE__) . '/dpsbridge_helper.inc';
 
 if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
 	echo "Missing Adobe ID and password!";
 } else {
 	$fp        = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
-	$folio_id   = isset($_POST['folioID'])?$_POST['folioID']:'';
-	$filenames = isset($_POST['filenames'])?$_POST['filenames']:'';
-	$alienated = isset($_POST['alienated'])?$_POST['alienated']:'';
-	$landscape = isset($_POST['landscape'])?$_POST['landscape']:'';
-	$portrait  = isset($_POST['portrait'])?$_POST['portrait']:'';
-	$dimension = isset($_POST['dimension'])?$_POST['dimension']:'';
-	$status    = isset($_POST['status'])?$_POST['status']:'';
-	$style     = isset($_POST['style'])?$_POST['style']:'';
+	$folio_id   = isset($_POST['folioID']) ? $_POST['folioID'] : '';
+	$filenames = isset($_POST['filenames']) ? $_POST['filenames'] : '';
+	$alienated = isset($_POST['alienated']) ? $_POST['alienated'] : '';
+	$landscape = isset($_POST['landscape']) ? $_POST['landscape'] : '';
+	$portrait  = isset($_POST['portrait']) ? $_POST['portrait'] : '';
+	$dimension = isset($_POST['dimension']) ? $_POST['dimension'] : '';
+	$status    = isset($_POST['status']) ? $_POST['status'] : '';
+	$style     = isset($_POST['style']) ? $_POST['style'] : '';
 
 	$offset = 0;
 	$alienatedArrayCounter = 0;

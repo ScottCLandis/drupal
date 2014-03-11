@@ -170,17 +170,17 @@ function dpsbridge_helper_folio_append($fid, $articles) {
       continue;
     }
     // If article already exists within the folio node.
-    if (dpsbridge_helper_check_existence($articles[$i], $folio->field_folio_reference['und'])) {
+    if (dpsbridge_helper_check_existence($articles[$i], $folio->field_folio_reference[LANGUAGE_NONE])) {
       continue;
     }
     // Appends the folio reference to the article.
     $article = node_load(intval($articles[$i]));
     if (isset($article->field_article_reference)) {
-      $article->field_article_reference['und'][]['target_id'] = $fid;
+      $article->field_article_reference[LANGUAGE_NONE][]['target_id'] = $fid;
       node_save_action($article);
     }
     // Appends the article reference to the folio.
-    $folio->field_folio_reference['und'][]['target_id'] = $articles[$i];
+    $folio->field_folio_reference[LANGUAGE_NONE][]['target_id'] = $articles[$i];
   }
   node_save_action($folio);
 }
@@ -204,15 +204,15 @@ function dpsbridge_helper_format_title($filename, $replacement = '') {
  * Helper method for generating the HTML article folder.
  * 
  * Make calls to the following:
- *  - dpsbridge_helper_create_dir() ............creates the HTML article structure
- *  - dpsbridge_helper_writePKG() ..............writes to the pkgproperties.xml file
- *  - dpsbridge_helper_writeFolioXML() .........writes to the Folio.xml file
- *  - dpsbridge_helper_style_bootstrap_toc() ...TOC page with Bootstrap layout
- *  - dpsbridge_helper_style_bootstrap_cover() .cover page with Bootstrap layout
- *  - dpsbridge_helper_style_bootstrap() .......article page with Bootstrap layout
- *  - dpsbridge_helper_style_foundation_toc() ..TOC page with Foundation layout
- *  - dpsbridge_helper_style_foundation_cover() cover page with Foundation layout
- *  - dpsbridge_helper_style_foundation() ......article page with Foundation layout
+ *  dpsbridge_helper_create_dir()...........creates the HTML article structure
+ *  dpsbridge_helper_writePKG().............writes to the pkgproperties.xml file
+ *  dpsbridge_helper_writeFolioXML() .......writes to the Folio.xml file
+ *  dpsbridge_helper_style_bootstrap_toc()....TOC page w/ Bootstrap layout
+ *  dpsbridge_helper_style_bootstrap_cover()..Cover page w/ Bootstrap layout
+ *  dpsbridge_helper_style_bootstrap()........Article page w/ Bootstrap layout
+ *  dpsbridge_helper_style_foundation_toc()...TOC page w/ Foundation layout
+ *  dpsbridge_helper_style_foundation_cover().Cover page w/ Foundation layout
+ *  dpsbridge_helper_style_foundation().......Article page w/ Foundation layout
  * 
  * @param array $article_metadata
  *   A list of metadata fields pertaining to the article node.
@@ -483,11 +483,11 @@ function dpsbridge_helper_pull_node($node_id) {
   $img_list = "";
   $tags = "";
   // Checks if there is only 1 or more than 1 images.
-  if (isset($node->field_image['und'])) {
-    $img_list = $node->field_image['und'];
+  if (isset($node->field_image[LANGUAGE_NONE])) {
+    $img_list = $node->field_image[LANGUAGE_NONE];
   }
-  elseif (isset($node->field_images['und'])) {
-    $img_list = $node->field_images['und'];
+  elseif (isset($node->field_images[LANGUAGE_NONE])) {
+    $img_list = $node->field_images[LANGUAGE_NONE];
   }
   // Store images in an array.
   if ($img_list) {
@@ -496,25 +496,25 @@ function dpsbridge_helper_pull_node($node_id) {
     }
   }
   // Translate tag ID into tag string.
-  if (isset($node->field_tags['und'])) {
-    for ($i = 0; $i < count($node->field_tags['und']); $i++) {
-      if (isset($node->field_tags['und'][$i]['tid'])) {
-        $tags .= (taxonomy_term_load($node->field_tags['und'][$i]['tid'])->name) . ', ';
+  if (isset($node->field_tags[LANGUAGE_NONE])) {
+    for ($i = 0; $i < count($node->field_tags[LANGUAGE_NONE]); $i++) {
+      if (isset($node->field_tags[LANGUAGE_NONE][$i]['tid'])) {
+        $tags .= (taxonomy_term_load($node->field_tags[LANGUAGE_NONE][$i]['tid'])->name) . ', ';
       }
     }
   }
-  $container['author'] = isset($node->field_folio_byline['und'][0]['value']) ? $node->field_folio_byline['und'][0]['value'] : $node->name;
+  $container['author'] = isset($node->field_folio_byline[LANGUAGE_NONE][0]['value']) ? $node->field_folio_byline[LANGUAGE_NONE][0]['value'] : $node->name;
   $container['title'] = isset($node->title) ? $node->title : '';
-  $container['desc'] = isset($node->field_intro) ? $node->field_intro['und'][0]['value'] : '';
+  $container['desc'] = isset($node->field_intro) ? $node->field_intro[LANGUAGE_NONE][0]['value'] : '';
   $container['kicker'] = '';
   $container['tags'] = ($tags != FALSE) ? substr($tags, 0, -2) : '';
   $container['title'] = isset($node->title) ? $node->title : '';
   $container['body'] = isset($node->body) ? $node->body : '';
   $container['image'] = isset($images[0]) ? $images : '';
-  $container['video'] = isset($node->field_video['und'][0]['video_url']) ? $node->field_video['und'][0]['video_url'] : '';
+  $container['video'] = isset($node->field_video[LANGUAGE_NONE][0]['video_url']) ? $node->field_video[LANGUAGE_NONE][0]['video_url'] : '';
   // Loads the taxonomy term.
-  if (isset($node->field_topic['und'][0]['tid'])) {
-    $tid = $node->field_topic['und'][0]['tid'];
+  if (isset($node->field_topic[LANGUAGE_NONE][0]['tid'])) {
+    $tid = $node->field_topic[LANGUAGE_NONE][0]['tid'];
     $taxonomy = taxonomy_term_load($tid);
     $container['kicker'] = $taxonomy->name;
   }

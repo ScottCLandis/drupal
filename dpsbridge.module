@@ -523,7 +523,7 @@ function dpsbridge_folio_add() {
     $message = '[Error] Missing folio name, publication name, folio number, publication date, and/or list of articles!';
   }
   else {
-    $lang = 'und';
+    $lang = LANGUAGE_NONE;
     // Creates the new node.
     $folio = new stdClass();
     $folio->uid = 1;
@@ -622,14 +622,14 @@ function dpsbridge_folio_clone_node() {
     unset($folio->nid);
     unset($folio->vid);
     $folio->title = 'Clone ' . $folio->title;
-    $folio->field_folio_product_id['und'][0]['value'] = '';
-    $folio->field_folio_status['und'][0]['value'] = 'Not uploaded';
-    $folio->field_folio_sync_status['und'][0]['value'] = 'Not Sync';
-    $folio->field_folio_producer_article_id['und'][0]['value'] = '';
-    $reference_length = count($folio->field_folio_reference['und']);
+    $folio->field_folio_product_id[LANGUAGE_NONE][0]['value'] = '';
+    $folio->field_folio_status[LANGUAGE_NONE][0]['value'] = 'Not uploaded';
+    $folio->field_folio_sync_status[LANGUAGE_NONE][0]['value'] = 'Not Sync';
+    $folio->field_folio_producer_article_id[LANGUAGE_NONE][0]['value'] = '';
+    $reference_length = count($folio->field_folio_reference[LANGUAGE_NONE]);
     for ($i = 0; $i < $reference_length; $i++) {
-      if ($folio->field_folio_reference['und'][$i]['target_id'] == $fid) {
-        unset($folio->field_folio_reference['und'][$i]);
+      if ($folio->field_folio_reference[LANGUAGE_NONE][$i]['target_id'] == $fid) {
+        unset($folio->field_folio_reference[LANGUAGE_NONE][$i]);
       }
     }
     node_save($folio);
@@ -913,7 +913,7 @@ function dpsbridge_folio_pull_accounts() {
   // @return array containing folio metadata and Folio Producer Account info.
   $folio_node_id = isset($_POST['folioNodeID']) ? $_POST['folioNodeID'] : '';
   $folio_node = node_load($folio_node_id);
-  $account = $folio_node->field_folio_producer_accounts['und'][0]['value'];
+  $account = $folio_node->field_folio_producer_accounts[LANGUAGE_NONE][0]['value'];
   $container = array();
   switch ($account) {
     case 'amazon':
@@ -1093,8 +1093,8 @@ function dpsbridge_folio_update_status() {
   }
   else {
     $folio_node = node_load($folio_node_id);
-    $folio_node->field_folio_product_id['und'][0]['value'] = $folio_id;
-    $folio_node->field_folio_status['und'][0]['value'] = 'Uploaded';
+    $folio_node->field_folio_product_id[LANGUAGE_NONE][0]['value'] = $folio_id;
+    $folio_node->field_folio_status[LANGUAGE_NONE][0]['value'] = 'Uploaded';
     node_save($folio_node);
   }
   drupal_json_output($message);
@@ -1116,8 +1116,8 @@ function dpsbridge_folio_update_timestamp() {
   }
   else {
     $folio_node = node_load($folio_node_id);
-    $folio_node->field_folio_producer_timestamp['und'][0]['value'] = date('Y-m-d\TH:i:s');
-    $folio_node->field_folio_sync_status['und'][0]['value'] = 'In Sync';
+    $folio_node->field_folio_producer_timestamp[LANGUAGE_NONE][0]['value'] = date('Y-m-d\TH:i:s');
+    $folio_node->field_folio_sync_status[LANGUAGE_NONE][0]['value'] = 'In Sync';
     node_save($folio_node);
   }
   drupal_json_output($message);
@@ -1150,7 +1150,7 @@ function dpsbridge_img_upload() {
       $landscape_path = drupal_get_path('module', 'dpsbridge') . '/images/landscape/' . dpsbridge_helper_format_title($fname) . '_' . $landscape_fn;
       /* $landscapeFake = '/sites/all/modules/dpsbridge/images/landscape/'.dpsbridge_helper_format_title($fname).'_'.$landscape_fn;*/
       move_uploaded_file($landscape_url, $landscape_path);
-      $node->field_folio_landscape_url['und'][0]['value'] = $landscape_path;
+      $node->field_folio_landscape_url[LANGUAGE_NONE][0]['value'] = $landscape_path;
     }
     if ($portrait && !$portrait['error']) {
       $portrait_fn  = $portrait['name'];
@@ -1158,7 +1158,7 @@ function dpsbridge_img_upload() {
       $portrait_path = drupal_get_path('module', 'dpsbridge') . '/images/portrait/' . dpsbridge_helper_format_title($fname) . '_' . $portrait_fn;
       /* $portraitFake = '/sites/all/modules/dpsbridge/images/portrait/'.dpsbridge_helper_format_title($fname).'_'.$portrait_fn;*/
       move_uploaded_file($portrait_url, $portrait_path);
-      $node->field_folio_portrait_url['und'][0]['value'] = $portrait_path;
+      $node->field_folio_portrait_url[LANGUAGE_NONE][0]['value'] = $portrait_path;
     }
     node_save_action($node);
   }
@@ -1410,9 +1410,9 @@ function dpsbridge_views_api() {
 /**
  * Implements hook_form().
  */
-function folios_form($node, $form_state) {
-  return node_content_form($node, $form_state);
-}
+//function folios_form($node, $form_state) {
+//  return node_content_form($node, $form_state);
+//}
 /**
  * Implements hook_node_update().
  *
@@ -1422,10 +1422,10 @@ function folios_form($node, $form_state) {
 function dpsbridge_node_update($node) {
   if ($node->type == 'article' && isset($node->field_article_reference)) {
     // Loops through the folio references.
-    for ($i = 0; $i < count($node->field_article_reference['und']); $i++) {
-      $folio_node_id = $node->field_article_reference['und'][$i]['target_id'];
+    for ($i = 0; $i < count($node->field_article_reference[LANGUAGE_NONE]); $i++) {
+      $folio_node_id = $node->field_article_reference[LANGUAGE_NONE][$i]['target_id'];
       $folio_node = node_load($folio_node_id);
-      $folio_node->field_folio_sync_status['und'][0]['value'] = "Not Sync";
+      $folio_node->field_folio_sync_status[LANGUAGE_NONE][0]['value'] = "Not Sync";
       node_save_action($folio_node);
     }
   }
@@ -1440,21 +1440,21 @@ function dpsbridge_node_update($node) {
  *  cascade its article references.
  */
 function dpsbridge_node_delete($node) {
-  if ($node->type == 'article' && isset($node->field_article_reference['und'][0]['target_id'])) {
+  if ($node->type == 'article' && isset($node->field_article_reference[LANGUAGE_NONE][0]['target_id'])) {
     // Loops through the article-to-folio references.
-    for ($i = 0; $i < count($node->field_article_reference['und']); $i++) {
+    for ($i = 0; $i < count($node->field_article_reference[LANGUAGE_NONE]); $i++) {
       $found = FALSE;
-      $folio_node_id = $node->field_article_reference['und'][$i]['target_id'];
+      $folio_node_id = $node->field_article_reference[LANGUAGE_NONE][$i]['target_id'];
       $folio_node = node_load($folio_node_id);
-      $folio_reference_len = count($folio_node->field_folio_reference['und']);
+      $folio_reference_len = count($folio_node->field_folio_reference[LANGUAGE_NONE]);
       // Loops through the folio-to-article references.
       for ($n = 0; $n < $folio_reference_len; $n++) {
-        if ($folio_node->field_folio_reference['und'][$n]['target_id'] == $node->nid) {
+        if ($folio_node->field_folio_reference[LANGUAGE_NONE][$n]['target_id'] == $node->nid) {
           // Shift the remaining items,
           // in folio-to-article reference list up one level.
           for ($p = $n + 1; $p < $folio_reference_len; $p++) {
-            $folio_node->field_folio_reference['und'][$p - 1]['target_id']
-              = $folio_node->field_folio_reference['und'][$p]['target_id'];
+            $folio_node->field_folio_reference[LANGUAGE_NONE][$p - 1]['target_id']
+              = $folio_node->field_folio_reference[LANGUAGE_NONE][$p]['target_id'];
           }
           $found = TRUE;
           break;
@@ -1463,26 +1463,26 @@ function dpsbridge_node_delete($node) {
       // If the targeted reference was found,
       // deletes the last item in the folio-to-article reference's list.
       if ($found) {
-        unset($folio_node->field_folio_reference['und'][$folio_reference_len - 1]);
+        unset($folio_node->field_folio_reference[LANGUAGE_NONE][$folio_reference_len - 1]);
         node_save_action($folio_node);
       }
     }
   }
-  elseif ($node->type == 'folios' && isset($node->field_folio_reference['und'][0]['target_id'])) {
+  elseif ($node->type == 'folios' && isset($node->field_folio_reference[LANGUAGE_NONE][0]['target_id'])) {
     // Loops through the folio-to-article references.
-    for ($i = 0; $i < count($node->field_folio_reference['und']); $i++) {
+    for ($i = 0; $i < count($node->field_folio_reference[LANGUAGE_NONE]); $i++) {
       $found = FALSE;
-      $article_node_id = $node->field_folio_reference['und'][$i]['target_id'];
+      $article_node_id = $node->field_folio_reference[LANGUAGE_NONE][$i]['target_id'];
       $article_node = node_load($article_node_id);
-      $article_reference_len = count($article_node->field_article_reference['und']);
+      $article_reference_len = count($article_node->field_article_reference[LANGUAGE_NONE]);
       // Loops through the article-to-folio references.
       for ($n = 0; $n < $article_reference_len; $n++) {
-        if ($article_node->field_article_reference['und'][$n]['target_id'] == $node->nid) {
+        if ($article_node->field_article_reference[LANGUAGE_NONE][$n]['target_id'] == $node->nid) {
           // Shift the remaining items,
           // in article-to-folio reference list up one level.
           for ($p = $n + 1; $p < $article_reference_len; $p++) {
-            $article_node->field_article_reference['und'][$p - 1]['target_id']
-              = $article_node->field_article_reference['und'][$p]['target_id'];
+            $article_node->field_article_reference[LANGUAGE_NONE][$p - 1]['target_id']
+              = $article_node->field_article_reference[LANGUAGE_NONE][$p]['target_id'];
           }
           $found = TRUE;
           break;
@@ -1491,7 +1491,7 @@ function dpsbridge_node_delete($node) {
       // If the targeted reference was found,
       // deletes the last item in the article-to-folio reference's list.
       if ($found) {
-        unset($article_node->field_article_reference['und'][$article_reference_len - 1]);
+        unset($article_node->field_article_reference[LANGUAGE_NONE][$article_reference_len - 1]);
         node_save_action($article_node);
       }
     }

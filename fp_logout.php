@@ -1,8 +1,14 @@
 <?php
 
-require_once dirname(__FILE__).'/fp_config.php';
+/**
+ * @file
+ * fp_config.php
+ * Folio Producer Config file.
+ */
+
+require_once dirname(__FILE__) . '/fp_config.php';
 $config = FPConfig::Instance();
-require_once dirname(__FILE__).'/fp_helper.php';
+require_once dirname(__FILE__) . '/fp_helper.php';
 
 if(isset($_SESSION['AdobeID'])) {
 	$fp = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
