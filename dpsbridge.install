@@ -35,7 +35,7 @@ function dpsbridge_uninstall() {
 /**
  * Add Custom Fields.
  */
-function add_custom_fields() {
+function dpsbridge_add_custom_fields() {
   // Install folio fields.
   foreach (_dpsbridge_install_folio_fields() as $field) {
     field_create_field($field);
@@ -63,7 +63,7 @@ function add_custom_fields() {
 /**
  * Delete Custom Fields.
  */
-function delete_custom_fields() {
+function dpsbridge_delete_custom_fields() {
   // Delete folio fields.
   foreach (array_keys(_dpsbridge_install_folio_fields()) as $field) {
     field_delete_field($field);

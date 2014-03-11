@@ -258,7 +258,7 @@ function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads
   );
   // Checks if the given is the ToC, cover page, or an article.
   if ($article_list != '') {
-    // Generate the Table of Contents wiht Bootstrap stylesheet.
+    // Generate the Table of Contents with Bootstrap stylesheet.
     if ($folio_metadata['pubCSS'] == 'Bootstrap') {
       dpsbridge_helper_style_bootstrap_toc(
           $folio_metadata['pubName'],

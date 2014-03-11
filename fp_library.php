@@ -12,7 +12,7 @@ class FPLibrary
 	var $response = array();
 
 	/**
-	 * Create new object and initalise the variables
+	 * Create new object and initialise the variables
 	 * @param array $config stores parameters
 	 */
 	public function __construct($config_in)
