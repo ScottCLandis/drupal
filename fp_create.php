@@ -12,14 +12,14 @@ require_once dirname(__FILE__) . '/fp_helper.php';
 
 if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
   echo "Please provide Adobe ID and password!";
-} 
+}
 else {
   $fp = new FPHelper($_SESSION['AdobeID'], $_SESSION['Password'], $_SESSION['APIKey'], $_SESSION['APISecret']);
   $folio_name = isset($_POST["folioName"]) ? $_POST["folioName"] : '';
   $magazine_title = isset($_POST["magazineTitle"]) ? $_POST["magazineTitle"] : '';
   $folio_number = isset($_POST["folioNumber"]) ? $_POST["folioNumber"] : '';
   $folio_description = isset($_POST["folioDescription"]) ? $_POST["folioDescription"] : '';
-  $publication_date = isset($_POST["publicationDate"]) ? date('Y-m-d\TH:i:s',strtotime($_POST['publicationDate'])) : '';
+  $publication_date = isset($_POST["publicationDate"]) ? date('Y-m-d\TH:i:s', strtotime($_POST['publicationDate'])) : '';
   $dimension = isset($_POST["dimension"]) ? explode(' x ', $_POST["dimension"]) : '';
   $default_asset_format = isset($_POST["defaultAssetFormat"]) ? $_POST["defaultAssetFormat"] : '';
   $default_jpeg_quality = isset($_POST["defaultJPEGQuality"]) ? $_POST["defaultJPEGQuality"] : '';

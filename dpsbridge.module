@@ -1301,10 +1301,6 @@ function dpsbridge_permission() {
 function dpsbridge_theme() {
   $path = drupal_get_path('module', 'dpsbridge');
   return array(
-//    'dpsbridge' => array(
-//      'template' => 'dpsbridge',
-//      'arguments' => array(),
-//    ),
     'dpsbridge_bootstrap_cover' => array(
       'variables' => array(
         'publication' => NULL,

@@ -43,7 +43,7 @@ if (!isset($_SESSION['ticket'])) {
       echo "[Authentication Failed] The Folio Producer's API Key and/or Secret provided was not valid.";
     }
     else {
-      echo "[". $session['status'] . "] " . $session['errorDetail'];
+      echo "[" . $session['status'] . "] " . $session['errorDetail'];
     }
     $config->fpError = $session['status'];
   }

@@ -30,8 +30,8 @@ class FPLibrary {
   /**
    * Generate nonce and store in config
    */
-  private function create_nonce() {
-    $sequence = array_merge(range(0,9), range('A','Z'), range('a','z'));
+  protected function create_nonce() {
+    $sequence = array_merge(range(0, 9), range('A', 'Z'), range('a', 'z'));
     $length = count($sequence);
     shuffle($sequence);
     $prefix = $this->config->timestamp;
@@ -41,7 +41,7 @@ class FPLibrary {
   /**
    * Get the timestamp and set in config.
    */
-  private function create_timestamp() {
+  protected function create_timestamp() {
     if($this->config->timestamp == '') {
       $this->config->timestamp = round(microtime(TRUE));
     }
@@ -50,7 +50,7 @@ class FPLibrary {
   /**
    * Generate URL for webservice.
    */
-  private function create_url($server, $suffix = '') {
+  protected function create_url($server, $suffix = '') {
     if (strpos($server, 'http') === FALSE) {
       $url = ($this->config->use_ssl) ? 'https' : 'http';
       return $url . '://' . $server . '/webservices/' . $suffix;
@@ -61,7 +61,7 @@ class FPLibrary {
   /**
    * Generate URL for webservice.
    */  
-  private function create_distributionurl($server, $suffix = '') {
+  protected function create_distributionurl($server, $suffix = '') {
     if (strpos($server,'http') === FALSE) {
       $url = ($this->config->use_ssl) ? 'https' : 'http';
       return $url . '://' . $server . '/'. $suffix;
@@ -72,7 +72,7 @@ class FPLibrary {
   /**
    * Message to be encrypted for oauth
    */
-  private function oauth_message() {
+  protected function oauth_message() {
     $url = urlencode($this->create_url($this->config->host, 'sessions'));
     $params = '&oauth_consumer_key%3D' . $this->config->consumer_key .
          '%26oauth_signature_method%3DHMAC-SHA256' .
@@ -83,7 +83,7 @@ class FPLibrary {
   /**
    * Generate the oauth signature
    */
-  private function oauth_signature() {
+  protected function oauth_signature() {
     $message = $this->oauth_message();
     $hash = hash_hmac('sha256', $message, $this->config->consumer_secret . '&', FALSE);
     $bytes = pack('H*', $hash);
@@ -94,11 +94,16 @@ class FPLibrary {
   /**
    * Set the properties for curl request.
    * 
-   * @param  [type]  $method      GET, POST, DELETE
-   * @param  [type]  $url         API
-   * @param  array   $params      request parameters
-   * @param  [type]  $filepath    path to file if uploading
-   * @param  boolean $is_download set if using the download server
+   * @param [type] $method
+   *  GET, POST, DELETE
+   * @param [type] $url
+   *  API
+   * @param array $params
+   *  request parameters
+   * @param [type] $filepath
+   *  path to file if uploading
+   * @param boolean $is_download
+   *  set if using the download server
    */
   public function request($method, $url, $params = array(), $filepath = NULL, $is_download = FALSE, $is_distribution = FALSE) {
     $this->method = $method;
@@ -106,23 +111,23 @@ class FPLibrary {
       'Content-Type: application/json; charset=utf-8',
     );
     $ready_for_request = FALSE;
-    
-    if($is_distribution && isset($_SESSION['distributionTicket'])) {
+
+    if ($is_distribution && isset($_SESSION['distributionTicket'])) {
       $ready_for_request = TRUE;
     }
     if(!$is_distribution && isset($_SESSION['ticket'])) {
       $ready_for_request = TRUE;
     }
     // If no oAuth then set it up!
-    if (!$ready_for_request) { 
+    if (!$ready_for_request) {
       // Echo 'athentication required...'!
-      if($is_distribution) {
+      if ($is_distribution) {
         //  Echo 'authenticating against distribution api....'!
         $this->url = $this->create_distributionurl($this->config->distributionHost, $url);
 
         $credentials = array(
           'email'  => $this->config->user_email,
-          'password'  => $this->config->user_password
+          'password'  => $this->config->user_password,
         );
 
         $this->params = json_encode($credentials);
@@ -132,7 +137,7 @@ class FPLibrary {
         echo '</pre>';
 */
         return $this->oauth;
-      } 
+      }
       else {
         // Authenticating against fp api....';!
         $this->create_timestamp();
@@ -140,13 +145,13 @@ class FPLibrary {
         $this->sig = $this->oauth_signature();
         //print_r("signature=[".$this->sig."]\n");
         $this->url = $this->create_url($this->config->host, $url);
-        
+
         $credentials = array(
           'email'  => $this->config->user_email,
           'password'  => $this->config->user_password,
         );
-        
-        if (!isset($credentials['email']) || !isset($credentials['password'] )) {
+
+        if (!isset($credentials['email']) || !isset($credentials['password'])) {
           throw new Exception("Email and password are required");
         }
         $this->params = json_encode($credentials);
@@ -166,7 +171,7 @@ class FPLibrary {
         $ticket= $_SESSION['distributionTicket'];
         $server= $this->config->distributionHost;
       }
-      else if ($is_download) {
+      elseif ($is_download) {
         $ticket = $_SESSION['downloadTicket'];
         $server = $_SESSION['downloadServer'];
       }
@@ -185,10 +190,10 @@ class FPLibrary {
         $this->file_upload();
       }
       $response = $this->curl(FALSE);
-      if(isset($response['ticket'])) { 
+      if (isset($response['ticket'])) {
         $_SESSION['ticket'] = $response['ticket'];
       }
-      if(isset($response['downloadTicket'])) { 
+      if (isset($response['downloadTicket'])) {
         $_SESSION['downloadTicket'] = $response['downloadTicket'];
       }
       return $response;
@@ -196,7 +201,8 @@ class FPLibrary {
   }
 
   /**
-   * Run the curl request using the values set in request()
+   * Run the curl request using the values set in request.
+   * 
    * @return array Curl output
    */
   public function curl($is_distribution = FALSE) {
@@ -204,16 +210,16 @@ class FPLibrary {
 
     curl_setopt_array($ch, array(
       CURLOPT_URL => $this->url,
-      CURLOPT_RETURNTRANSFER => TRUE,  
+      CURLOPT_RETURNTRANSFER => TRUE,
       CURLOPT_USERAGENT => $this->config->user_agent,
       CURLOPT_PROXY => $this->config->proxy ? $this->config->proxy : '',
       CURLOPT_HTTPPROXYTUNNEL => $this->config->proxy ? TRUE : FALSE,
       CURLOPT_PROXYPORT => $this->config->proxy ? '8888' : '',
       CURLOPT_PROXYTYPE => $this->config->proxy ? 'HTTP' : '',
       CURLOPT_HTTPHEADER => $this->headers,
-      
-      CURLOPT_SSL_VERIFYHOST => $this->config->curl_ssl_verifyhost ,
-      CURLOPT_SSL_VERIFYPEER => $this->config->curl_ssl_verifypeer,       
+
+      CURLOPT_SSL_VERIFYHOST => $this->config->curl_ssl_verifyhost,
+      CURLOPT_SSL_VERIFYPEER => $this->config->curl_ssl_verifypeer,
     ));
 
     if ($this->config->curl_capath !== FALSE) {
@@ -239,7 +245,7 @@ class FPLibrary {
     $execute = curl_exec($ch);
     curl_close($ch);
     
-    if($is_distribution) {
+    if ($is_distribution) {
       return $execute;
     }
     else {
@@ -248,25 +254,25 @@ class FPLibrary {
   }
 
   /**
-   * Set multipart request
+   * Set multipart request.
    */
-  private function file_upload() {
+  protected function file_upload() {
     $file = $this->file;
     if (!file_exists($file)) {
       throw new Exception("File does not exist");
-    }  
+    }
 
-    $handle = fopen($file, 'rb'); 
-    $buffer = ''; 
-    fseek($handle, 0); 
-    $binary = fread($handle, filesize($file)); 
+    $handle = fopen($file, 'rb');
+    $buffer = '';
+    fseek($handle, 0);
+    $binary = fread($handle, filesize($file));
     fclose($handle);
 
     $separator = md5(microtime());
     $this->headers[] = 'Content-Type: multipart/form-data; boundary=' . $separator;
 
-    // TODO: 
-    // parameters 
+    // TODO:
+    // parameters
     // HTML
     $eol = "\r\n";
     $data = '';
@@ -275,7 +281,7 @@ class FPLibrary {
     $data .= 'Content-Type: ' . $eol;
     $data .= 'Content-Transfer-Encoding: binary' . $eol . $eol;
     $data .= $binary . $eol;
-    $data .= '--' . $separator . "--" . $eol ;
+    $data .= '--' . $separator . "--" . $eol;
 
     $this->params = $data;
   }

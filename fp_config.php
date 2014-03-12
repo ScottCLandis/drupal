@@ -12,13 +12,13 @@ class FPConfig extends Settings {
   var $response = array();
   var $version = "1.01";
 
-/**
- * Create new object and initialise the variables
- * @param array $config stores parameters
- *
- * Call this method to get singleton
- * @return UserFactory
- */
+  /**
+   * Create new object and initialise the variables
+   * @param array $config stores parameters
+   *
+   * Call this method to get singleton
+   * @return UserFactory
+   */
   public static function Instance() {
     static $inst = NULL;
     if ($inst === NULL) {
@@ -64,7 +64,7 @@ class FPConfig extends Settings {
         $this->host = 'dpsapi2.digitalpublishing.acrobat.com';
         $this->distributionHost = 'origin.adobe-dcfs.com';
       }
-      // staging
+      // Staging info.
       else {
         $this->host = 'dpsapi2-stage.digitalpublishing.acrobat.com';
         $this->distributionHost = 'origin-stage.adobe-dcfs.com';
@@ -72,7 +72,7 @@ class FPConfig extends Settings {
 
       $this->user_agent = 'PHP';
       $this->consumer_key = '';
-      $this->consumer_secret ='';
+      $this->consumer_secret = '';
       $this->user_email = '';
       $this->user_password = '';
       $this->timestamp ='';
@@ -82,7 +82,7 @@ class FPConfig extends Settings {
       $this->curl_ca_info = '';
       $this->curl_capath = '';
     }
-    
+
     if ($this->require_ssl && $_SERVER["HTTPS"] != "on") {
       session_write_close();
       header("HTTP/1.1 301 Moved Permanently");
