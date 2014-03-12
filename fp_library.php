@@ -9,7 +9,8 @@
 require_once dirname(__FILE__) . '/fp_config.php';
 
 /**
- * FolioProducer Library Wrapper
+ * FolioProducer Library Wrapper.
+ * 
  * R25
  * @dbeaton
  */
@@ -19,7 +20,8 @@ class FPLibrary {
   /**
    * Create new object and initialise the variables.
    *
-   * @param array $config_in stores parameters
+   * @param array $config_in 
+   *   Stores parameters.
    */
   public function __construct($config_in) {
     $this->params = array();
@@ -42,7 +44,7 @@ class FPLibrary {
    * Get the timestamp and set in config.
    */
   protected function create_timestamp() {
-    if($this->config->timestamp == '') {
+    if ($this->config->timestamp == '') {
       $this->config->timestamp = round(microtime(TRUE));
     }
   }
@@ -60,7 +62,7 @@ class FPLibrary {
 
   /**
    * Generate URL for webservice.
-   */  
+   */
   protected function create_distributionurl($server, $suffix = '') {
     if (strpos($server,'http') === FALSE) {
       $url = ($this->config->use_ssl) ? 'https' : 'http';
@@ -70,18 +72,16 @@ class FPLibrary {
   }
 
   /**
-   * Message to be encrypted for oauth
+   * Message to be encrypted for oauth.
    */
   protected function oauth_message() {
     $url = urlencode($this->create_url($this->config->host, 'sessions'));
-    $params = '&oauth_consumer_key%3D' . $this->config->consumer_key .
-         '%26oauth_signature_method%3DHMAC-SHA256' .
-        '%26oauth_timestamp%3D' .  $this->config->timestamp;
-    return 'POST&' . $url . $params;  
+    $params = '&oauth_consumer_key%3D' . $this->config->consumer_key . '%26oauth_signature_method%3DHMAC-SHA256' . '%26oauth_timestamp%3D' . $this->config->timestamp;
+    return 'POST&' . $url . $params;
   }
 
   /**
-   * Generate the oauth signature
+   * Generate the oauth signature.
    */
   protected function oauth_signature() {
     $message = $this->oauth_message();
@@ -95,15 +95,15 @@ class FPLibrary {
    * Set the properties for curl request.
    * 
    * @param [type] $method
-   *  GET, POST, DELETE
+   *   GET, POST, DELETE
    * @param [type] $url
-   *  API
+   *   API
    * @param array $params
-   *  request parameters
+   *   request parameters
    * @param [type] $filepath
-   *  path to file if uploading
-   * @param boolean $is_download
-   *  set if using the download server
+   *   path to file if uploading
+   * @param bool $is_download
+   *   set if using the download server
    */
   public function request($method, $url, $params = array(), $filepath = NULL, $is_download = FALSE, $is_distribution = FALSE) {
     $this->method = $method;
@@ -115,7 +115,7 @@ class FPLibrary {
     if ($is_distribution && isset($_SESSION['distributionTicket'])) {
       $ready_for_request = TRUE;
     }
-    if(!$is_distribution && isset($_SESSION['ticket'])) {
+    if (!$is_distribution && isset($_SESSION['ticket'])) {
       $ready_for_request = TRUE;
     }
     // If no oAuth then set it up!
@@ -167,7 +167,7 @@ class FPLibrary {
     // OAuth present regular request.
     else {
       $this->params = json_encode($params);
-      if($is_distribution) {
+      if ($is_distribution) {
         $ticket= $_SESSION['distributionTicket'];
         $server= $this->config->distributionHost;
       }

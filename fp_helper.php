@@ -31,7 +31,7 @@ class FPHelper {
 
   /**
    * Create Session.
-   */  
+   */
   public function create_session() {
     $fp_sessiondata = $this->fp->request('POST', 'sessions');
     return $fp_sessiondata;
@@ -54,7 +54,7 @@ class FPHelper {
 
   /**
    * Create Folio.
-   */  
+   */
   public function create_folio($folio_params) {
     if (!isset($folio_params['folioName'])) {
       throw new Exception('Folio parameters required');
@@ -81,14 +81,14 @@ class FPHelper {
     }
     return $this->fp->request('POST', 'folios/' . $folio_id, $metadata);
   }
-  
+
   /**
    * Metadata for either all folios or particular one.
    * 
    * Depending on whether folioID is set or not
    * 
-   * @param  string $folio_id
-   * 
+   * @param string $folio_id
+   *  Value of Folio Id.   * 
    */
   public function folios($folio_id = '') {
     return $this->fp->request('GET', 'folios/' . $folio_id);
@@ -131,7 +131,7 @@ class FPHelper {
     if (!isset($folio_id) || !isset($article_id)) {
       throw new Exception('Folio ID and Article ID required');
     }
-    return $this->fp->request('DELETE', 'folios/' . $folio_id . '/articles/'.$article_id);
+    return $this->fp->request('DELETE', 'folios/' . $folio_id . '/articles/' . $article_id);
   }
 
   /**

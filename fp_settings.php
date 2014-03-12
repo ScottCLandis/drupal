@@ -15,7 +15,7 @@ abstract class Settings {
   static private $public;// = array();
 
   protected function __construct($session_key,$configData) {
-    if(isset($configData)) {
+    if (isset($configData)) {
       $configDataObject = new ArrayObject($configData);
       self::$public = $configDataObject->getArrayCopy();
     /*  self::$public =array();
