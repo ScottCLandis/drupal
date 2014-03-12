@@ -3,9 +3,10 @@ description = "This module will convert the contents from selected page(s) into 
 package = "Adobe DPS"
 core = 7.x
 
-files[] = dpsbridge.install
-files[] = dpsbridge.module
-files[] = dpsbridge.admin
+files[] = fp_config.php
+files[] = fp_helper.php
+files[] = fp_library.php
+files[] = fp_settings.php
 
 configure = admin/config/content/dpsbridge
 

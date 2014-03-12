@@ -10,9 +10,9 @@ require_once dirname(__FILE__) . '/fp_config.php';
 $config = FPConfig::Instance();
 require_once dirname(__FILE__) . '/fp_helper.php';
 
-if(isset($_SESSION['AdobeID'])) {
-  $fp = new FPHelper($_SESSION['AdobeID'],$_SESSION['Password'],$_SESSION['APIKey'],$_SESSION['APISecret']);
-  $deleteSession = $fp->delete_session();
+if (isset($_SESSION['AdobeID'])) {
+  $fp = new FPHelper($_SESSION['AdobeID'], $_SESSION['Password'], $_SESSION['APIKey'], $_SESSION['APISecret']);
+  $delete_session = $fp->delete_session();
 }
 
 $_SESSION = array();

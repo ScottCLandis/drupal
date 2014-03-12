@@ -1,4 +1,5 @@
-var fid = '', // set to Folio node ID when opening the edit panel 
+// Set to Folio node ID when opening the edit panel.
+var fid = '',
     previewFileName   = '',
     amazonDimensions  = '',
     androidDimensions = '',
@@ -98,9 +99,11 @@ function get_selected(toggle) {
       case 'clone':
         dpsbridge_helper_folio_clone(baseURL, selectedFolio.val());
         break;
+
       case 'delete':
         dpsbridge_helper_delete_node(baseURL, selectedFolio.val());
         break;
+
       case 'upload':
         dpsbridge_helper_show_status('Generating HTML articles...', 600, 500);
         generate_html(selectedFolio.val());
@@ -224,10 +227,12 @@ function fp_upload(accountMeta, folioMeta, filenames) {
     success: function(output) {
       dpsbridge_helper_delete_files(baseURL, filenames);
       dpsbridge_helper_update_status(output);
-      if (folioMeta['status'] != 'Uploaded')
+      if (folioMeta['status'] != 'Uploaded') {
         node_status_update(folioMeta['folioNodeID'], folioMeta['productID']);
-      else
+      }
+      else {
         node_status_timestamp(folioMeta['folioNodeID']);
+      }
     }
   });
 }
@@ -249,7 +254,7 @@ function imageUI_update() {
   });
 }
 /* ======================================= *
- * Save the folio ID (from Folio Producer) 
+ * Save the folio ID (from Folio Producer)
  *   in the folio node (Drupal node)
  * ======================================= */
 function node_status_update(folioNodeID, folioID) {
@@ -296,9 +301,12 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
       data: { "nodeID":articleID },
       success: function(output) {
         var html = '', checked = '';
-        if (isAds[i] == true) // check the checkbox if the article is an ad
+        // Check the checkbox if the article is an ad.
+        if (isAds[i] == true) {
           checked = "checked";
-        if (output.length === 0) { // create a locked row if the content is not from Drupal
+        }
+        // create a locked row if the content is not from Drupal
+        if (output.length === 0) { 
           // makes sure to not show non-Drupal articles that has been deleted from Folio Producer
           var exist = dpsbridge_helper_check_article_by_id(fpArticles, alienatedID[alienatedCount]);
           if (exist) { 
@@ -317,7 +325,9 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
             index++;
           }
           alienatedCount++;
-        } else { // create a editable row if the content is from Drupal
+        }
+        // create a editable row if the content is from Drupal.
+        else {
           // check if the Drupal article is up in Folio Producer (true if so, false otherwise)
           var exist = dpsbridge_helper_check_article_by_name(fpArticles, output['filename']);
           html += "<tr id='article-row-id-" + articleID + "'>\n";
@@ -348,7 +358,7 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
       continue;
     // insert non-Drupal articles that hasn't been added to Drupal database
     if (jQuery('#article-row-id-' + fpArticles[n]['id']).length == 0) {
-      var sortNumber  = (fpArticles[n]['articleMetadata']['sortNumber']/1000)-offsetIndex;
+      var sortNumber  = (fpArticles[n]['articleMetadata']['sortNumber'] / 1000) - offsetIndex;
       var sortOrder   = Math.floor(sortNumber);
       html  = "<tr id='article-row-id-" + fpArticles[n]['id'] + "'>\n";
       html += "<td class='article-index'><input type='hidden' value='" + fpArticles[n]['id'] + "' /><span class='ui-icon ui-icon-locked'></span></td>\n";
@@ -361,10 +371,12 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
       html += "<td class='is-ad'><input type='hidden' /><span class='ui-icon ui-icon-locked'></span></td>\n";
       html += "<td><span class='ui-icon ui-icon-check'></span></td>\n";
       html += "</tr>\n";
-      if (sortOrder <= 0)
+      if (sortOrder <= 0) {
         jQuery('#articleSortIndex-1').parent().before(html);
-      else
+      }
+      else {
         jQuery('#articleSortIndex-' + sortOrder).parent().after(html);
+      }
     }
   }
   // refreshes the stylesheets
@@ -391,15 +403,16 @@ function profileUI(folioNodeID, toggle) {
         androidDimensions = output['androidDimensions'];
         appleDimensions   = output['appleDimensions'];
       offsetIndex = 0;
-      var landscapeImg = (output['landscape'] != '')? '/' + output['landscape']:'http://placehold.it/300x400&text=Cover+Landscape';
-      var portraitImg = (output['portrait'] != '')? '/' + output['portrait']:'http://placehold.it/400x300&text=Cover+Portrait';
+      var landscapeImg = (output['landscape'] != '') ? '/' + output['landscape'] : 'http://placehold.it/300x400&text=Cover+Landscape';
+      var portraitImg = (output['portrait'] != '') ? '/' + output['portrait'] : 'http://placehold.it/400x300&text=Cover+Portrait';
       // insert new attributes into the current overlay
       jQuery('#portrait').attr('src', portraitImg);
       jQuery('#landscape').attr('src', landscapeImg);
       jQuery('#image').attr('src', landscapeImg);
       jQuery('#image-ui-fid').val(folioNodeID);
       jQuery('#image-ui-fname').val(output['title']);
-      if (toggle == 'full') { // toggle for opening the Folio edit UI
+      // toggle for opening the Folio edit UI
+      if (toggle == 'full') {
         jQuery("#folio-ui-fname").val(output['title']);
         jQuery("#folio-ui-pname").val(output['pubName']);
         jQuery("#folio-ui-fnumber").val(output['folioNum']);
@@ -413,11 +426,14 @@ function profileUI(folioNodeID, toggle) {
         // updates the dimension field depending on the default account choice
         refreshDimensions();
         jQuery('#dimension').val(output['dimension']);
-        if (output['status'] == 'Uploaded') { // disable account & dimension selection if published
+        // disable account & dimension selection if published
+        if (output['status'] == 'Uploaded') {
           jQuery('#accounts').attr('disabled', 'disabled');
           jQuery('#dimension').attr('disabled', 'disabled');
           jQuery('#folio-ui-orientation').attr('disabled', 'disabled');
-        } else { // re-enable account & dimension selection if not published
+        }
+        // re-enable account & dimension selection if not published
+        else {
           jQuery('#accounts').removeAttr('disabled');
           jQuery('#dimension').removeAttr('disabled');
           jQuery('#folio-ui-orientation').removeAttr('disabled');
@@ -431,17 +447,17 @@ function profileUI(folioNodeID, toggle) {
           fp_sync(
             output['pubID'],
             output['title'],
-            output['credentials'], 
-            output['articles'], 
-            output['isAds'], 
-            output['alienated'], 
+            output['credentials'],
+            output['articles'],
+            output['isAds'],
+            output['alienated'],
             output['uploadDate']
           );
         } else {
           dpsbridge_helper_pull_articles(
             output['title'],
-            output['articles'], 
-            output['isAds'], 
+            output['articles'],
+            output['isAds'],
             output['alienated'],
             output['uploadDate'],
             ''
@@ -450,7 +466,9 @@ function profileUI(folioNodeID, toggle) {
         readStylesheets();
         jQuery('#pubcss').val(output['pubCSS']);
         jQuery('.overridecss').val(output['pubCSS']);
-      } else if (toggle == 'half') { // toggle for opening the image edit UI
+      }
+      // toggle for opening the image edit UI
+      else if (toggle == 'half') {
         jQuery('#dialog-status').dialog('close');
         jQuery('#dialog-edit-cover').dialog('option', 'title', output['title']).dialog('open');
       }
@@ -487,10 +505,13 @@ function previewArticle(orientation) {
   var windows_width, windows_height, previewURL,
     preview_dimension = jQuery('#preview-dimension :selected').val(),
     preview_token = preview_dimension.split(',');
-  if (orientation == "landscape") { // view landscape mode
+  // view landscape mode
+  if (orientation == "landscape") {
     windows_width = preview_token[0];
     windows_height = preview_token[1];
-  } else { // view portrait mode
+  }
+  // view portrait mode
+  else {
     windows_width = preview_token[1];
     windows_height = preview_token[0];
   }
@@ -509,10 +530,13 @@ function readStylesheets() {
     async: false,
     success: function(output) {
       for (var i = 0; i < output.length; i++) {
-        if (output[i].indexOf('-') < 0)
+        if (output[i].indexOf('-') < 0) {
           styleText = output[i];
-        else // removes the derivatives for viewing purposes
+        }
+        // removes the derivatives for viewing purposes
+        else {
           styleText = output[i].split(/-/)[1];
+        }
         jQuery("#pubcss").append(jQuery("<option></option>").attr("value", output[i]).text(styleText));
         //jQuery(".overridecss").append(jQuery("<option></option>").attr("value", output[i]).text(styleText));
       }
@@ -530,9 +554,11 @@ function refreshDimensions() {
     case 'amazon':
       dpsbridge_helper_generate_dimensions('dimension', amazonDimensions, true);
       break;
+
     case 'android':
       dpsbridge_helper_generate_dimensions('dimension', androidDimensions, true);
       break;
+
     case 'apple':
     default:
       dpsbridge_helper_generate_dimensions('dimension', appleDimensions, true);
@@ -557,7 +583,7 @@ function removePreviewFile() {
 function replaceHREF(ahref, toggle) {
   for (var i = 0; i < ahref.length; i++) {
     var url = ahref[i].href;
-    ahref[i].href = 'javascript:profileUI(' + url.substring(url.indexOf('/node')+6, url.indexOf('/edit?')) + ', "' + toggle + '")';
+    ahref[i].href = 'javascript:profileUI(' + url.substring(url.indexOf('/node') + 6, url.indexOf('/edit?')) + ', "' + toggle + '")';
   }
 }
 
@@ -576,105 +602,109 @@ function replaceHREF(ahref, toggle) {
     Drupal.behaviors.dpsbridge_view_select = {
         attach: function() {
             var fname       = $("#folio-ui-fname"),
-                    pname       = $("#folio-ui-pname"),
-                    fnumber     = $("#folio-ui-fnumber"),
-                    pdate       = $("#folio-ui-pdate"),
-                    fdesc      = $("#folio-ui-fdesc"),
-                    filter       = $("#folio-ui-filter");
-                    fversion    = $('#folio-ui-fversion'),
-                    orientation = $('#folio-ui-orientation'),
-                    autoToggle  = $('#folio-ui-generator'),
-                    image       = $('#image'),
-                    portrait    = $('#portrait'),
-                    landscape   = $('#landscape');
+                pname       = $("#folio-ui-pname"),
+                fnumber     = $("#folio-ui-fnumber"),
+                pdate       = $("#folio-ui-pdate"),
+                fdesc      = $("#folio-ui-fdesc"),
+                filter       = $("#folio-ui-filter");
+                fversion    = $('#folio-ui-fversion'),
+                orientation = $('#folio-ui-orientation'),
+                autoToggle  = $('#folio-ui-generator'),
+                image       = $('#image'),
+                portrait    = $('#portrait'),
+                landscape   = $('#landscape');
             // JQUERY UI: dialog box functionality for editing cover images
             $("#dialog-edit-cover").dialog({
-                    autoOpen:false, height:525, width:570, modal:true,
-                    buttons: {
-                            Save: function() {
-                                    var form = document.getElementById('image-form');
-                                    var formData = new FormData(form);
-                                    var xhr = new XMLHttpRequest();
-                                    xhr.open('POST', form.getAttribute('action'), false);
-                                    xhr.send(formData);
-                                    imageUI_update();
-                                    $(this).dialog("close"); },
-                            Cancel: function() { $(this).dialog("close"); }}
+                autoOpen:false, height:525, width:570, modal:true,
+                buttons: {
+                    Save: function() {
+                        var form = document.getElementById('image-form');
+                        var formData = new FormData(form);
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', form.getAttribute('action'), false);
+                        xhr.send(formData);
+                        imageUI_update();
+                        $(this).dialog("close"); },
+                    Cancel: function() { $(this).dialog("close"); }}
             });
             // JQUERY UI: dialog box functionality for editing folio
             $("#dialog-edit-folio").dialog({
-                    autoOpen:false, height:666, width:1100, modal:true,
-                    buttons: {
-                            "Export Selected Articles as HTML stacks": function() {
-                                    var articleID  = '';
-                                        checkboxes = $('.article-index input');
-                                    for (var n = 0; n < checkboxes.length; n++)
-                                            if (checkboxes[n].checked)
-                                                    articleID += checkboxes[n].value + ',';
-                                    if (articleID)
-                                            generate_selected_html(articleID);
-                                    else
-                                            dpsbridge_helper_show_status("Please select an article first!");
+                autoOpen:false, height:666, width:1100, modal:true,
+                buttons: {
+                    "Export Selected Articles as HTML stacks": function() {
+                        var articleID  = '';
+                            checkboxes = $('.article-index input');
+                        for (var n = 0; n < checkboxes.length; n++)
+                                if (checkboxes[n].checked)
+                                        articleID += checkboxes[n].value + ',';
+                        if (articleID) {
+                          generate_selected_html(articleID);
+                        }
+                        else {
+                          dpsbridge_helper_show_status("Please select an article first!");
+                        }
+                    },
+                    "Remove Selected Articles from Folio": function() {
+                        var indexes           = $('td.sortable-index'),
+                            checkboxes        = $('.article-index input');
+                        for (var i = 0; i < checkboxes.length; i++)
+                                if (checkboxes[i].checked)
+                                        $('#article-row-id-' + checkboxes[i].value).remove();
+                        for (var n = 0; n < indexes.length; n++)
+                                indexes[n].innerHTML = n + 1; 
+                    },
+                    "Save": function() {
+                        var ads      = "",
+                            articles = "",
+                            indexes    = $('.article-index input'),
+                            isad      = $('.is-ad input'),
+                            dimension  = $('#dimension :selected'),
+                            pubcss     = $('#pubcss'),
+                            toccss     = $('#toccss'),
+                            account    = $('#accounts :selected');
+                        // appends the current articles from folio
+                        for (var i = 0; i < indexes.length; i++) {
+                                articles += indexes[i].value + ",";
+                        }
+                        for (var n = 0; n < isad.length; n++)
+                                ads += (isad[n].checked)?"1,":"0,";
+                        // attempts to save the metadata to the selected Folio node
+                        $.ajax({
+                            url: baseURL + "/dpsbridge/folio/update",
+                            type: "POST",
+                            data: {
+                                "fid"         :fid,
+                                "fname"       :fname.val(),
+                                "pname"       :pname.val(),
+                                "fnumber"     :fnumber.val(),
+                                "pdate"       :pdate.val(),
+                                "fdesc"       :fdesc.val(),
+                                "dimension"   :dimension.val(),
+                                "orientation" :orientation.val(),
+                                "autoToggle"  :autoToggle.val(),
+                                "filter"      :filter.val(),
+                                "fversion"    :fversion.val(),
+                                "pubcss"      :pubcss.val(),
+                                "toccss"      :toccss.val(),
+                                "isads"       :ads,
+                                "accounts"    :account.val(),
+                                "articles"    :articles },
+                            success: function(output) {
+                                if (output === 'ok') {
+                                    window.location = baseURL + "/admin/config/content/fpmanage";
+                                }
+                                else {
+                                    dpsbridge_helper_show_status("Failed to update '" + fname.val() + "'<br/><br/>:: " + output, 400, 300);
+                                }
                             },
-                            "Remove Selected Articles from Folio": function() {
-                                    var indexes           = $('td.sortable-index'),
-                                        checkboxes        = $('.article-index input');
-                                    for (var i = 0; i < checkboxes.length; i++)
-                                            if (checkboxes[i].checked)
-                                                    $('#article-row-id-' + checkboxes[i].value).remove();
-                                    for (var n = 0; n < indexes.length; n++)
-                                            indexes[n].innerHTML = n + 1; 
-                            },
-                            "Save": function() {
-                                    var ads      = "",
-                                            articles = "",
-                                            indexes    = $('.article-index input'),
-                                            isad      = $('.is-ad input'),
-                                            dimension  = $('#dimension :selected'),
-                                            pubcss     = $('#pubcss'),
-                                            toccss     = $('#toccss'),
-                                            account    = $('#accounts :selected');
-                                    // appends the current articles from folio
-                                    for (var i = 0; i < indexes.length; i++) {
-                                            articles += indexes[i].value + ",";
-                                    }
-                                    for (var n = 0; n < isad.length; n++)
-                                            ads += (isad[n].checked)?"1,":"0,";
-                                    // attempts to save the metadata to the selected Folio node
-                                    $.ajax({
-                                            url: baseURL + "/dpsbridge/folio/update",
-                                            type: "POST",
-                                            data: {
-                                                    "fid"         :fid,
-                                                    "fname"       :fname.val(),
-                                                    "pname"       :pname.val(),
-                                                    "fnumber"     :fnumber.val(),
-                                                    "pdate"       :pdate.val(),
-                                                    "fdesc"       :fdesc.val(),
-                                                    "dimension"   :dimension.val(),
-                                                    "orientation" :orientation.val(),
-                                                    "autoToggle"  :autoToggle.val(),
-                                                    "filter"      :filter.val(),
-                                                    "fversion"    :fversion.val(),
-                                                    "pubcss"      :pubcss.val(),
-                                                    "toccss"      :toccss.val(),
-                                                    "isads"       :ads,
-                                                    "accounts"    :account.val(),
-                                                    "articles"    :articles },
-                                            success: function(output) {
-                                                    if (output === 'ok')
-                                                            window.location = baseURL + "/admin/config/content/fpmanage";
-                                                    else
-                                                            dpsbridge_helper_show_status("Failed to update '" + fname.val() + "'<br/><br/>:: " + output, 400, 300);
-                                            },
-                                            error: function (e, status) {
-                                                    dpsbridge_helper_show_status(e.responseText);
-                                            }
-                                    });
-                                    $(this).dialog("close");
-                            },
-                            Cancel: function() { $(this).dialog("close"); }
-                    }
+                            error: function (e, status) {
+                                    dpsbridge_helper_show_status(e.responseText);
+                            }
+                        });
+                        $(this).dialog("close");
+                    },
+                    Cancel: function() { $(this).dialog("close"); }
+                }
             });
             // JQUERY UI: dialog box functionality for providing previewing option (landscape or portrait)
             $("#dialog-iframe-preview-option").dialog({

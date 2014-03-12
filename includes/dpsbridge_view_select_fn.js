@@ -1,31 +1,34 @@
 var articles = "";
 /* ----------------------------------------------------------- *
- * Attempts to obtain the values from the selected checkboxes, 
+ * Attempts to obtain the values from the selected checkboxes,
  *  toggles the overlay window if checkboxes are selected
  * ----------------------------------------------------------- */
 function get_selected(toggle) {
-        var checkboxes = jQuery('.views-table tr input');
-        var selectedArticles = "";
-        for (var i = 1; i < checkboxes.length; i++) {
-                if (checkboxes[i].checked) {
-                        selectedArticles += checkboxes[i].value + ",";
-                }
+    var checkboxes = jQuery('.views-table tr input');
+    var selectedArticles = "";
+    for (var i = 1; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            selectedArticles += checkboxes[i].value + ",";
         }
-        // Give warning if nothing was selected
-        if (!selectedArticles) {
-                dpsbridge_helper_show_status("Please select an article first!");
-        } else {
-                articles = selectedArticles;
-                // toggle the respective popup window
-                switch (toggle) {
-                        case "new": 
-                                jQuery("#dialog-new").dialog("open"); break;
-                        case "existing":
-                                jQuery("#dialog-existing").dialog("open"); break;
-                        default:
-                                break;
-                }
+    }
+    // Give warning if nothing was selected
+    if (!selectedArticles) {
+        dpsbridge_helper_show_status("Please select an article first!");
+    } 
+    else {
+        articles = selectedArticles;
+        // toggle the respective popup window
+        switch (toggle) {
+            case "new":
+                    jQuery("#dialog-new").dialog("open");
+                    break;
+            case "existing":
+                    jQuery("#dialog-existing").dialog("open");
+                    break;
+            default:
+                    break;
         }
+    }
 }
     
 /* ----------------------------------------- *
@@ -37,9 +40,9 @@ function get_selected(toggle) {
         attach: function() {
             baseURL = Drupal.settings.dpsbridge.base_url;
             var fname   = $("#fname"),
-                    pname   = $("#pname"),
-                    fnumber = $("#fnumber"),
-                    pdate   = $("#pdate");
+                pname   = $("#pname"),
+                fnumber = $("#fnumber"),
+                pdate   = $("#pdate");
 
             $("#dialog-new").dialog({
                     autoOpen:false, height:470, width:350, modal:true,

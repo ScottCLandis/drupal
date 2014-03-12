@@ -9,23 +9,22 @@
 require_once dirname(__FILE__) . '/fp_config.php';
 
 /**
-* FolioProducer Library Wrapper
-* R25
-* @dbeaton
-*/
-class FPLibrary
-{
+ * FolioProducer Library Wrapper
+ * R25
+ * @dbeaton
+ */
+class FPLibrary {
   var $response = array();
 
   /**
-   * Create new object and initialise the variables
-   * @param array $config stores parameters
+   * Create new object and initialise the variables.
+   *
+   * @param array $config_in stores parameters
    */
   public function __construct($config_in) {
     $this->params = array();
     $this->headers = array();
     $this->config = FPConfig::Instance();
-    
     $this->config->mergePublic($config_in);
   }
   /**
@@ -36,18 +35,20 @@ class FPLibrary
     $length = count($sequence);
     shuffle($sequence);
     $prefix = $this->config->timestamp;
-    $this->config->nonce = md5(substr($prefix . implode('',$sequence),0,$length ));
+    $this->config->nonce = md5(substr($prefix . implode('', $sequence), 0, $length));
   }
+
   /**
-   * Get the timestamp and set in config
+   * Get the timestamp and set in config.
    */
   private function create_timestamp() {
     if($this->config->timestamp == '') {
       $this->config->timestamp = round(microtime(TRUE));
     }
   }
+
   /**
-   * Generate URL for webservice
+   * Generate URL for webservice.
    */
   private function create_url($server, $suffix = '') {
     if (strpos($server, 'http') === FALSE) {
@@ -56,13 +57,18 @@ class FPLibrary
     }
     return $server . '/webservices/' . $suffix;
   }
-  private function create_distributionurl($server ,$suffix = '') {
+
+  /**
+   * Generate URL for webservice.
+   */  
+  private function create_distributionurl($server, $suffix = '') {
     if (strpos($server,'http') === FALSE) {
       $url = ($this->config->use_ssl) ? 'https' : 'http';
       return $url . '://' . $server . '/'. $suffix;
     }
     return $server . '/webservices/' . $suffix;
   }
+
   /**
    * Message to be encrypted for oauth
    */
@@ -73,6 +79,7 @@ class FPLibrary
         '%26oauth_timestamp%3D' .  $this->config->timestamp;
     return 'POST&' . $url . $params;  
   }
+
   /**
    * Generate the oauth signature
    */
@@ -83,8 +90,10 @@ class FPLibrary
     $base = base64_encode($bytes);
     return urlencode($base);
   }
+
   /**
-   * Set the properties for curl request
+   * Set the properties for curl request.
+   * 
    * @param  [type]  $method      GET, POST, DELETE
    * @param  [type]  $url         API
    * @param  array   $params      request parameters
@@ -104,16 +113,13 @@ class FPLibrary
     if(!$is_distribution && isset($_SESSION['ticket'])) {
       $ready_for_request = TRUE;
     }
-    // If no oAuth then set it up
+    // If no oAuth then set it up!
     if (!$ready_for_request) { 
-    //  echo 'athentication required...';
-      
+      // Echo 'athentication required...'!
       if($is_distribution) {
-      //  echo 'authenticating against distribution api....';
+        //  Echo 'authenticating against distribution api....'!
         $this->url = $this->create_distributionurl($this->config->distributionHost, $url);
-        
-//          echo '</pre>';
-            
+
         $credentials = array(
           'email'  => $this->config->user_email,
           'password'  => $this->config->user_password
@@ -128,7 +134,7 @@ class FPLibrary
         return $this->oauth;
       } 
       else {
-//        echo 'authenticating against fp api....';
+        // Authenticating against fp api....';!
         $this->create_timestamp();
         $this->create_nonce();
         $this->sig = $this->oauth_signature();
@@ -145,47 +151,36 @@ class FPLibrary
         }
         $this->params = json_encode($credentials);
         $this->headers[] = 'Authorization: OAuth oauth_consumer_key="' . $this->config->consumer_key . '", oauth_timestamp="' . $this->config->timestamp . '", oauth_signature_method="HMAC-SHA256", oauth_signature="' . $this->sig . '"';
-  
-      //  echo 'calling curl now...';
         $this->oauth = $this->curl(FALSE);
-      //  echo '<pre>';
-      //  print_r($this->oauth);
-      //  echo '</pre>';
         $_SESSION['ticket'] = $this->oauth['ticket'];
-      //  echo 'ticket-->'.$_SESSION['ticket'];
         $_SESSION['server'] = $this->oauth['server'];
         $_SESSION['downloadTicket'] = $this->oauth['downloadTicket'];
         $_SESSION['downloadServer'] = $this->oauth['downloadServer'];
         return $this->oauth;
       }
     }
+    // OAuth present regular request.
     else {
-      
-      //echo 'regular request';
       $this->params = json_encode($params);
-
       if($is_distribution) {
-      //  echo '[distribution]';
         $ticket= $_SESSION['distributionTicket'];
         $server= $this->config->distributionHost;
       }
       else if ($is_download) {
-      //  echo '[download]';
         $ticket = $_SESSION['downloadTicket'];
         $server = $_SESSION['downloadServer'];
       }
       else {
-      //  echo '[FP API]';
         $ticket = $_SESSION['ticket'];
         $server = $_SESSION['server'];
       }
-    //  echo 'server='.$server;
+
       $this->url = $this->create_url($server,$url);
-  
       $this->headers[] = 'Authorization: AdobeAuth ticket="' . $ticket  . '"';
-      
+
       if (isset($filepath)) {
-        unset($this->headers[0]); // remove content-type
+        // Remove content-type.
+        unset($this->headers[0]);
         $this->file = $filepath;
         $this->file_upload();
       }
@@ -199,6 +194,7 @@ class FPLibrary
       return $response;
     }
   }
+
   /**
    * Run the curl request using the values set in request()
    * @return array Curl output
@@ -206,7 +202,6 @@ class FPLibrary
   public function curl($is_distribution = FALSE) {
     $ch = curl_init();
 
-    //print_r($this->url);
     curl_setopt_array($ch, array(
       CURLOPT_URL => $this->url,
       CURLOPT_RETURNTRANSFER => TRUE,  
@@ -230,12 +225,13 @@ class FPLibrary
 
     switch ($this->method) {
       case 'GET' :
-
         break;
+
       case 'POST' :
         curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->params);  
         break;
+
       default :
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method );
         break;
@@ -249,7 +245,8 @@ class FPLibrary
     else {
       return json_decode($execute, TRUE);
     }
-  }  
+  }
+
   /**
    * Set multipart request
    */
@@ -269,11 +266,11 @@ class FPLibrary
     $this->headers[] = 'Content-Type: multipart/form-data; boundary=' . $separator;
 
     // TODO: 
-    //   parameters 
-    //   HTML
+    // parameters 
+    // HTML
     $eol = "\r\n";
     $data = '';
-    $data .=  '--' . $separator . $eol;
+    $data .= '--' . $separator . $eol;
     $data .= 'Content-Disposition: form-data; name=""; filename="' . $file . '"' . $eol;
     $data .= 'Content-Type: ' . $eol;
     $data .= 'Content-Transfer-Encoding: binary' . $eol . $eol;

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * dpsbridge.admin.inc

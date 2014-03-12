@@ -12,13 +12,13 @@ class FPConfig extends Settings {
   var $response = array();
   var $version = "1.01";
 
-  /**
-   * Create new object and initialise the variables
-   * @param array $config stores parameters
-   *
-     * Call this method to get singleton
-     * @return UserFactory
-     */
+/**
+ * Create new object and initialise the variables
+ * @param array $config stores parameters
+ *
+ * Call this method to get singleton
+ * @return UserFactory
+ */
   public static function Instance() {
     static $inst = NULL;
     if ($inst === NULL) {
@@ -28,14 +28,14 @@ class FPConfig extends Settings {
   }
 
   /**
-   * protected constructor so others can not violate the singleton
+   * Protected constructor so others can not violate the singleton.
    */
   protected function __construct() {
     session_start();
 
     $preconfigured = FALSE;
     $cconfig = isset($_SESSION['config']) ? $_SESSION['config'] : array();
-    if($cconfig || !isset($cconfig['mode'])) {
+    if ($cconfig || !isset($cconfig['mode'])) {
       $preconfigured = FALSE;
     }
     else {
@@ -44,22 +44,23 @@ class FPConfig extends Settings {
 
     parent::__construct('config', $cconfig);
 
-    if(!$preconfigured) {
+    if (!$preconfigured) {
       $this->mode = 'debug';
       $this->server_family = 'production';
-      
-      if($this->mode == 'release') {
+
+      if ($this->mode == 'release') {
         $this->proxy = '';
         $this->use_ssl = TRUE;
         $this->require_ssl = TRUE;
       }
       else {
         $this->use_ssl = TRUE;
-        $this->proxy = ''; //'127.0.0.1';
+        // Proxy '127.0.0.1';!
+        $this->proxy = '';
         $this->require_ssl = FALSE;
       }
-    
-      if($this->server_family == 'production') {
+
+      if ($this->server_family == 'production') {
         $this->host = 'dpsapi2.digitalpublishing.acrobat.com';
         $this->distributionHost = 'origin.adobe-dcfs.com';
       }
@@ -68,7 +69,7 @@ class FPConfig extends Settings {
         $this->host = 'dpsapi2-stage.digitalpublishing.acrobat.com';
         $this->distributionHost = 'origin-stage.adobe-dcfs.com';
       }
-      
+
       $this->user_agent = 'PHP';
       $this->consumer_key = '';
       $this->consumer_secret ='';
@@ -82,7 +83,7 @@ class FPConfig extends Settings {
       $this->curl_capath = '';
     }
     
-    if($this->require_ssl && $_SERVER["HTTPS"] != "on") {
+    if ($this->require_ssl && $_SERVER["HTTPS"] != "on") {
       session_write_close();
       header("HTTP/1.1 301 Moved Permanently");
       header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);

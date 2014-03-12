@@ -22,9 +22,11 @@ function connectivity(Account) {
     case 'Amazon': // test Amazon account
       dps_connect(amazon_id.val(), amazon_pass.val(), apikey.val(), apisec.val(), 'Amazon', 'true');
       break;
+
     case 'Android': // test Android account
       dps_connect(android_id.val(), android_pass.val(), apikey.val(), apisec.val(), 'Android', 'true');
       break;
+
     case 'Apple': // test Apple account
       dps_connect(apple_id.val(), apple_pass.val(), apikey.val(), apisec.val(), 'Apple', 'true');
       break;
@@ -46,10 +48,12 @@ function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
       "Test"    :toggle    // toggle for stating that this is a test
     },
     success: function(output) {
-      if (output === 'ok')
+      if (output === 'ok') {
         dpsbridge_helper_show_status("<strong><em>" + type + "</em></strong><br/><br/>-Folio Producer API authentication successful!<br/><br/>- Login successful!<br/><br/>- Test completed!", 350, 400);
-      else
+      }
+      else {
         dpsbridge_helper_show_status("<strong><em>" + type + "</em></strong><br/><br/>:: " + output, 600, 250);
+      }
       logout();
     }
   });
@@ -82,10 +86,12 @@ function dps_credentials() {
       "apple_dimension"  :apple_target_dimension
     },
     success: function(output) {
-      if (output === 'ok')
+      if (output === 'ok') {
         dpsbridge_helper_show_status('Credentials have been successfully updated!');
-      else
+      }
+      else {
         dpsbridge_helper_show_status(output);
+      }
     }
   })
 }
@@ -183,9 +189,11 @@ function refreshDimensions() {
     case 'amazon':
       dpsbridge_helper_generate_dimensions('dimension-list', jQuery('#amazon_dimension option'), false);
       break;
+
     case 'android':
       dpsbridge_helper_generate_dimensions('dimension-list', jQuery('#android_dimension option'), false);
       break;
+
     case 'apple':
       dpsbridge_helper_generate_dimensions('dimension-list', jQuery('#apple_dimension option'), false);
       break;
@@ -245,7 +253,8 @@ function updateFields() {
           $('#dlength').val('');
           $('#dwidth').val('');
           $(this).dialog("close");
-        } else {
+        }
+        else {
           dpsbridge_helper_show_status('Please enter desired dimension length and width.');
         }},
       Close: function() {
@@ -267,7 +276,9 @@ function updateFields() {
             $('#' + desiredAccount.val() + '_dimension option[value="' + dimensions[i].value + '"]').remove();
           }
           $(this).dialog("close");
-        } else { // if user hasn't selected any dimensions
+        }
+        // if user hasn't selected any dimensions
+        else {
           dpsbridge_helper_show_status('Please select dimension(s) to delete.');
         } },
       Close: function() {
@@ -285,11 +296,14 @@ function updateFields() {
           derivative = $('#derivative :selected').val();
         if (!filename) {
           dpsbridge_helper_show_status("Please enter a filename!");
-        } else if (!derivative) {
+        }
+        else if (!derivative) {
           dpsbridge_helper_show_status("Please select the derivative of this stylesheet!");
-        } else if (filename == 'Bootstrap' || filename == 'Foundation') {
+        }
+        else if (filename == 'Bootstrap' || filename == 'Foundation') {
           dpsbridge_helper_show_status("Cannot override the stocked Bootstrap or Foundation stylesheet!");
-        } else {
+        }
+        else {
           // sends the zip file via XML-HTTP-Request
           var form = document.getElementById('stylesheet-form'),
             formData = new FormData(form),
@@ -303,7 +317,8 @@ function updateFields() {
             $("#stylesheets").append("<tr id='style-" + derivative + "-" + response[1] + "'><td value='" + derivative + "-" + response[1] + "'>" + response[1] + "</td></tr>");
             $("#stylesheet-delete").append("<option value='" + derivative + "-" + response[1] + "'>" + response[1] + "</option>");
             $("#stylesheet-download").append("<option value='" + derivative + "-" + response[1] + "'>" + response[1] + "</option>");
-          } else {
+          }
+          else {
             dpsbridge_helper_show_status(response[0] + ' ' + response[1]);
           }
           $(this).dialog("close");
@@ -320,9 +335,11 @@ function updateFields() {
           stylesheet = $('#stylesheet-delete :selected').val();
         if (stylesheetNum <= 1) { // must have at least 1 stylesheet
           dpsbridge_helper_show_status("Must have at least 1 stylesheet available at all times!");
-        } else if (stylesheet == 'Bootstrap' || stylesheet == 'Foundation') { // cannot delete Bootstrap or Foundation stylesheet
+        }
+        else if (stylesheet == 'Bootstrap' || stylesheet == 'Foundation') { // cannot delete Bootstrap or Foundation stylesheet
           dpsbridge_helper_show_status("Cannot delete the stocked Bootstrap or Foundation stylesheet!");
-        } else {
+        }
+        else {
           // deletes the stylesheet from local directory
           $.ajax({ url: baseURL + "/dpsbridge/stylesheet/delete", type: "POST", data: {'filename':stylesheet} });
           // remove stylesheet from view
