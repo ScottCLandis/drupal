@@ -41,13 +41,14 @@ function dpsbridge_helper_style_bootstrap_cover($publication, $landscape, $portr
  * @param array  $article_names
  *   A list of article names, used to generate the nav-to links.
  */
-function dpsbridge_helper_style_bootstrap_toc($publication, $article_names) {
+function dpsbridge_helper_style_bootstrap_toc($publication, $article_names, $ds_articles) {
   $directory     = drupal_get_path('module', 'dpsbridge') . '/html/';
   // Generate the contents of the HTML article.
   $variables = array(
     'publication' => $publication,
     'ads_list' => $ads_list,
     'article_names' => $article_names,
+    'ds_articles' => $ds_articles,
   );
   $html = theme('dpsbridge_bootstrap_toc', $variables);
   // Save the above HTML @ /dpsbridge/html/TableofContents/TableofContents.html.

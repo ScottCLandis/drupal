@@ -223,7 +223,7 @@ function dpsbridge_helper_format_title($filename, $replacement = '') {
  * @param array $article_list
  *   A list of article names, used for generating the ToC
  */
-function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $article_list = '') {
+function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $article_list = '', $ds_articles = array()) {
   // Filter the title to create the folder & filename.
   $filename = dpsbridge_helper_format_title($article_metadata['title']);
   // Create the directory and its default files.
@@ -262,14 +262,16 @@ function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads
     if ($folio_metadata['pubCSS'] == 'Bootstrap') {
       dpsbridge_helper_style_bootstrap_toc(
           $folio_metadata['pubName'],
-          $article_list
+          $article_list,
+          $ds_articles
       );
     }
     // Generate the Table of Contents with Foundation stylesheet.
     else {
       dpsbridge_helper_style_foundation_toc(
           $folio_metadata['pubName'],
-          $article_list
+          $article_list,
+          $ds_articles
       );
     }
   }
@@ -473,7 +475,8 @@ function dpsbridge_helper_pull_node($node_id) {
   $container = array();
   // Loads the node from the database.
   $node = node_load($node_id);
-
+  $container['node'] = $node; 
+  
   // Pull fields from dps node view.
   $node_display = node_view($node, 'dps');
   $container['ds_content'] = isset($node_display) ? $node_display : array();

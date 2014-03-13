@@ -6,6 +6,7 @@
  * - $publication
  * - $ads_list
  * - $article_names
+ * - $ds_articles - content array() from DPS TOC node view.
  */
 ?>
 

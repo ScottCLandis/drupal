@@ -235,6 +235,10 @@ function dpsbridge_entity_info_alter(&$entity_info) {
     'label' => t('DPS'),
     'custom settings' => TRUE,
   );
+  $entity_info['node']['view modes']['dps_toc'] = array(
+    'label' => t('DPS Toc'),
+    'custom settings' => TRUE,
+  );
 }
 
 /**
@@ -772,6 +776,7 @@ function dpsbridge_folio_generate_html() {
   $folio_node = dpsbridge_helper_pull_content($folio_node_id);
   $article_list = $folio_node['articles'];
   $file_list = array();
+  $ds_articles = array();
   $offset = 1;
   // If given landscape and portrait images, generate the cover page.
   if ($folio_node['landscape'] != '' || $folio_node['portrait'] != '') {
@@ -808,6 +813,7 @@ function dpsbridge_folio_generate_html() {
     // Calls helper to generate HTML article folder.
     dpsbridge_helper_generate_html($article_node, $folio_node, $folio_node['isAds'][$n]);
     array_push($file_list, $article_node['title']);
+    $ds_articles[$article_node['node']->nid] = node_view($article_node['node'], 'dps_toc');
   }
   // Generate the ToC if the toggle is set to auto-generate the ToC.
   if ($folio_node['autoToggle'] == 'Generate ToC' || $folio_node['autoToggle'] == 'Generate Both') {
@@ -821,8 +827,10 @@ function dpsbridge_folio_generate_html() {
         'tags'   => ''),
       $folio_node,
       FALSE,
-      $file_list
+      $file_list,
+      $ds_articles
     );
+    dpm($ds_articles);
   }
   drupal_json_output($file_list);
   drupal_exit();
@@ -1316,6 +1324,7 @@ function dpsbridge_theme() {
         'publication' => NULL,
         'ads_list' => NULL,
         'article_names' => NULL,
+        'ds_articles' => NULL,
       ),
       'template' => 'dpsbridge-bootstrap-toc',
       'path' => $path . '/theme',
@@ -1350,6 +1359,7 @@ function dpsbridge_theme() {
         'publication' => NULL,
         'ads_list' => NULL,
         'article_names' => NULL,
+        'ds_articles' => NULL,
       ),
       'template' => 'dpsbridge-foundation-toc',
       'path' => $path . '/theme',
