@@ -49,7 +49,8 @@
       <?php
           $n++;
         }
-      ?>        
+      ?>
+      <?php print drupal_render($ds_articles); ?>        
       </div>
     </div>
   </div>
