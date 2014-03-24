@@ -11,15 +11,22 @@ require_once dirname(__FILE__) . '/fp_settings.php';
 abstract class Settings {
   // For DB / Passwords etc.
   static private $protected = array();
-  //For all public strings such as meta stuff for site
+  // For all public strings such as meta stuff for site
   static private $public;// = array();
 
-  protected function __construct($session_key,$configData) {
-    if (isset($configData)) {
-      $configDataObject = new ArrayObject($configData);
+  /** 
+   * Create new object and initialise the variables.
+   * 
+   * @param type $session_key
+   * @param type $config_data
+   * 
+   */
+  protected function __construct($session_key, $config_data) {
+    if (isset($config_data)) {
+      $configDataObject = new ArrayObject($config_data);
       self::$public = $configDataObject->getArrayCopy();
     /*  self::$public =array();
-      foreach($configData as $key => $value) {
+      foreach($config_data as $key => $value) {
         self::$public[$key] = $value;
       }*/
     }

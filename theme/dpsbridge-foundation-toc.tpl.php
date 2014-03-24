@@ -34,16 +34,16 @@
       </div>
       <div class='large-12 small-12 columns'>
       <?php 
-      for ($i = 1, $n = 1; $i < count($article_names); $i++) {
-        if ($ads_list[$i - 1] == TRUE) {
+      for ($i = 1, $n = 1; $i < count($article_names); $i++):
+        if ($ads_list[$i - 1] == TRUE):
           continue;
-        }?>
+        endif; ?>
         <div class='large-12 small-12 columns'>
           <h4><a class='bluebg' href='navto://<?php print dpsbridge_helper_format_title($article_names[$i]); ?>'><?php print $n ?> ) <?php print $article_names[$i]; ?></a></h4>
         </div>
       <?php
         $n++;
-      }?>
+      endfor; ?>
       <?php print drupal_render($ds_articles); ?>
       </div>
     </div>

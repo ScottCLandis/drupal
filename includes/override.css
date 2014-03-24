@@ -60,7 +60,7 @@
 #dialog-option-stylesheet-add select,
 #dialog-option-stylesheet-delete select,
 #dialog-option-stylesheet-download select {
-  border: thin solid #BEBFB9;
+  border: thin solid #bebfb9;
   margin-top: 10px;
   margin-bottom: 10px;
 }

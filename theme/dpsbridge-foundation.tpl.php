@@ -43,35 +43,35 @@
           <div class='row'>
           <?php
           // If there are only one image.
-          if (count($images) == 1):?>
+          if (count($images) == 1): ?>
             <img src='<?php print dpsbridge_helper_link_img($filename, $images[0]); ?>' width='100%' /><br/>
           <?php
           // Creates a slideshow if there are multiple images.
-          else:?>
+          else: ?>
             <ul data-orbit>
             <?php 
-            for ($q = 0; $q < count($images); $q++) {?>
+            for ($q = 0; $q < count($images); $q++): ?>
               <li>
                 <img src='<?php print dpsbridge_helper_link_img($filename, $images[$q]); ?>' />
                 <div class='orbit-caption'>Some caption here</div>
               </li>
             <?php 
-            }?>
+            endfor; ?>
             </ul>
           <?php
-          endif;?>
+          endif; ?>
           </div>
         </div>
       <?php
       // If there are embedded videoes.
-      elseif ($videos):?>
+      elseif ($videos): ?>
         <div id='videoArea' class='large-6 small-12 columns'>
           <div class='flex-video row'>
             <iframe width='420' height='315' src='" . dpsbridge_helper_format_url($videos) . "' frameborder='0' allowfullscreen></iframe>
           </div>
         </div>
       <?php
-      endif;?>
+      endif; ?>
       <?php print $paragraphs; ?>
       </div>
     </div>

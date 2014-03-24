@@ -44,54 +44,47 @@
       </div>
       <div class='col-lg-12 col-12'>
       <?php 
-        if ($images) {
+        if ($images):
       ?>
         <div id='imageArea' class='col-lg-6 col-12'>
         <?php // If there are only one image.
-        if (count($images) == 1) {
-        ?>
+        if (count($images) == 1): ?>
           <img src='" . dpsbridge_helper_linkImg($filename, $images[0]) . "' width='100%' /><br/>
         <?php 
-        }
         // Creates a slideshow if there are multiple images.
-        else {
-        ?>  
+        else: ?>  
           <div id='carousel-generic' class='carousel slide'>
           <ol class='carousel-indicators'>
           <!-- TODO: Use jQuery to assign default class=active to first li -->
-          <?php for ($q = 0; $q < count($images); $q++) { ?>
+          <?php for ($q = 0; $q < count($images); $q++): ?>
             <li data-target='#carousel-generic' data-slide-to='<?php print $q; ?>' class=''></li>
-          <?php } ?>
+          <?php endfor; ?>
           </ol>
           <div class='carousel-inner'>
-            <?php for ($q = 0; $q < count($images); $q++) { ?>
+            <?php for ($q = 0; $q < count($images); $q++): ?>
             <!-- TODO: Use jQuery to add class=active to first div -->
             <div class='item'>
               <img src='<?php print dpsbridge_helper_linkImg($filename, $images[$q]); ?>' alt=''>
               <div class='carousel-caption'>Some Caption Here</div>
             </div>
-            <?php } ?>
+            <?php endfor; ?>
           </div>
           <a class='left carousel-control' href='#carousel-generic' data-slide='prev'><span class='icon-prev'></span></a>
           <a class='right carousel-control' href='#carousel-generic' data-slide='next'><span class='icon-next'></span></a>
           </div>
         <?php
-        }
-        ?>
+        endif; ?>
         </div>
       <?php
-        }
         // If there are embedded videoes.
-        elseif ($videos) {
-      ?>
+        elseif ($videos): ?>
           <div id='videoArea' class='col-lg-6 col-12'>
           <div class='flex-video row'>
           <iframe width='420' height='315' src='<?php dpsbridge_helper_format_url($videos); ?>' frameborder='0' allowfullscreen></iframe>
           </div>
           </div>
       <?php
-        }
-      ?>
+        endif; ?>
         <?php print $paragraphs; ?>
       </div>
     </div>

@@ -15,7 +15,7 @@ require_once dirname(__FILE__) . '/fp_config.php';
  * @dbeaton
  */
 class FPLibrary {
-  var $response = array();
+  public $response = array();
 
   /**
    * Create new object and initialise the variables.
@@ -30,7 +30,7 @@ class FPLibrary {
     $this->config->mergePublic($config_in);
   }
   /**
-   * Generate nonce and store in config
+   * Generate nonce and store in config.
    */
   protected function create_nonce() {
     $sequence = array_merge(range(0, 9), range('A', 'Z'), range('a', 'z'));
@@ -64,9 +64,9 @@ class FPLibrary {
    * Generate URL for webservice.
    */
   protected function create_distributionurl($server, $suffix = '') {
-    if (strpos($server,'http') === FALSE) {
+    if (strpos($server, 'http') === FALSE) {
       $url = ($this->config->use_ssl) ? 'https' : 'http';
-      return $url . '://' . $server . '/'. $suffix;
+      return $url . '://' . $server . '/' . $suffix;
     }
     return $server . '/webservices/' . $suffix;
   }
@@ -122,7 +122,7 @@ class FPLibrary {
     if (!$ready_for_request) {
       // Echo 'athentication required...'!
       if ($is_distribution) {
-        //  Echo 'authenticating against distribution api....'!
+        // Echo 'authenticating against distribution api....'!
         $this->url = $this->create_distributionurl($this->config->distributionHost, $url);
 
         $credentials = array(
@@ -143,7 +143,7 @@ class FPLibrary {
         $this->create_timestamp();
         $this->create_nonce();
         $this->sig = $this->oauth_signature();
-        //print_r("signature=[".$this->sig."]\n");
+        // Debug message print_r("signature=[".$this->sig."]\n");.
         $this->url = $this->create_url($this->config->host, $url);
 
         $credentials = array(
@@ -168,8 +168,8 @@ class FPLibrary {
     else {
       $this->params = json_encode($params);
       if ($is_distribution) {
-        $ticket= $_SESSION['distributionTicket'];
-        $server= $this->config->distributionHost;
+        $ticket = $_SESSION['distributionTicket'];
+        $server = $this->config->distributionHost;
       }
       elseif ($is_download) {
         $ticket = $_SESSION['downloadTicket'];
@@ -180,7 +180,7 @@ class FPLibrary {
         $server = $_SESSION['server'];
       }
 
-      $this->url = $this->create_url($server,$url);
+      $this->url = $this->create_url($server, $url);
       $this->headers[] = 'Authorization: AdobeAuth ticket="' . $ticket  . '"';
 
       if (isset($filepath)) {
@@ -203,7 +203,8 @@ class FPLibrary {
   /**
    * Run the curl request using the values set in request.
    * 
-   * @return array Curl output
+   * @return array 
+   *   Curl output
    */
   public function curl($is_distribution = FALSE) {
     $ch = curl_init();
@@ -223,10 +224,10 @@ class FPLibrary {
     ));
 
     if ($this->config->curl_capath !== FALSE) {
-      curl_setopt($ch, CURLOPT_CAPATH, $this->config->curl_capath );
+      curl_setopt($ch, CURLOPT_CAPATH, $this->config->curl_capath);
     }
     if ($this->config->curl_cainfo !== FALSE) {
-      curl_setopt($ch, CURLOPT_CAINFO, $this->config->curl_cainfo );
+      curl_setopt($ch, CURLOPT_CAINFO, $this->config->curl_cainfo);
     }
 
     switch ($this->method) {
@@ -235,16 +236,16 @@ class FPLibrary {
 
       case 'POST' :
         curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->params);  
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->params);
         break;
 
       default :
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method );
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
         break;
     }
     $execute = curl_exec($ch);
     curl_close($ch);
-    
+
     if ($is_distribution) {
       return $execute;
     }

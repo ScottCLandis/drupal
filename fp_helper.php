@@ -14,8 +14,8 @@ require_once dirname(__FILE__) . '/fp_library.php';
  * @dbeaton
  */
 class FPHelper {
-  var $fp;
-  var $config;
+  public $fp;
+  public $config;
 
   /**
    * Constructor.
@@ -88,7 +88,7 @@ class FPHelper {
    * Depending on whether folioID is set or not
    * 
    * @param string $folio_id
-   *  Value of Folio Id.   * 
+   *   Value of Folio Id.   * 
    */
   public function folios($folio_id = '') {
     return $this->fp->request('GET', 'folios/' . $folio_id);

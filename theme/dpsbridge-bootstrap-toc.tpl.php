@@ -38,7 +38,7 @@
       </div>
       <div class='col-lg-12 col-12'>
       <?php
-        for ($i = 1, $n = 1; $i < count($article_names); $i++) {
+        for ($i = 1, $n = 1; $i < count($article_names); $i++):
           if ($ads_list[$i - 1] == TRUE) {
             continue;
           }
@@ -48,7 +48,7 @@
         </div>
       <?php
           $n++;
-        }
+        endfor;
       ?>
       <?php print drupal_render($ds_articles); ?>        
       </div>

@@ -31,27 +31,25 @@
     <div class='large-12 small-12 columns'>
       <div class='large-12 small-12 columns'>
       <?php
-      if ($landscape) {
+      if ($landscape):
         $landscape_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $landscape);
         file_put_contents($directory . 'Cover/landscape.png', $landscape_img);
       ?>
         <div class='show-for-landscape'><img src='landscape.png' width='100%' /></div>
       <?php
-      }
-      else {?>
+      else: ?>
         <div class='show-for-landscape'><img src='portrait.png' width='100%' /></div>
       <?php
-      }
-      if ($portrait) {
+      endif;
+      if ($portrait):
         $portrait_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $portrait);
         file_put_contents($directory . 'Cover/portrait.png', $portrait_img);?>
         <div class='show-for-portrait'><img src='portrait.png' width='100%' /></div>
       <?php
-      }
-      else {?>
+      else: ?>
         <div class='show-for-portrait'><img src='landscape.png' width='100%' /></div>
       <?php
-      }?> 
+      endif; ?> 
       </div>
     </div>
   </div>

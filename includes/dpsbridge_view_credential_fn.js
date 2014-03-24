@@ -1,16 +1,16 @@
-var apikey,            // Folio Producer API key 
-  apisec,            // Folio Producer API secret
-  amazon_id,         // Amazon - Folio Producer user ID
-  amazon_pass,       // Amazon - Folio Producer user password
-  amazon_dimension,  // Amazon - available dimensions
-  android_id,        // Android - Folio Producer user ID
-  android_pass,      // Android - Folio Producer user password
-  android_dimension, // Android - available dimensions
-  apple_id,          // Apple - Folio Producer user ID
-  apple_pass,        // Apple - Folio Producer user password
-  apple_dimension,   // Apple - available dimensions
+var apikey,
+  apisec,
+  amazon_id,
+  amazon_pass,
+  amazon_dimension,
+  android_id,
+  android_pass,
+  android_dimension,
+  apple_id,
+  apple_pass,
+  apple_dimension,
   baseURL = "",
-  pathToDir = "";
+  pathToDir = ""; 
 /* =================================================== *
  * Given the account type,
  *   call helper to connect to Folio Producer,
@@ -19,15 +19,15 @@ var apikey,            // Folio Producer API key
 function connectivity(Account) {
   updateFields();
   switch (Account) {
-    case 'Amazon': // test Amazon account
+    case 'Amazon':
       dps_connect(amazon_id.val(), amazon_pass.val(), apikey.val(), apisec.val(), 'Amazon', 'true');
       break;
 
-    case 'Android': // test Android account
+    case 'Android':
       dps_connect(android_id.val(), android_pass.val(), apikey.val(), apisec.val(), 'Android', 'true');
       break;
 
-    case 'Apple': // test Apple account
+    case 'Apple':
       dps_connect(apple_id.val(), apple_pass.val(), apikey.val(), apisec.val(), 'Apple', 'true');
       break;
   }
@@ -41,11 +41,11 @@ function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
     url: pathToDir + "/fp_connect.php",
     type: "POST",
     data: {
-      "AdobeID"   :AdobeID,   // Folio Producer user ID
-      "Password"  :AdobePass, // Folio Producer user password
-      "APIKey"    :APIKey,    // Folio Producer API key
-      "APISecret" :APISecret, // Folio Producer API secret
-      "Test"    :toggle    // toggle for stating that this is a test
+      "AdobeID"   :AdobeID,
+      "Password"  :AdobePass,
+      "APIKey"    :APIKey,
+      "APISecret" :APISecret,
+      "Test"    :toggle
     },
     success: function(output) {
       if (output === 'ok') {
@@ -72,7 +72,7 @@ function dps_credentials() {
   jQuery.ajax({
     url: baseURL + "/dpsbridge/dps/credentials/add",
     type: "POST",
-    data: { 
+    data: {
       "apikey"           :apikey.val(),
       "apisec"           :apisec.val(),
       "amazon_id"        :amazon_id.val(),
@@ -140,10 +140,13 @@ function generate_form_table_stylesheet() {
     type: "POST",
     success: function(output) {
       for (var i = 0; i < output.length; i++) {
-        if (output[i].indexOf('-') < 0)
+        if (output[i].indexOf('-') < 0) {
           styleText = output[i];
-        else // removes the derivatives for viewing purposes
+        }
+        // removes the derivatives for viewing purposes
+        else {
           styleText = output[i].split(/-/)[1];
+        }
         jQuery("#stylesheets").append("<tr id='style-" + output[i] + "'><td value='" + output[i] + "'>" + styleText + "</td></tr>");
         jQuery("#stylesheet-delete").append("<option value='" + output[i] + "'>" + styleText + "</option>");
         jQuery("#stylesheet-download").append("<option value='" + output[i] + "'>" + styleText + "</option>");
@@ -243,9 +246,9 @@ function updateFields() {
     autoOpen:false, height:300, width:300, modal:true,
     buttons: {
       Add: function() {
-        var desiredAccount  = $('#account-type-add :selected'), // selected account type
-          dimensionLength = $('#dlength'), // input length
-          dimensionWidth  = $('#dwidth');  // input width
+        var desiredAccount  = $('#account-type-add :selected'),
+          dimensionLength = $('#dlength'),
+          dimensionWidth  = $('#dwidth');
         if (dimensionLength.val() && dimensionWidth.val()) {
           // calls helper method to insert the dimension in numerical order
           insertDimension(desiredAccount.val(), dimensionLength.val() + ' x ' + dimensionWidth.val());
@@ -333,10 +336,12 @@ function updateFields() {
       Delete: function() {
         var stylesheetNum = $('#stylesheet-delete option').length,
           stylesheet = $('#stylesheet-delete :selected').val();
-        if (stylesheetNum <= 1) { // must have at least 1 stylesheet
+        // Must have at least 1 stylesheet.
+        if (stylesheetNum <= 1) {
           dpsbridge_helper_show_status("Must have at least 1 stylesheet available at all times!");
         }
-        else if (stylesheet == 'Bootstrap' || stylesheet == 'Foundation') { // cannot delete Bootstrap or Foundation stylesheet
+        // Cannot delete Bootstrap or Foundation stylesheet.
+        else if (stylesheet == 'Bootstrap' || stylesheet == 'Foundation') {
           dpsbridge_helper_show_status("Cannot delete the stocked Bootstrap or Foundation stylesheet!");
         }
         else {

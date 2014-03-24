@@ -7,7 +7,7 @@
  * - $landscape:
  * - $portrait:
  * - $directory:
- * 
+ *
  */
 ?>
 <!doctype html>
@@ -40,27 +40,25 @@
     <div class='col-lg-12 col-12'>
     <?php 
     // If a landscape image was provided.
-    if ($landscape) {
+    if ($landscape):
       $landscape_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $landscape);
       file_put_contents($directory . 'Cover/landscape.png', $landscape_img);?>
       <div class='visible-lg'><img src='landscape.png' width='100%' /></div>
     <?php
-    }
-    else {?>
+    else:?>
       <div class='visible-lg'><img src='portrait.png' width='100%' /></div>
     <?php
-    }
+    endif;
     // If a portrait image was provided.
-    if ($portrait) {
+    if ($portrait):
       $portrait_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $portrait);
       file_put_contents($directory . 'Cover/portrait.png', $portrait_img);?>
       <div class='hidden-lg'><img src='portrait.png' width='100%' /></div>
     <?
-    }
-    else {?>
+    else:?>
       <div class='hidden-lg'><img src='landscape.png' width='100%' /></div>
     <?php
-    }?>
+    endif;?>
     </div>
   </div>
   </div>

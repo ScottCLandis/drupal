@@ -9,15 +9,20 @@
 require_once dirname(__FILE__) . '/fp_settings.php';
 
 class FPConfig extends Settings {
-  var $response = array();
-  var $version = "1.01";
+  public $response = array();
+  public $version = "1.01";
 
   /**
-   * Create new object and initialise the variables
-   * @param array $config stores parameters
+   * Create new object and initialise the variables.
+   * 
+   * Call this method to get singleton.
+   * 
+   * @param array $config 
+   *   Stores parameters
    *
-   * Call this method to get singleton
-   * @return UserFactory
+   * @return 
+   *   UserFactory
+   * 
    */
   public static function Instance() {
     static $inst = NULL;
@@ -75,7 +80,7 @@ class FPConfig extends Settings {
       $this->consumer_secret = '';
       $this->user_email = '';
       $this->user_password = '';
-      $this->timestamp ='';
+      $this->timestamp = '';
       $this->oauth_signature_method = 'HAC-SHA256';
       $this->curl_ssl_verifyhost = '';
       $this->curl_ssl_verifypeer = '';

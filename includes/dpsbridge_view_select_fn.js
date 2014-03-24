@@ -14,19 +14,21 @@ function get_selected(toggle) {
     // Give warning if nothing was selected
     if (!selectedArticles) {
         dpsbridge_helper_show_status("Please select an article first!");
-    } 
+    }
     else {
         articles = selectedArticles;
         // toggle the respective popup window
         switch (toggle) {
             case "new":
-                    jQuery("#dialog-new").dialog("open");
-                    break;
+                jQuery("#dialog-new").dialog("open");
+                break;
+
             case "existing":
-                    jQuery("#dialog-existing").dialog("open");
-                    break;
+                jQuery("#dialog-existing").dialog("open");
+                break;
+
             default:
-                    break;
+                break;
         }
     }
 }
@@ -45,56 +47,60 @@ function get_selected(toggle) {
                 pdate   = $("#pdate");
 
             $("#dialog-new").dialog({
-                    autoOpen:false, height:470, width:350, modal:true,
-                    buttons: {
-                            "Create Folio": function() {
-                                    dpsbridge_helper_show_status("Adding the selected Article(s) to \"" + fname.val() + "\", please wait...");
-                                    $.ajax({
-                                            url: baseURL + "/dpsbridge/folio/add",
-                                            type: "POST",
-                                            data: {
-                                                    "fname":fname.val(),
-                                                    "pname":pname.val(),
-                                                    "fnumber":fnumber.val(),
-                                                    "pdate":pdate.val(),
-                                                    "articles":articles },
-                                            success: function(output) {
-                                                    if (output === 'ok')
-                                                            window.location = baseURL + "/admin/config/content/fpmanage";
-                                                    else
-                                                            dpsbridge_helper_show_status(output);
-                                            }
-                                    })
-                                    $(this).dialog("close"); },
-                            Cancel: function() { $(this).dialog("close"); }}
+                autoOpen:false, height:470, width:350, modal:true,
+                buttons: {
+                    "Create Folio": function() {
+                        dpsbridge_helper_show_status("Adding the selected Article(s) to \"" + fname.val() + "\", please wait...");
+                        $.ajax({
+                            url: baseURL + "/dpsbridge/folio/add",
+                            type: "POST",
+                            data: {
+                                "fname":fname.val(),
+                                "pname":pname.val(),
+                                "fnumber":fnumber.val(),
+                                "pdate":pdate.val(),
+                                "articles":articles },
+                            success: function(output) {
+                                if (output === 'ok') {
+                                    window.location = baseURL + "/admin/config/content/fpmanage";
+                                }
+                                else {
+                                    dpsbridge_helper_show_status(output);
+                                }
+                            }
+                        })
+                        $(this).dialog("close"); },
+                    Cancel: function() { $(this).dialog("close"); }}
             });
             $("#dialog-existing").dialog({
-                    autoOpen:false, height:275, width:400, modal:true,
-                    buttons: {
-                            "Add to Folio": function() {
-                                    var fid = $("#fid :selected")
-                                    dpsbridge_helper_show_status("Adding the selected Article(s) to \"" + fid.text() + "\", please wait...");
-                                    $.ajax({
-                                            url: baseURL + "/dpsbridge/folio/append",
-                                            type: "POST",
-                                            data: {
-                                                    "fid":fid.val(),
-                                                    "articles":articles },
-                                            success: function(output) {
-                                                    if (output === 'ok')
-                                                            window.location = baseURL + "/admin/config/content/fpmanage";
-                                                    else
-                                                            dpsbridge_helper_show_status(output);
-                                            }
-                                    })
-                                    $(this).dialog("close"); },
-                            Cancel: function() { $(this).dialog("close"); }}
+                autoOpen:false, height:275, width:400, modal:true,
+                buttons: {
+                    "Add to Folio": function() {
+                        var fid = $("#fid :selected")
+                        dpsbridge_helper_show_status("Adding the selected Article(s) to \"" + fid.text() + "\", please wait...");
+                        $.ajax({
+                            url: baseURL + "/dpsbridge/folio/append",
+                            type: "POST",
+                            data: {
+                                "fid":fid.val(),
+                                "articles":articles },
+                            success: function(output) {
+                                if (output === 'ok') {
+                                    window.location = baseURL + "/admin/config/content/fpmanage";
+                                }
+                                else {
+                                    dpsbridge_helper_show_status(output);
+                                }
+                            }
+                        })
+                        $(this).dialog("close"); },
+                    Cancel: function() { $(this).dialog("close"); }}
             });
             $("#dialog-status").dialog({
-                    autoOpen:false, modal:true,
-                    buttons: {
-                            Close: function() {
-                                    $(this).dialog("close"); }}
+                autoOpen:false, modal:true,
+                buttons: {
+                    Close: function() {
+                        $(this).dialog("close"); }}
             });
             $("#jqueryui-tabs").tabs();
             

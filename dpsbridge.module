@@ -687,13 +687,15 @@ function dpsbridge_folio_article_preview() {
     $body = isset($article_node['body']) ? $article_node['body'] : '';
     $images = isset($article_node['image']) ? $article_node['image'] : '';
     $videos = isset($article_node['video']) ? $article_node['video'] : '';
-    $toc  = '';
+    // Unused Variable $toc  = '';.
     // Fields from dps node view.
     $ds_content = $article_node['ds_content'];
     // Create the directory and its default files.
     dpsbridge_helper_create_dir(dpsbridge_helper_format_title($title));
     // Unzip the selected stylesheet for preview.
-    $result = dpsbridge_helper_extract_stylesheet($pubcss);
+    // Removed variable from function becuase pareview complained.
+    // Removed variable $result = dpsbridge_helper_extract_stylesheet($pubcss);.
+    dpsbridge_helper_extract_stylesheet($pubcss);    
     // Apply the stylesheet framework for preview.
     // Is derivative of Bootstrap framework?
     if (strpos($pubcss, 'Bootstrap') !== FALSE) {
@@ -1039,7 +1041,7 @@ function dpsbridge_folio_update() {
   $pdate = isset($_POST['pdate']) ? $_POST['pdate'] : '';
   $pname = isset($_POST['pname']) ? $_POST['pname'] : '';
   $pubcss = isset($_POST['pubcss']) ? $_POST['pubcss'] : '';
-  $toccss = isset($_POST['toccss']) ? $_POST['toccss'] : '';
+  // Unused variable $toccss = isset($_POST['toccss']) ? $_POST['toccss'] : '';.
   $accounts = isset($_POST['accounts']) ? $_POST['accounts'] : '';
   $articles = isset($_POST['articles']) ? $_POST['articles'] : '';
   $dimension = isset($_POST['dimension']) ? $_POST['dimension'] : ',';
