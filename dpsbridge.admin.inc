@@ -88,4 +88,3 @@ function dpsbridge_credential_page() {
   drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge_view_credential_fn.js');
   return theme('dpsbridge_credential_page', $variables);
 }
-

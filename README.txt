@@ -14,7 +14,8 @@ Shrink the Web (optional)
 
 Permissions
 ===========
-Navigate to [base_url]/admin/people/permissions to configuring the user permissions for this module.
+Navigate to [base_url]/admin/people/permissions to configuring 
+the user permissions for this module.
 
 Content Type
 ============
