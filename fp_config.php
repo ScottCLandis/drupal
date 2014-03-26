@@ -16,9 +16,6 @@ class FPConfig extends Settings {
    * 
    * Call this method to get singleton.
    *
-   * @param array $config 
-   *   Stores parameters
-   *
    * @return object
    *   UserFactory
    */

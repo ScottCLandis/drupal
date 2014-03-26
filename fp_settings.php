@@ -10,9 +10,9 @@ require_once dirname(__FILE__) . '/fp_settings.php';
 
 abstract class Settings {
   // For DB / Passwords etc.
-  static private $protected = array();
-  // For all public strings such as meta stuff for site
-  static private $public;
+  static protected $protected = array();
+  // For all public strings such as meta stuff for site.
+  static protected $public;
 
   /**
    * Create new object and initialise the variables.
@@ -53,8 +53,8 @@ abstract class Settings {
   /**
    * Merge Public.
    */
-  public static function mergePublic($mergeData) {
-    self::$public = array_merge(self::$public, $mergeData);
+  public static function mergePublic($merge_data) {
+    self::$public = array_merge(self::$public, $merge_data);
     return self::$public;
   }
   /**
@@ -74,7 +74,7 @@ abstract class Settings {
    * Getter.
    */
   public function __get($key) {
-    return isset(self::$public[$key]) ? self::$public[$key] : false;
+    return isset(self::$public[$key]) ? self::$public[$key] : FALSE;
   }
   /**
    * Setter.
