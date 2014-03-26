@@ -32,7 +32,6 @@ function get_selected(toggle) {
         }
     }
 }
-    
 /* ----------------------------------------- *
  * Constructing the Jquery UI Overlay Window
  * ----------------------------------------- */
@@ -103,7 +102,7 @@ function get_selected(toggle) {
                         $(this).dialog("close"); }}
             });
             $("#jqueryui-tabs").tabs();
-            
+
             var container = $('#block-system-main');
             var button_wrapper = $('<div/>').css({'float':'left', 'margin-bottom':'15px'});
             var button_exist = $('<button/>').text('Add Selected Articles to Existing Folio').click(function() { get_selected('existing') });

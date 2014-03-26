@@ -306,10 +306,10 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
           checked = "checked";
         }
         // create a locked row if the content is not from Drupal
-        if (output.length === 0) { 
+        if (output.length === 0) {
           // makes sure to not show non-Drupal articles that has been deleted from Folio Producer
           var exist = dpsbridge_helper_check_article_by_id(fpArticles, alienatedID[alienatedCount]);
-          if (exist) { 
+          if (exist) {
             html += "<tr id='article-row-id-" + alienatedID[alienatedCount] + "'>\n";
             html += "<td class='article-index'><input type='hidden' value='" + alienatedID[alienatedCount] + "' /><span class='ui-icon ui-icon-locked'></span></td>\n";
             html += "<td><span class='ui-icon ui-icon-arrow-4'></span></td>\n";
@@ -340,10 +340,12 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
           //html += "<td><select class='overridecss'></select></td>\n";
           html += "<td>" + output['modified'] + "</td>\n";
           html += "<td class='is-ad'><input type='checkbox' " + checked + "/></td>\n";
-          if (output['timestamp'] <= uploadDate && exist)
+          if (output['timestamp'] <= uploadDate && exist) {
             html += "<td><span class='ui-icon ui-icon-check'></span></td>\n";
-          else
+          }
+          else {
             html += "<td><span class='ui-icon ui-icon-close'></span></td>\n";
+          }
           html += "</tr>\n";
           index++;
         }
@@ -354,8 +356,9 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
   // display all non-Drupal articles that has not been stored in Drupal previously
   for (var n = 0; n < fpArticles.length; n++) {
     // skip if it is a Drupal article
-    if (fpArticles[n]['articleMetadata']['assetFormat'] == 'Auto')
+    if (fpArticles[n]['articleMetadata']['assetFormat'] == 'Auto') {
       continue;
+    }
     // insert non-Drupal articles that hasn't been added to Drupal database
     if (jQuery('#article-row-id-' + fpArticles[n]['id']).length == 0) {
       var sortNumber  = (fpArticles[n]['articleMetadata']['sortNumber'] / 1000) - offsetIndex;
@@ -395,7 +398,7 @@ function profileUI(folioNodeID, toggle) {
   jQuery.ajax({
     url: baseURL + "/dpsbridge/folio/pull-content",
     type: "POST",
-    data: { 
+    data: {
       "nodeID":folioNodeID,
       "toggle":'sync' },
     success: function(output) {
@@ -438,8 +441,9 @@ function profileUI(folioNodeID, toggle) {
           jQuery('#dimension').removeAttr('disabled');
           jQuery('#folio-ui-orientation').removeAttr('disabled');
         }
-        if (landscapeImg || portraitImg)
+        if (landscapeImg || portraitImg) {
           offsetIndex++;
+        }
         //for (var n = 0; n < output['articles'].length; n++)
         //  dpsbridge_helper_pull_articles(output['articles'][n]['target_id'], n+1, output['isAds'][n], output['alienated'], output['uploadDate'], '');
         // sync with the Folio Producer
@@ -481,13 +485,13 @@ function profileUI(folioNodeID, toggle) {
  *   Open the option UI dialog box for selecting the dimension size and mode upon success.
  * ====================================================================================== */
 function previewOptions(previewID, filename) {
-  var pname  = jQuery("#folio-ui-pname").val(), 
+  var pname  = jQuery("#folio-ui-pname").val(),
     pubcss = jQuery("#pubcss").val();
     previewFileName = filename;
   jQuery.ajax({
     url: baseURL + "/dpsbridge/folio/preview-article",
     type: "POST",
-    data: { 
+    data: {
       "previewID"  :previewID,
       "pname"    :pname,
       "pubcss"  :pubcss },
@@ -633,10 +637,12 @@ function replaceHREF(ahref, toggle) {
                 buttons: {
                     "Export Selected Articles as HTML stacks": function() {
                         var articleID  = '';
-                            checkboxes = $('.article-index input');
-                        for (var n = 0; n < checkboxes.length; n++)
-                                if (checkboxes[n].checked)
-                                        articleID += checkboxes[n].value + ',';
+                        checkboxes = $('.article-index input');
+                        for (var n = 0; n < checkboxes.length; n++) {
+                          if (checkboxes[n].checked) {
+                            articleID += checkboxes[n].value + ',';
+                          }
+                        }
                         if (articleID) {
                           generate_selected_html(articleID);
                         }
@@ -647,11 +653,14 @@ function replaceHREF(ahref, toggle) {
                     "Remove Selected Articles from Folio": function() {
                         var indexes           = $('td.sortable-index'),
                             checkboxes        = $('.article-index input');
-                        for (var i = 0; i < checkboxes.length; i++)
-                                if (checkboxes[i].checked)
-                                        $('#article-row-id-' + checkboxes[i].value).remove();
-                        for (var n = 0; n < indexes.length; n++)
-                                indexes[n].innerHTML = n + 1; 
+                        for (var i = 0; i < checkboxes.length; i++) {
+                          if (checkboxes[i].checked) {
+                            $('#article-row-id-' + checkboxes[i].value).remove();
+                          }
+                        }
+                        for (var n = 0; n < indexes.length; n++) {
+                          indexes[n].innerHTML = n + 1;
+                        }
                     },
                     "Save": function() {
                         var ads      = "",
@@ -664,10 +673,11 @@ function replaceHREF(ahref, toggle) {
                             account    = $('#accounts :selected');
                         // appends the current articles from folio
                         for (var i = 0; i < indexes.length; i++) {
-                                articles += indexes[i].value + ",";
+                          articles += indexes[i].value + ",";
                         }
-                        for (var n = 0; n < isad.length; n++)
-                                ads += (isad[n].checked)?"1,":"0,";
+                        for (var n = 0; n < isad.length; n++) {
+                          ads += (isad[n].checked)?"1,":"0,";
+                        }
                         // attempts to save the metadata to the selected Folio node
                         $.ajax({
                             url: baseURL + "/dpsbridge/folio/update",
@@ -710,23 +720,23 @@ function replaceHREF(ahref, toggle) {
             $("#dialog-iframe-preview-option").dialog({
                     autoOpen:false, height:400, width:375, modal:true,
                     buttons: {
-                            Back: function() {
-                                    removePreviewFile();
-                                    $(this).dialog("close"); }},
+                        Back: function() {
+                            removePreviewFile();
+                            $(this).dialog("close"); }},
                     close: function() { removePreviewFile(); }
             });
             // JQUERY UI: dialog box functionality for providing previewing option (landscape or portrait)
             $("#dialog-status").dialog({
                     autoOpen:false, modal:true,
                     buttons: {
-                            Close: function() {
-                                    $(this).dialog("close"); }}
+                        Close: function() {
+                            $(this).dialog("close"); }}
             });
             // JQUERY UI: auto sort the table
             $("#sortable-table tbody").sortable({
                     update: function(event, ui) {
-                            $('#sortable-table tbody tr').each(function() {
-                                    $(this).children('td.sortable-index').html($(this).index() + 1); }); }
+                        $('#sortable-table tbody tr').each(function() {
+                            $(this).children('td.sortable-index').html($(this).index() + 1); }); }
             });
             // JQUERY UI: auto resizing the dialog boxes depending on the size of the browser
             $(window).resize(function() {

@@ -12,19 +12,20 @@ abstract class Settings {
   // For DB / Passwords etc.
   static private $protected = array();
   // For all public strings such as meta stuff for site
-  static private $public;// = array();
+  static private $public;
 
-  /** 
+  /**
    * Create new object and initialise the variables.
    * 
-   * @param type $session_key
-   * @param type $config_data
-   * 
+   * @param object $session_key
+   *   Session Key
+   * @param object $config_data
+   *   Config Data
    */
   protected function __construct($session_key, $config_data) {
     if (isset($config_data)) {
-      $configDataObject = new ArrayObject($config_data);
-      self::$public = $configDataObject->getArrayCopy();
+      $config_data_object = new ArrayObject($config_data);
+      self::$public = $config_data_object->getArrayCopy();
     /*  self::$public =array();
       foreach($config_data as $key => $value) {
         self::$public[$key] = $value;

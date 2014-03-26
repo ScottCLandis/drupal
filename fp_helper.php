@@ -32,7 +32,7 @@ class FPHelper {
   /**
    * Create Session.
    */
-  public function create_session() {
+  public function createSession() {
     $fp_sessiondata = $this->fp->request('POST', 'sessions');
     return $fp_sessiondata;
   }
@@ -40,7 +40,7 @@ class FPHelper {
   /**
    * Create Distribution Session.
    */
-  public function create_distribution_session() {
+  public function createDistributionSession() {
     $fp_sessiondata = $this->fp->request('GET', 'ddp/issueServer/signInWithCredentials?emailAddress=' . $this->fp->config->user_email . '&password=' . $this->fp->config->user_password, array(), '', FALSE, TRUE);
     return $fp_sessiondata;
   }
@@ -48,14 +48,14 @@ class FPHelper {
   /**
    * Delete Session.
    */
-  public function delete_session() {
+  public function deleteSession() {
     return $this->fp->request('DELETE', 'sessions');
   }
 
   /**
    * Create Folio.
    */
-  public function create_folio($folio_params) {
+  public function createFolio($folio_params) {
     if (!isset($folio_params['folioName'])) {
       throw new Exception('Folio parameters required');
     }
@@ -65,7 +65,7 @@ class FPHelper {
   /**
    * Delete Folio.
    */
-  public function delete_folio($folio_id) {
+  public function deleteFolio($folio_id) {
     if (!isset($folio_id)) {
       throw new Exception('Folio ID required');
     }
@@ -75,7 +75,7 @@ class FPHelper {
   /**
    * Update Folio.
    */
-  public function update_folio($folio_id, $metadata) {
+  public function updateFolio($folio_id, $metadata) {
     if (!isset($folio_id) || !isset($metadata)) {
       throw new Exception('Folio ID and parameters required');
     }
@@ -107,7 +107,7 @@ class FPHelper {
   /**
    * Update Article.
    */
-  public function update_article($folio_id, $article_id, $metadata) {
+  public function updateArticle($folio_id, $article_id, $metadata) {
     if (!isset($folio_id) || !isset($article_id) || !isset($metadata)) {
       throw new Exception('Folio ID and parameters required');
     }
@@ -117,7 +117,7 @@ class FPHelper {
   /**
    * Upload Article.
    */
-  public function upload_article($folio_id, $metadata, $filepath) {
+  public function uploadArticle($folio_id, $metadata, $filepath) {
     if (!isset($folio_id) || !isset($filepath)) {
       throw new Exception('Folio ID and File required');
     }
@@ -127,7 +127,7 @@ class FPHelper {
   /**
    * Delete Article.
    */
-  public function delete_article($folio_id, $article_id) {
+  public function deleteArticle($folio_id, $article_id) {
     if (!isset($folio_id) || !isset($article_id)) {
       throw new Exception('Folio ID and Article ID required');
     }
@@ -137,7 +137,7 @@ class FPHelper {
   /**
    * Upload HTML Resources.
    */
-  public function upload_htmlresources($folio_id, $filepath) {
+  public function uploadHTMLResources($folio_id, $filepath) {
     if (!isset($folio_id) || !isset($filepath)) {
       throw new Exception('Folio ID and File required');
     }
@@ -147,7 +147,7 @@ class FPHelper {
   /**
    * Upload Cover.
    */
-  public function upload_cover($folio_id, $orientation, $url) {
+  public function uploadCover($folio_id, $orientation, $url) {
     if (!isset($folio_id) || !isset($orientation) || !isset($url)) {
       throw new Exception('Folio ID and File required');
     }

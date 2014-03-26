@@ -1,4 +1,3 @@
-
 /**
  * Given an array of values,
  *   convert it to string of values separated by commas
@@ -6,8 +5,9 @@
  */
 function dpsbridge_helper_array_to_string(dimensionArray) {
   var dimensionString = "";
-  for (var i = 0; i < dimensionArray.length; i++)
+  for (var i = 0; i < dimensionArray.length; i++) {
     dimensionString += dimensionArray[i].value + ",";
+  }
   return dimensionString;
 }
 /**
@@ -35,9 +35,11 @@ function dpsbridge_helper_check_article_by_id(articleList, articleID) {
  * @return {boolean} true if found, false otherwise
  */
 function dpsbridge_helper_check_article_by_name(articleList, article) {
-  for (var i = 0; i < articleList.length; i++)
-    if (articleList[i]['name'] == article)
+  for (var i = 0; i < articleList.length; i++) {
+    if (articleList[i]['name'] == article) {
       return true;
+    }
+  }
   return false;
 }
 /* ===================================================== *
@@ -48,12 +50,18 @@ function dpsbridge_helper_check_article_by_name(articleList, article) {
  * ===================================================== */
 function dpsbridge_helper_generate_dimensions(id, dimensions, toggle) {
   for (var i = 0; i < dimensions.length; i++) {
-    if (dimensions[i] == '') // do nothing if array is empty
+    // Do nothing if array is empty.
+    if (dimensions[i] == '') {
       continue;
-    if (toggle) // for inputing the dimension values on load
+    }
+    // For inputing the dimension values on load.
+    if (toggle) {
       jQuery('#' + id).append('<option value="' + dimensions[i] + '">' + dimensions[i] + '</option>');
-    else // for the delete dimensions window
+    }
+    // For the delete dimensions window.
+    else {
       jQuery('#' + id).append('<option value="' + dimensions[i].value + '">' + dimensions[i].value + '</option>');
+    }
   }
 }
 /**
@@ -69,10 +77,12 @@ function dpsbridge_helper_folio_clone(baseURL, folioNodeID) {
     type: "POST",
     data: { "fid":folioNodeID },
     success: function(output) {
-      if (output === 'ok')
+      if (output === 'ok') {
         window.location = baseURL + "/admin/config/content/fpmanage";
-      else
+      }
+      else {
         dpsbridge_helper_show_status(output);
+      }
     }
   });
 }
@@ -90,8 +100,8 @@ function dpsbridge_helper_delete_files(baseURL, filenames) {
   });
 }
 /**
- * Given the node ID, 
- *   make AJAX call to delete the node from the Drupal database.
+ * Make AJAX call to delete the node from the Drupal database.
+ * 
  * @param {string} baseURL ..the webhost base URL
  * @param {string} nodeID ...the node ID
  */
@@ -101,10 +111,12 @@ function dpsbridge_helper_delete_node(baseURL, nodeID) {
     type: "POST",
     data: { "fid":nodeID },
     success: function(output) {
-      if (output === 'ok')
+      if (output === 'ok') {
         window.location = baseURL + "/admin/config/content/fpmanage";
-      else
+      }
+      else {
         dpsbridge_helper_show_status(output);
+      }
     }
   });
 }
@@ -148,4 +160,3 @@ function dpsbridge_helper_show_status(message, width, height) {
 function dpsbridge_helper_update_status(message) {
   jQuery('#status').append("<p>" + message + "</p>\n");
 }
-

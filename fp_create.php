@@ -55,7 +55,7 @@ else {
       'folioIntent' => $folio_intent,
       'Filters' => $filters,
     );
-    $response = $fp->create_folio($params);
+    $response = $fp->createFolio($params);
     echo $response['folioID'];
   }
   else {

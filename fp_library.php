@@ -43,7 +43,7 @@ class FPLibrary {
   /**
    * Get the timestamp and set in config.
    */
-  protected function create_timestamp() {
+  protected function createTimestamp() {
     if ($this->config->timestamp == '') {
       $this->config->timestamp = round(microtime(TRUE));
     }
@@ -140,7 +140,7 @@ class FPLibrary {
       }
       else {
         // Authenticating against fp api....';!
-        $this->create_timestamp();
+        $this->createTimestamp();
         $this->create_nonce();
         $this->sig = $this->oauth_signature();
         // Debug message print_r("signature=[".$this->sig."]\n");.

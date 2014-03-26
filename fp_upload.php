@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . '/dpsbridge_helper.inc';
 
 if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
   echo "Missing Adobe ID and password!";
-} 
+}
 else {
   $fp        = new FPHelper($_SESSION['AdobeID'], $_SESSION['Password'], $_SESSION['APIKey'], $_SESSION['APISecret']);
   $folio_id   = isset($_POST['folioID']) ? $_POST['folioID'] : '';
@@ -35,7 +35,7 @@ else {
   if ($landscape) {
     $landscape           = substr($landscape, stripos($landscape, 'images'));
     $landscape_temp_url = dpsbridge_helper_scale_img($landscape, $width, $height, 'landscape');
-    $fp->upload_cover($folio_id, 'landscape', $landscape_temp_url);
+    $fp->uploadCover($folio_id, 'landscape', $landscape_temp_url);
     unlink($landscape_temp_url);
   }
   // If given a portrait image, scale and upload it,
@@ -43,11 +43,11 @@ else {
   if ($portrait) {
     $portrait          = substr($portrait, stripos($portrait, 'images'));
     $portrait_temp_url = dpsbridge_helper_scale_img($portrait, $height, $width, 'portrait');
-    $fp->upload_cover($folio_id, 'portrait', $portrait_temp_url);
+    $fp->uploadCover($folio_id, 'portrait', $portrait_temp_url);
     unlink($portrait_temp_url);
   }
   // Attempts to upload the HTML Resources zip file.
-  $response = $fp->upload_htmlresources($folio_id, 'styles/' . $style . '/HTMLResources.zip');
+  $response = $fp->uploadHTMLResources($folio_id, 'styles/' . $style . '/HTMLResources.zip');
   if ($response['status'] === 'ok') {
     echo ' - Success: HTMLResource<br/>';
   }
@@ -67,44 +67,47 @@ else {
         // If article is HTML base?
         if ($articles[$n]['articleMetadata']['assetFormat'] == 'Auto') {
           // Delete the article from Folio folder in the Folio Producer.
-          $fp->delete_article($folio_id, $articles[$n]['id']);
-        } else {
+          $fp->deleteArticle($folio_id, $articles[$n]['id']);
+        }
+        else {
           // Reset non-Drupal article's sort number.
-          $fp->update_article($folio_id, $articles[$n]['id'], array('sortOrder' => intval($n)));
+          $fp->updateArticle($folio_id, $articles[$n]['id'], array('sortOrder' => intval($n)));
         }
       }
     }
     // Increment the offset if there is a cover page, for sorting purposes.
-    if (count($filenames) > 0 && $filenames[0] == 'Cover')
+    if (count($filenames) > 0 && $filenames[0] == 'Cover') {
       $offset++;
+    }
     // Increment the offset if there is a TOC page, for sorting purposes.
-    if (count($filenames) > 1 && $filenames[1] == 'TableofContents')
+    if (count($filenames) > 1 && $filenames[1] == 'TableofContents') {
       $offset++;
+    }
     // Loop through the articles and upload them to the Folio Producer.
     for ($i = 0; $i < count($filenames); $i++) {
       $adjusted_sort_order = ($i + 1 + $offset) * 1000;
       // Checks if the article is not from Drupal.
       if ($filenames[$i] == '') {
         // Updates the sort order of the non-Drupal article.
-        $fp->update_article($folio_id, $alienated[$alienated_array_counter], array('sortOrder' => intval($adjusted_sort_order)));
+        $fp->updateArticle($folio_id, $alienated[$alienated_array_counter], array('sortOrder' => intval($adjusted_sort_order)));
         $alienated_array_counter++;
         continue;
       }
       $sourcePath  = 'folio/'.dpsbridge_helper_format_title($filenames[$i]).'.folio';
-      $response = $fp->upload_article($folio_id, array('sortOrder' => intval($adjusted_sort_order)), $sourcePath);
+      $response = $fp->uploadArticle($folio_id, array('sortOrder' => intval($adjusted_sort_order)), $sourcePath);
       // Locking the article.
-      // $fp->update_article($folio_id, 
+      // $fp->updateArticle($folio_id,
       // $response['articleInfo']['id'],array('locked' => 'true'));!
       if ($response['status'] === 'ok') {
         echo "<br/> - Success: ".$filenames[$i]."<br/>";
-      } 
+      }
       else {
         echo "<br/> - Failed: ".$filenames[$i].' <br/> :: ';
         print_r($response);
         echo "<br/>";
       }
     }
-  } 
+  }
   else {
     echo " - Failed: Articles <br/> :: Missing one or more of the following: Folio ID, article name, sort order, and target viewer!";
   }

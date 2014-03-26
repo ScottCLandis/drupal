@@ -10,7 +10,7 @@ var apikey,
   apple_pass,
   apple_dimension,
   baseURL = "",
-  pathToDir = ""; 
+  pathToDir = "";
 /* =================================================== *
  * Given the account type,
  *   call helper to connect to Folio Producer,
@@ -203,7 +203,7 @@ function refreshDimensions() {
   }
 }
 /* ============================== *
- * Update the global fields, 
+ * Update the global fields,
  *   in preparation for API calls
  * ============================== */
 function updateFields() {
@@ -273,8 +273,10 @@ function updateFields() {
         // check if all available dimensions are selected, to prevent deletion of all available dimensions
         if (dimensions.length >= $('#' + desiredAccount.val() + '_dimension option').length) {
           dpsbridge_helper_show_status('At least 1 dimension has to exist per account type!');
-        } else if (dimensions.length > 0) { // if user has selected dimension(s) < availalbe dimensions
-          // delete the selected dimension(s) from the selected account type
+        }
+        // If user has selected dimension(s) < available dimensions.
+        else if (dimensions.length > 0) {
+          // Delete the selected dimension(s) from the selected account type.
           for (var i = 0; i < dimensions.length; i++) {
             $('#' + desiredAccount.val() + '_dimension option[value="' + dimensions[i].value + '"]').remove();
           }

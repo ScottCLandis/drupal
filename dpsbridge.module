@@ -695,7 +695,7 @@ function dpsbridge_folio_article_preview() {
     // Unzip the selected stylesheet for preview.
     // Removed variable from function becuase pareview complained.
     // Removed variable $result = dpsbridge_helper_extract_stylesheet($pubcss);.
-    dpsbridge_helper_extract_stylesheet($pubcss);    
+    dpsbridge_helper_extract_stylesheet($pubcss);  
     // Apply the stylesheet framework for preview.
     // Is derivative of Bootstrap framework?
     if (strpos($pubcss, 'Bootstrap') !== FALSE) {
@@ -1411,7 +1411,11 @@ function dpsbridge_theme() {
       'path' => $path . '/theme',
     ),
     'dpsbridge_image_formatter' => array(
-      'variables' => array('item' => NULL, 'title' => NULL, 'image_style' => NULL),
+      'variables' => array(
+        'item' => NULL,
+        'title' => NULL,
+        'image_style' => NULL,
+        ),
     ),
   );
 }

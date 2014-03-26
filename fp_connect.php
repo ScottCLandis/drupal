@@ -30,8 +30,8 @@ $config->fulfillmentError = 'ok';
 
 // Create session.
 if (!isset($_SESSION['ticket'])) {
-  $session = $fp->create_session();
-  $distribution_api = $fp->create_distribution_session();
+  $session = $fp->createSession();
+  $distribution_api = $fp->createDistributionSession();
   $distribution_info = new SimpleXMLElement($distribution_api);
   $_SESSION['DistributionID'] = (string) $distribution_info->accountId;
 
