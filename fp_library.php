@@ -32,7 +32,7 @@ class FPLibrary {
   /**
    * Generate nonce and store in config.
    */
-  protected function create_nonce() {
+  protected function createNonce() {
     $sequence = array_merge(range(0, 9), range('A', 'Z'), range('a', 'z'));
     $length = count($sequence);
     shuffle($sequence);
@@ -52,7 +52,7 @@ class FPLibrary {
   /**
    * Generate URL for webservice.
    */
-  protected function create_url($server, $suffix = '') {
+  protected function createURL($server, $suffix = '') {
     if (strpos($server, 'http') === FALSE) {
       $url = ($this->config->use_ssl) ? 'https' : 'http';
       return $url . '://' . $server . '/webservices/' . $suffix;
@@ -63,7 +63,7 @@ class FPLibrary {
   /**
    * Generate URL for webservice.
    */
-  protected function create_distributionurl($server, $suffix = '') {
+  protected function createDistributionURL($server, $suffix = '') {
     if (strpos($server, 'http') === FALSE) {
       $url = ($this->config->use_ssl) ? 'https' : 'http';
       return $url . '://' . $server . '/' . $suffix;
@@ -74,8 +74,8 @@ class FPLibrary {
   /**
    * Message to be encrypted for oauth.
    */
-  protected function oauth_message() {
-    $url = urlencode($this->create_url($this->config->host, 'sessions'));
+  protected function oAuthMessage() {
+    $url = urlencode($this->createURL($this->config->host, 'sessions'));
     $params = '&oauth_consumer_key%3D' . $this->config->consumer_key . '%26oauth_signature_method%3DHMAC-SHA256' . '%26oauth_timestamp%3D' . $this->config->timestamp;
     return 'POST&' . $url . $params;
   }
@@ -83,8 +83,8 @@ class FPLibrary {
   /**
    * Generate the oauth signature.
    */
-  protected function oauth_signature() {
-    $message = $this->oauth_message();
+  protected function oAuthSignature() {
+    $message = $this->oAuthMessage();
     $hash = hash_hmac('sha256', $message, $this->config->consumer_secret . '&', FALSE);
     $bytes = pack('H*', $hash);
     $base = base64_encode($bytes);
@@ -123,7 +123,7 @@ class FPLibrary {
       // Echo 'athentication required...'!
       if ($is_distribution) {
         // Echo 'authenticating against distribution api....'!
-        $this->url = $this->create_distributionurl($this->config->distributionHost, $url);
+        $this->url = $this->createDistributionURL($this->config->distributionHost, $url);
 
         $credentials = array(
           'email'  => $this->config->user_email,
@@ -132,19 +132,16 @@ class FPLibrary {
 
         $this->params = json_encode($credentials);
         $this->oauth = $this->curl(TRUE);
-/*        echo '<pre>';
-        print_r($this->oauth);
-        echo '</pre>';
-*/
+
         return $this->oauth;
       }
       else {
         // Authenticating against fp api....';!
         $this->createTimestamp();
-        $this->create_nonce();
-        $this->sig = $this->oauth_signature();
+        $this->createNonce();
+        $this->sig = $this->oAuthSignature();
         // Debug message print_r("signature=[".$this->sig."]\n");.
-        $this->url = $this->create_url($this->config->host, $url);
+        $this->url = $this->createURL($this->config->host, $url);
 
         $credentials = array(
           'email'  => $this->config->user_email,
@@ -180,14 +177,14 @@ class FPLibrary {
         $server = $_SESSION['server'];
       }
 
-      $this->url = $this->create_url($server, $url);
+      $this->url = $this->createURL($server, $url);
       $this->headers[] = 'Authorization: AdobeAuth ticket="' . $ticket  . '"';
 
       if (isset($filepath)) {
         // Remove content-type.
         unset($this->headers[0]);
         $this->file = $filepath;
-        $this->file_upload();
+        $this->fileUpload();
       }
       $response = $this->curl(FALSE);
       if (isset($response['ticket'])) {
@@ -231,15 +228,15 @@ class FPLibrary {
     }
 
     switch ($this->method) {
-      case 'GET' :
+      case 'GET':
         break;
 
-      case 'POST' :
+      case 'POST':
         curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->params);
         break;
 
-      default :
+      default:
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
         break;
     }
@@ -257,7 +254,7 @@ class FPLibrary {
   /**
    * Set multipart request.
    */
-  protected function file_upload() {
+  protected function fileUpload() {
     $file = $this->file;
     if (!file_exists($file)) {
       throw new Exception("File does not exist");

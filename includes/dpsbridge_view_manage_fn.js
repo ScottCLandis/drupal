@@ -1,3 +1,6 @@
+/**
+ * View Manage Scripting.
+ */
 // Set to Folio node ID when opening the edit panel.
 var fid = '',
     previewFileName   = '',
@@ -759,3 +762,4 @@ function replaceHREF(ahref, toggle) {
         }
     }
 })(jQuery);
+

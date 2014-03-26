@@ -20,7 +20,7 @@ class FPHelper {
   /**
    * Constructor.
    */
-  function __construct($email, $password, $consumer_key, $consumer_secret) {
+  public function __construct($email, $password, $consumer_key, $consumer_secret) {
     $this->fp = new FPLibrary(array(
       'user_email' => $email,
       'user_password' => $password,

@@ -26,52 +26,66 @@ abstract class Settings {
     if (isset($config_data)) {
       $config_data_object = new ArrayObject($config_data);
       self::$public = $config_data_object->getArrayCopy();
-    /*  self::$public =array();
-      foreach($config_data as $key => $value) {
-        self::$public[$key] = $value;
-      }*/
     }
     else {
       self::$public = array();
     }
     self::$public['sessionKey'] = $session_key;
   }
-  
+  /**
+   * Get Protected.
+   */
   public static function getProtected($key) {
-    return isset(self::$protected[$key]) ? self::$protected[$key] : false;
+    return isset(self::$protected[$key]) ? self::$protected[$key] : FALSE;
   }
-  
+  /**
+   * Get Public Array.
+   */
   public static function getPublicArray() {
     return self::$public;
   }
-
+  /**
+   * Get Public.
+   */
   public static function getPublic($key) {
-    return isset(self::$public[$key]) ? self::$public[$key] : false;
+    return isset(self::$public[$key]) ? self::$public[$key] : FALSE;
   }
-  
+  /**
+   * Merge Public.
+   */
   public static function mergePublic($mergeData) {
-    self::$public = array_merge(self::$public,$mergeData);
+    self::$public = array_merge(self::$public, $mergeData);
     return self::$public;
   }
-
-  public static function setProtected($key,$value) {
+  /**
+   * Set Protected.
+   */
+  public static function setProtected($key, $value) {
     self::$protected[$key] = $value;
   }
-
-  public static function setPublic($key,$value) {
+  /**
+   * Set Public.
+   */
+  public static function setPublic($key, $value) {
     self::$public[$key] = $value;
-    $_SESSION[self::$public['sessionKey']]=self::$public;
+    $_SESSION[self::$public['sessionKey']] = self::$public;
   }
-
+  /**
+   * Getter.
+   */
   public function __get($key) {
     return isset(self::$public[$key]) ? self::$public[$key] : false;
   }
-
-  public function __set($key,$value) {
-    self::$public[$key]=$value;
-    $_SESSION[self::$public['sessionKey']]=self::$public;
+  /**
+   * Setter.
+   */
+  public function __set($key, $value) {
+    self::$public[$key] = $value;
+    $_SESSION[self::$public['sessionKey']] = self::$public;
   }
-  
+  /**
+   * Is Set.
+   */
   public function __isset($key) {
     return isset(self::$public[$key]);
   }

@@ -47,7 +47,8 @@
         if ($images):
       ?>
         <div id='imageArea' class='col-lg-6 col-12'>
-        <?php // If there are only one image.
+        <?php
+        // If there are only one image.
         if (count($images) == 1): ?>
           <img src='" . dpsbridge_helper_linkImg($filename, $images[0]) . "' width='100%' /><br/>
         <?php 

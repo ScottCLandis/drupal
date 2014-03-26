@@ -7,7 +7,6 @@
  * - $landscape:
  * - $portrait:
  * - $directory:
- *
  */
 ?>
 <!doctype html>
@@ -54,7 +53,7 @@
       $portrait_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $portrait);
       file_put_contents($directory . 'Cover/portrait.png', $portrait_img);?>
       <div class='hidden-lg'><img src='portrait.png' width='100%' /></div>
-    <?
+    <?php
     else:?>
       <div class='hidden-lg'><img src='landscape.png' width='100%' /></div>
     <?php

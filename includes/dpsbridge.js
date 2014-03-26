@@ -160,3 +160,4 @@ function dpsbridge_helper_show_status(message, width, height) {
 function dpsbridge_helper_update_status(message) {
   jQuery('#status').append("<p>" + message + "</p>\n");
 }
+

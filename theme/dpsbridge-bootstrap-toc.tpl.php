@@ -39,9 +39,9 @@
       <div class='col-lg-12 col-12'>
       <?php
         for ($i = 1, $n = 1; $i < count($article_names); $i++):
-          if ($ads_list[$i - 1] == TRUE) {
+          if ($ads_list[$i - 1] == TRUE):
             continue;
-          }
+          endif;
       ?>
         <div class='col-lg-12 col-12'>
           <h4><a class="bluebg" href="navto://<?php print dpsbridge_helper_format_title($article_names[$i]); ?>"> <?php print $n; ?> )  <?php print $article_names[$i]; ?></a></h4>

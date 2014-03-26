@@ -93,16 +93,16 @@ else {
         $alienated_array_counter++;
         continue;
       }
-      $sourcePath  = 'folio/'.dpsbridge_helper_format_title($filenames[$i]).'.folio';
-      $response = $fp->uploadArticle($folio_id, array('sortOrder' => intval($adjusted_sort_order)), $sourcePath);
+      $source_path  = 'folio/'.dpsbridge_helper_format_title($filenames[$i]) . '.folio';
+      $response = $fp->uploadArticle($folio_id, array('sortOrder' => intval($adjusted_sort_order)), $source_path);
       // Locking the article.
       // $fp->updateArticle($folio_id,
       // $response['articleInfo']['id'],array('locked' => 'true'));!
       if ($response['status'] === 'ok') {
-        echo "<br/> - Success: ".$filenames[$i]."<br/>";
+        echo "<br/> - Success: " . $filenames[$i]."<br/>";
       }
       else {
-        echo "<br/> - Failed: ".$filenames[$i].' <br/> :: ';
+        echo "<br/> - Failed: " . $filenames[$i].' <br/> :: ';
         print_r($response);
         echo "<br/>";
       }

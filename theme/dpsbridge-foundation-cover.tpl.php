@@ -7,7 +7,6 @@
  * - $landscape:
  * - $portrait:
  * - $directory:
- * 
  */
 ?>
 <!doctype html>

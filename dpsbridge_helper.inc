@@ -129,15 +129,15 @@ function dpsbridge_helper_extract_stylesheet($stylesheet) {
  *   Containing the URL to the saved snapshot
  */
 function dpsbridge_helper_format_thumbnail($url) {
-//  $img_url  = theme('shrinktheweb_image', array('url' => $url));
-//  $pattern = '<img src="([\w:\/.]+)" />';
-//  preg_match($pattern, $img_url, $formatted_url);
-//  if (!$formated_url) {
-//    return 'http://placehold.it/100x100&text=Adobe';
-//  }
-//  else {
-//    return $formated_url[1];
-//  }
+  //  $img_url  = theme('shrinktheweb_image', array('url' => $url));
+  //  $pattern = '<img src="([\w:\/.]+)" />';
+  //  preg_match($pattern, $img_url, $formatted_url);
+  //  if (!$formated_url) {
+  //  return 'http://placehold.it/100x100&text=Adobe';
+  //  }
+  //  else {
+  //  return $formated_url[1];
+  //  }
 }
 /**
  * Helper method for formatting the given video url to embedded video url.
@@ -475,8 +475,8 @@ function dpsbridge_helper_pull_node($node_id) {
   $container = array();
   // Loads the node from the database.
   $node = node_load($node_id);
-  $container['node'] = $node; 
-  
+  $container['node'] = $node;
+
   // Pull fields from dps node view.
   $node_display = node_view($node, 'dps');
   $container['ds_content'] = isset($node_display) ? $node_display : array();

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * fp_config.php
@@ -16,13 +15,12 @@ class FPConfig extends Settings {
    * Create new object and initialise the variables.
    * 
    * Call this method to get singleton.
-   * 
+   *
    * @param array $config 
    *   Stores parameters
    *
-   * @return 
+   * @return object
    *   UserFactory
-   * 
    */
   public static function Instance() {
     static $inst = NULL;

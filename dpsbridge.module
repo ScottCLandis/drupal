@@ -695,7 +695,7 @@ function dpsbridge_folio_article_preview() {
     // Unzip the selected stylesheet for preview.
     // Removed variable from function becuase pareview complained.
     // Removed variable $result = dpsbridge_helper_extract_stylesheet($pubcss);.
-    dpsbridge_helper_extract_stylesheet($pubcss);  
+    dpsbridge_helper_extract_stylesheet($pubcss);
     // Apply the stylesheet framework for preview.
     // Is derivative of Bootstrap framework?
     if (strpos($pubcss, 'Bootstrap') !== FALSE) {
@@ -1415,7 +1415,7 @@ function dpsbridge_theme() {
         'item' => NULL,
         'title' => NULL,
         'image_style' => NULL,
-        ),
+      ),
     ),
   );
 }
@@ -1476,7 +1476,7 @@ function dpsbridge_field_formatter_settings_summary($field, $instance, $view_mod
     else {
       $summary[] = t('Original image');
     }
-    
+
     return implode('<br />', $summary);
   }
 }
@@ -1638,7 +1638,7 @@ function theme_dpsbridge_date($variables) {
 /**
  * Returns HTML for an image field formatter.
  *
- * @param $variables
+ * @param array $variables
  *   An associative array containing:
  *   - item: Associative array of image data, which may include "uri", "alt",
  *     "width", "height", "title" and "attributes".
@@ -1673,11 +1673,10 @@ function theme_dpsbridge_image_formatter($variables) {
 
   $title = $variables['title'];
   $article_folder = dpsbridge_helper_format_title($title);
-  $parsed    = explode('/', $image['path']);
-  $filename  = $parsed[count($parsed) - 1];
+  $parsed = explode('/', $image['path']);
+  $filename = $parsed[count($parsed) - 1];
 
   if ($variables['image_style']) {
-    
     // Determine the dimensions of the styled image.
     $dimensions = array(
       'width' => $image['width'],
@@ -1697,8 +1696,8 @@ function theme_dpsbridge_image_formatter($variables) {
     $path = file_create_url($image['path']);
     dpsbridge_helper_save_img($path, $article_folder . '/' . $filename);
   }
-  
-  $output = '<img src="'. $filename .'" />';
+
+  $output = '<img src="' . $filename . '" />';
 
   return $output;
 }
