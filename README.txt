@@ -84,7 +84,7 @@ field_folio_producer_article_id
 Reference to the non-Drupal articles
 Folio Selection view
 
-Memory Issue
+emory Issue
 ============
 
 Drupal default memory limit issues (i.e. blank page when loading Drupal)

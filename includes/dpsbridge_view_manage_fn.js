@@ -749,7 +749,7 @@ function replaceHREF(ahref, toggle) {
             });
 
             $("#jqueryui-tabs").tabs();
-            
+
             var container = $('#block-system-main');
             var button_wrapper = $('<div/>').css({'float':'left', 'margin-bottom':'15px'});
             var button_clone = $('<button/>').text('Clone Selected Folio').click(function() { get_selected('clone'); });
