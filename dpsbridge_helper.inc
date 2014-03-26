@@ -122,7 +122,7 @@ function dpsbridge_helper_extract_stylesheet($stylesheet) {
 /**
  * Helper method for taking a snapshot of the webpage via shrinktheweb module.
  * 
- * Method to be tested throughly.
+ * Method to be tested thoroughly.
  *
  * @param string $url
  *   Webpage URL.

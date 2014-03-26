@@ -693,7 +693,7 @@ function dpsbridge_folio_article_preview() {
     // Create the directory and its default files.
     dpsbridge_helper_create_dir(dpsbridge_helper_format_title($title));
     // Unzip the selected stylesheet for preview.
-    // Removed variable from function becuase pareview complained.
+    // Removed variable from function because pareview complained.
     // Removed variable $result = dpsbridge_helper_extract_stylesheet($pubcss);.
     dpsbridge_helper_extract_stylesheet($pubcss);
     // Apply the stylesheet framework for preview.
