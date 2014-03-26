@@ -8,7 +8,7 @@
 
 require_once dirname(__FILE__) . '/fp_settings.php';
 
-abstract class Settings {
+abstract class DPSBridgeSettings {
   // For DB / Passwords etc.
   static protected $protected = array();
   // For all public strings such as meta stuff for site.

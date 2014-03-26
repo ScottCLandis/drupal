@@ -14,7 +14,7 @@ require_once dirname(__FILE__) . '/fp_config.php';
  * R25
  * @dbeaton
  */
-class FPLibrary {
+class DPSBridgeFPLibrary {
   public $response = array();
 
   /**
@@ -26,7 +26,7 @@ class FPLibrary {
   public function __construct($config_in) {
     $this->params = array();
     $this->headers = array();
-    $this->config = FPConfig::Instance();
+    $this->config = DPSBridgeFPConfig::Instance();
     $this->config->mergePublic($config_in);
   }
   /**
@@ -261,7 +261,6 @@ class FPLibrary {
     }
 
     $handle = fopen($file, 'rb');
-    $buffer = '';
     fseek($handle, 0);
     $binary = fread($handle, filesize($file));
     fclose($handle);

@@ -131,6 +131,7 @@ function dpsbridge_helper_extract_stylesheet($stylesheet) {
  *   Containing the URL to the saved snapshot
  */
 function dpsbridge_helper_format_thumbnail($url) {
+  $formated_url = NULL;
   $img_url  = theme('shrinktheweb_image', array('url' => $url));
   $pattern = '<img src="([\w:\/.]+)" />';
   preg_match($pattern, $img_url, $formatted_url);

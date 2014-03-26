@@ -7,7 +7,7 @@
  */
 
 require_once dirname(__FILE__) . '/fp_config.php';
-$config = FPConfig::Instance();
+$config = DPSBridgeFPConfig::Instance();
 require_once dirname(__FILE__) . '/fp_helper.php';
 require_once dirname(__FILE__) . '/dpsbridge_helper.inc';
 
@@ -15,7 +15,7 @@ if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
   echo "Missing Adobe ID and password!";
 }
 else {
-  $fp        = new FPHelper($_SESSION['AdobeID'], $_SESSION['Password'], $_SESSION['APIKey'], $_SESSION['APISecret']);
+  $fp        = new DPSBridgeFPHelper($_SESSION['AdobeID'], $_SESSION['Password'], $_SESSION['APIKey'], $_SESSION['APISecret']);
   $folio_id   = isset($_POST['folioID']) ? $_POST['folioID'] : '';
   $filenames = isset($_POST['filenames']) ? $_POST['filenames'] : '';
   $alienated = isset($_POST['alienated']) ? $_POST['alienated'] : '';

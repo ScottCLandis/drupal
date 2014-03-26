@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . '/fp_library.php';
  * R25
  * @dbeaton
  */
-class FPHelper {
+class DPSBridgeFPHelper {
   public $fp;
   public $config;
 
@@ -21,7 +21,7 @@ class FPHelper {
    * Constructor.
    */
   public function __construct($email, $password, $consumer_key, $consumer_secret) {
-    $this->fp = new FPLibrary(array(
+    $this->fp = new DPSBridgeFPLibrary(array(
       'user_email' => $email,
       'user_password' => $password,
       'consumer_key' => $consumer_key,

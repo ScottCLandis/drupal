@@ -42,6 +42,7 @@ function dpsbridge_helper_style_bootstrap_cover($publication, $landscape, $portr
  *   A list of article names, used to generate the nav-to links.
  */
 function dpsbridge_helper_style_bootstrap_toc($publication, $article_names, $ds_articles) {
+  $ads_list = NULL;
   $directory     = drupal_get_path('module', 'dpsbridge') . '/html/';
   // Generate the contents of the HTML article.
   $variables = array(
@@ -52,7 +53,7 @@ function dpsbridge_helper_style_bootstrap_toc($publication, $article_names, $ds_
   );
   $html = theme('dpsbridge_bootstrap_toc', $variables);
   // Save the above HTML @ /dpsbridge/html/TableofContents/TableofContents.html.
-  $result = file_put_contents($directory . 'TableofContents/TableofContents.html', $html);
+  file_put_contents($directory . 'TableofContents/TableofContents.html', $html);
   // Take a snapshot of the webpage.
   $toc_img = dpsbridge_helper_format_thumbnail($GLOBALS['base_url'] . '/' . $directory . 'TableofContents/TableofContents.html');
   dpsbridge_helper_save_img($toc_img, 'TableofContents/toc.png');
@@ -78,7 +79,6 @@ function dpsbridge_helper_style_bootstrap_toc($publication, $article_names, $ds_
  *   The article video.
  */
 function dpsbridge_helper_style_bootstrap($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content) {
-  $slideshow = "";
   $filename = dpsbridge_helper_format_title($title);
   $paragraphs = isset($body[LANGUAGE_NONE][0]['safe_value']) ? $body[LANGUAGE_NONE][0]['safe_value'] : '';
   $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
@@ -96,7 +96,7 @@ function dpsbridge_helper_style_bootstrap($publication, $title, $author, $kicker
   );
   $html = theme('dpsbridge_bootstrap', $variables);
   // Save the above HTML @ /dpsbridge/html/[article name]/[article name].html.
-  $result = file_put_contents($directory . $filename . '/' . $filename . '.html', $html);
+  file_put_contents($directory . $filename . '/' . $filename . '.html', $html);
   // Take a snapshot of the webpage.
   $toc_img = dpsbridge_helper_format_thumbnail($GLOBALS['base_url'] . '/' . $directory . $filename . '/' . $filename . '.html');
   dpsbridge_helper_save_img($toc_img, $filename . '/toc.png');

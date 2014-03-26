@@ -7,7 +7,7 @@
 
 require_once dirname(__FILE__) . '/fp_settings.php';
 
-class FPConfig extends Settings {
+class DPSBridgeFPConfig extends DPSBridgeSettings {
   public $response = array();
   public $version = "1.01";
 
@@ -22,7 +22,7 @@ class FPConfig extends Settings {
   public static function Instance() {
     static $inst = NULL;
     if ($inst === NULL) {
-      $inst = new FPConfig();
+      $inst = new DPSBridgeFPConfig();
     }
     return $inst;
   }

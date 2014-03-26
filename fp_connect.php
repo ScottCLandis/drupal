@@ -11,7 +11,7 @@ session_cache_limiter('private');
 $cache_limiter = session_cache_limiter();
 session_cache_expire(30);
 $cache_expire = session_cache_expire();
-$config = FPConfig::Instance();
+$config = DPSBridgeFPConfig::Instance();
 require_once dirname(__FILE__) . '/fp_helper.php';
 
 $_SESSION['AdobeID'] = htmlspecialchars(isset($_POST["AdobeID"]) ? $_POST["AdobeID"] : '');
@@ -21,9 +21,9 @@ $_SESSION['APISecret'] = htmlspecialchars(isset($_POST["APISecret"]) ? $_POST["A
 $folio_id = htmlspecialchars(isset($_POST['folioID']) ? $_POST['folioID'] : '');
 $is_test = htmlspecialchars(isset($_POST["Test"]) ? $_POST["Test"] : '');
 
-$fp = new FPHelper($_SESSION['AdobeID'], $_SESSION['Password'], $_SESSION['APIKey'], $_SESSION['APISecret']);
+$fp = new DPSBridgeFPHelper($_SESSION['AdobeID'], $_SESSION['Password'], $_SESSION['APIKey'], $_SESSION['APISecret']);
 $config->fp = $fp;
-$config = FPConfig::Instance();
+$config = DPSBridgeFPConfig::Instance();
 $fp = $config->fp;
 $config->fpError = 'ok';
 $config->fulfillmentError = 'ok';
