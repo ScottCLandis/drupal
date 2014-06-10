@@ -1,8 +1,6 @@
 <?php
-
 /**
  * @file
- * fp_config.php
  * Folio Producer Config file.
  */
 
@@ -16,11 +14,11 @@ abstract class DPSBridgeSettings {
 
   /**
    * Create new object and initialise the variables.
-   * 
+   *
    * @param object $session_key
-   *   Session Key
+   *   Session Key.
    * @param object $config_data
-   *   Config Data
+   *   Config Data.
    */
   protected function __construct($session_key, $config_data) {
     if (isset($config_data)) {

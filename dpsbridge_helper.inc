@@ -1,21 +1,19 @@
 <?php
-
 /**
  * @file
- * DPSBridge module helper functions. 
+ * DPSBridge module helper functions.
  */
-
 
 /**
  * To check if article already exists within the selected folio node.
- * 
+ *
  * Loops through the existing articles in the folio node to determine if an
  * article exists within the folio.
- * 
+ *
  * @param string $article_id
  *   Article node id.
- * @param array $folio_node_array 
- *   Array containing a list of article node ID's
+ * @param array $folio_node_array
+ *   Array containing a list of article node ID's.
  */
 function dpsbridge_helper_check_existence($article_id, $folio_node_array) {
   for ($i = 0; $i < count($folio_node_array); $i++) {
@@ -27,7 +25,7 @@ function dpsbridge_helper_check_existence($article_id, $folio_node_array) {
 }
 /**
  * Helper method for creating the Folio structure.
- * 
+ *
  *   directory [filename]
  *   -> Folio.xml
  *   -> [filename].html
@@ -35,11 +33,11 @@ function dpsbridge_helper_check_existence($article_id, $folio_node_array) {
  *   -> META-INF
  *      -> pkgproperties.xml
  *   Skip creation if already exists.
- * 
+ *
  * @param string $filename
  *   Filtered Article name, used as folder and file name.
  */
-function dpsbridge_helper_create_dir($filename) { 
+function dpsbridge_helper_create_dir($filename) {
   $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/html/';
   if (!file_exists($directory . '/' . $filename)) {
     mkdir($directory . $filename);
@@ -58,19 +56,19 @@ function dpsbridge_helper_create_dir($filename) {
 }
 /**
  * Helper method for saving the Adobe DPS credentials as a Drupal 7 user.
- * 
+ *
  * @param string $uid
- *   Drupal user id
+ *   Drupal user id.
  * @param string $id
- *   Adobe DPS user id
+ *   Adobe DPS user id.
  * @param string $pass
- *   Adobe DPS user password
+ *   Adobe DPS user password.
  * @param string $dimension
- *   Available dimensions per account type (not used ATM)
+ *   Available dimensions per account type (not used ATM).
  * @param string $key
- *   Adobe DPS API key
+ *   Adobe DPS API key.
  * @param string $secret
- *   Adobe DPS API secret
+ *   Adobe DPS API secret.
  */
 function dpsbridge_helper_credential_update($uid, $id, $pass, $dimension, $key, $secret) {
   $user = user_load($uid);
@@ -103,10 +101,10 @@ function dpsbridge_helper_credential_update($uid, $id, $pass, $dimension, $key, 
 
 /**
  * Helper method for unzipping the given stylesheet.
- * 
+ *
  * Located in /dpsbridge/styles/[stylsheet name]/HTMLResources.zip,
  *   and place it in /dpsbridge/html/HTMLResources/
- * 
+ *
  * @param string $stylesheet
  *   Name of the stylesheet to unzip.
  */
@@ -121,13 +119,13 @@ function dpsbridge_helper_extract_stylesheet($stylesheet) {
 }
 /**
  * Helper method for taking a snapshot of the webpage via shrinktheweb module.
- * 
+ *
  * Method to be tested thoroughly.
  *
  * @param string $url
  *   Webpage URL.
- * 
- * @return string 
+ *
+ * @return string
  *   Containing the URL to the saved snapshot
  */
 function dpsbridge_helper_format_thumbnail($url) {
@@ -136,7 +134,6 @@ function dpsbridge_helper_format_thumbnail($url) {
   $pattern = '<img src="([\w:\/.]+)" />';
   preg_match($pattern, $img_url, $formatted_url);
   if (!$formated_url) {
-    // return 'http://placehold.it/100x100&text=Adobe';
     return drupal_get_path("module", "dpsbridge") . "/images/icons/toc.png";
   }
   else {
@@ -145,10 +142,10 @@ function dpsbridge_helper_format_thumbnail($url) {
 }
 /**
  * Helper method for formatting the given video url to embedded video url.
- * 
+ *
  * @param string $url
  *   Video URL.
- * 
+ *
  * @return string
  *   Containing the embedded video URL.
  */
@@ -159,7 +156,7 @@ function dpsbridge_helper_format_url($url) {
 }
 /**
  * Helper method for appending the articles to a folio node.
- * 
+ *
  * @param string $fid
  *   Folio node ID.
  * @param array $articles
@@ -190,12 +187,12 @@ function dpsbridge_helper_folio_append($fid, $articles) {
 }
 /**
  * Helper method for removing any special chars from filename (article title).
- * 
+ *
  * @param string $filename
  *   Article title, used as the folder name, folio name, and .html filename.
  * @param string $replacement
  *   Optional replacement char for the special chars.
- * 
+ *
  * @return string
  *   Containing the formatted filename without any special characters.
  */
@@ -206,7 +203,7 @@ function dpsbridge_helper_format_title($filename, $replacement = '') {
 }
 /**
  * Helper method for generating the HTML article folder.
- * 
+ *
  * Make calls to the following:
  *  dpsbridge_helper_create_dir()...........creates the HTML article structure
  *  dpsbridge_helper_writePKG().............writes to the pkgproperties.xml file
@@ -217,7 +214,7 @@ function dpsbridge_helper_format_title($filename, $replacement = '') {
  *  dpsbridge_helper_style_foundation_toc()...TOC page w/ Foundation layout
  *  dpsbridge_helper_style_foundation_cover().Cover page w/ Foundation layout
  *  dpsbridge_helper_style_foundation().......Article page w/ Foundation layout
- * 
+ *
  * @param array $article_metadata
  *   A list of metadata fields pertaining to the article node.
  * @param array $folio_metadata
@@ -225,7 +222,9 @@ function dpsbridge_helper_format_title($filename, $replacement = '') {
  * @param array $ads_toggle
  *   A list of 0's and 1's, 1 for ads and 0 for not.
  * @param array $article_list
- *   A list of article names, used for generating the ToC
+ *   A list of article names, used for generating the ToC.
+ * @param array $ds_articles
+ *   A list of Display Suite articles.
  */
 function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $article_list = '', $ds_articles = array()) {
   // Filter the title to create the folder & filename.
@@ -238,7 +237,7 @@ function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads
     $article_metadata['tags'] .= "DPSBridge";
   }
   else {
-    $article_metadata['tags'] .= "DPSBridge-" . $article_metadata['node']->nid ;
+    $article_metadata['tags'] .= "DPSBridge-" . $article_metadata['node']->nid;
   }
 
   // Write to the Folio.xml.
@@ -346,11 +345,7 @@ function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads
 
 /**
  * Helper method for including the css/js for each of the 3 view pages.
- * 
- *   - /admin/config/content/dpsbridge
- *   - /admin/config/content/fpmanage
- *   - /admin/config/content/fpselect
- * 
+ *
  * @param string $toggle
  *   Includes the respective javascript depending on the view page.
  */
@@ -361,9 +356,9 @@ function dpsbridge_helper_include_goodies($toggle) {
 }
 /**
  * Helper method for saving the given image url, to the predefined image path.
- * 
+ *
  * (/dpsbridge/file_name/image.jpg), with the given image name.
- * 
+ *
  * @param string $filename
  *   Image URL.
  * @param string $images
@@ -378,10 +373,10 @@ function dpsbridge_helper_link_img($filename, $images) {
 
 /**
  * Helper method to pull the article node contents.
- * 
+ *
  * @param string $node_id
  *   Article node ID (or any other types of node).
- * 
+ *
  * @return array
  *   Containing the article metadata.
  */
@@ -401,13 +396,13 @@ function dpsbridge_helper_pull_article($node_id) {
 
 /**
  * Helper method for pulling folio node contents and the user credentials.
- * 
+ *
  * @param string $node_id
  *   Folio node id.
  * @param string $toggle
  *   Toggle for pulling the account information.
- * 
- * @return array 
+ *
+ * @return array
  *   Containing the folio metadata.
  */
 function dpsbridge_helper_pull_content($node_id, $toggle = '') {
@@ -474,10 +469,10 @@ function dpsbridge_helper_pull_content($node_id, $toggle = '') {
 }
 /**
  * Helper method for pulling the article node contents.
- * 
+ *
  * @param string $node_id
  *   Article node id.
- * 
+ *
  * @return array
  *   Containing the article metadata.
  */
@@ -533,10 +528,11 @@ function dpsbridge_helper_pull_node($node_id) {
   }
   return $container;
 }
+
 /**
  * Helper method to check for article node ref exist within the folio node.
- * 
- * @param array  $container
+ *
+ * @param array $container
  *   List of article node references that are currently within the folio node.
  * @param string $target
  *   Pending article node reference.
@@ -553,7 +549,7 @@ function dpsbridge_helper_reference_check($container, $target, $lang) {
 }
 /**
  * Helper method to remove all files & subfolders within a directory.
- * 
+ *
  * @param string $directory
  *   Name of the directory to be deleted.
  */
@@ -570,7 +566,7 @@ function dpsbridge_helper_rrmdir($directory) {
 }
 /**
  * Helper method for storing the image in the generated HTML article folder.
- * 
+ *
  * @param string $img_url
  *   URL to the source image.
  * @param string $filename
@@ -583,7 +579,7 @@ function dpsbridge_helper_save_img($img_url, $filename) {
 }
 /**
  * Helper method for scaling the image and saving it in a temp directory.
- * 
+ *
  * @param string $img_url
  *   The targeted image url (local).
  * @param string $newwidth
@@ -592,7 +588,7 @@ function dpsbridge_helper_save_img($img_url, $filename) {
  *   Specify the new image height.
  * @param string $orientation
  *   Specify if the image is landscape or portrait.
- * 
+ *
  * @return string
  *   Url of the scaled image.
  */
@@ -618,9 +614,9 @@ function dpsbridge_helper_scale_img($img_url, $newwidth, $newheight, $orientatio
 }
 /**
  * Helper method for writing the Folio.xml file.
- * 
+ *
  * Located in /dpsbridge/html/[filename]/Folio.xml
- * 
+ *
  * @param string $title
  *   The article title, used as the filename after removing special characters.
  * @param string $author
@@ -706,9 +702,9 @@ function dpsbridge_helper_writefolioxml($title, $author, $mag_title, $folio_num,
 }
 /**
  * Helper method for writing the pkgproperties.xml file.
- * 
+ *
  * Located in /dpsbridge/html/[filename]/META-INF/pkgproperties.xml
- * 
+ *
  * @param string $filename
  *   Same as the article name.
  */

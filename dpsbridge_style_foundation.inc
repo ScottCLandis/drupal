@@ -2,12 +2,12 @@
 
 /**
  * @file
- * DPSBridge Style Foundation functions. 
+ * DPSBridge Style Foundation functions.
  */
 
 /**
  * Helper method for creating the HTML cover page with Foundation stylesheet.
- * 
+ *
  * @param string $publication
  *   The folio publication name.
  * @param string $landscape
@@ -36,11 +36,13 @@ function dpsbridge_helper_style_foundation_cover($publication, $landscape, $port
 
 /**
  * Helper method to create the HTML TOC page with Foundation stylesheet.
- * 
+ *
  * @param string $publication
- *   The folio publication name
+ *   The folio publication name.
  * @param array $article_names
  *   A list of article names, used to generate the nav-to links.
+ * @param array $ds_articles
+ *   A list of Dispaly Suite articles.
  */
 function dpsbridge_helper_style_foundation_toc($publication, $article_names, $ds_articles) {
   $ads_list = NULL;
@@ -62,21 +64,23 @@ function dpsbridge_helper_style_foundation_toc($publication, $article_names, $ds
 
 /**
  * Helper method for generating the HTML article with Foundation stylesheet.
- * 
+ *
  * @param string $publication
- *   The folio publication name
+ *   The folio publication name.
  * @param string $title
- *   The article title
+ *   The article title.
  * @param string $author
- *   The article author
+ *   The article author.
  * @param string $kicker
- *   The folio kicker
+ *   The folio kicker.
  * @param string $body
- *   The article content
+ *   The article content.
  * @param array $images
  *   The article image(s), generating a slideshow if more than 1 images.
  * @param string $videos
- *   The article video
+ *   The article video.
+ * @param string $ds_content
+ *   A list of Display Suite content.
  */
 function dpsbridge_helper_style_foundation($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content) {
   $filename = dpsbridge_helper_format_title($title);
@@ -100,3 +104,4 @@ function dpsbridge_helper_style_foundation($publication, $title, $author, $kicke
   $toc_img = dpsbridge_helper_format_thumbnail($GLOBALS['base_url'] . '/' . $directory . $filename . '/' . $filename . '.html');
   dpsbridge_helper_save_img($toc_img, $filename . '/toc.png');
 }
+

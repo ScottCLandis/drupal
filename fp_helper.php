@@ -1,8 +1,6 @@
 <?php
-
 /**
  * @file
- * fp_config.php
  * Folio Producer Config file.
  */
 
@@ -10,8 +8,6 @@ require_once dirname(__FILE__) . '/fp_library.php';
 
 /**
  * FolioProducer Helper.
- * R25
- * @dbeaton
  */
 class DPSBridgeFPHelper {
   public $fp;
@@ -84,11 +80,11 @@ class DPSBridgeFPHelper {
 
   /**
    * Metadata for either all folios or particular one.
-   * 
-   * Depending on whether folioID is set or not
-   * 
+   *
+   * Depending on whether folioID is set or not.
+   *
    * @param string $folio_id
-   *   Value of Folio Id.   * 
+   *   Value of Folio Id.
    */
   public function folios($folio_id = '') {
     return $this->fp->request('GET', 'folios/' . $folio_id);

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Enable views for the DPSBridge module.
@@ -7,10 +6,6 @@
 
 /**
  * Gemerate the following views page (sourced @ /dpsbridge/views/).
- * 
- *   - Folio Selection view
- *   - Folio Management view
- *   - DPSBridge Configuration view
  */
 function dpsbridge_views_default_views() {
   $view = NULL;

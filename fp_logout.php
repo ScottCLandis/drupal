@@ -1,8 +1,6 @@
 <?php
-
 /**
  * @file
- * fp_config.php
  * Folio Producer Config file.
  */
 
@@ -28,3 +26,4 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 echo "[Session] You have been successfully logged out of Folio Producer.";
+

@@ -1,7 +1,6 @@
 <?php
 /**
  * @file
- * fp_config.php
  * Folio Producer Config file.
  */
 
@@ -13,7 +12,7 @@ class DPSBridgeFPConfig extends DPSBridgeSettings {
 
   /**
    * Create new object and initialise the variables.
-   * 
+   *
    * Call this method to get singleton.
    *
    * @return object

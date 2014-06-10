@@ -2,14 +2,12 @@
 /**
  * @file
  * Template for folio config page.
- *
- * - $dpsbridge_config
  */
 ?>
 
 <?php print $dpsbridge_config; ?>
 <!-- ==================================================
-Overlay for displaying options for testing connectivity 
+Overlay for displaying options for testing connectivity
 =================================================== -->
 <div id="dialog-option-connectivity" title="Test Connectivity" class="align-center"><br/>
   <label>Select an account to test</label>
@@ -59,7 +57,7 @@ Overlay for adding stylesheet
       <option type="radio" value="Bootstrap"> Bootstrap</option>
       <option type="radio" value="Foundation" selected> Foundation</option>
     </select>
-  </form> 
+  </form>
 </div>
 <!-- ==========================
 Overlay for deleting stylesheet

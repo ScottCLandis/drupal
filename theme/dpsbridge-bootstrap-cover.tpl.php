@@ -2,11 +2,6 @@
 /**
  * @file
  * Template for bootstrap cover page.
- *
- * - $publication:
- * - $landscape:
- * - $portrait:
- * - $directory:
  */
 ?>
 <!doctype html>
@@ -37,7 +32,7 @@
     <h1 class='title'>Table of Contents</h1>
     </div>
     <div class='col-lg-12 col-12'>
-    <?php 
+    <?php
     // If a landscape image was provided.
     if ($landscape):
       $landscape_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $landscape);
@@ -65,3 +60,4 @@
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/bootstrap.min.js'></script>
 </body>
 </html>
+

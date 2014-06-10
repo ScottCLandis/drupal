@@ -2,11 +2,6 @@
 /**
  * @file
  * Template for foundation cover page.
- *
- * - $publication:
- * - $landscape:
- * - $portrait:
- * - $directory:
  */
 ?>
 <!doctype html>
@@ -43,10 +38,11 @@
       else: ?>
         <div class='show-for-portrait'><img src='landscape.png' width='100%' /></div>
       <?php
-      endif; ?> 
+      endif; ?>
   <script type='text/javascript'>document.write('<script src=' + ('__proto__' in {} ? '../HTMLResources/js/vendor/zepto' : '../HTMLResources/js/vendor/jquery') + '.js><\/script>')</script>
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/foundation.js'></script>
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/foundation.orbit.js'></script>
   <script type='text/javascript'>$(document).foundation('orbit').init();</script>
 </body>
 </html>
+

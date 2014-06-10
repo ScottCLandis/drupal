@@ -2,11 +2,6 @@
 /**
  * @file
  * Template for foundation toc page.
- *
- * - $publication
- * - $ads_list
- * - $article_names
- * - $ds_articles - content array() from DPS TOC node view.
  */
 ?>
 
@@ -33,7 +28,7 @@
       <h1 class='title'>Table of Contents</h1>
       </div>
       <div class='large-12 small-12 columns'>
-      <?php 
+      <?php
       for ($i = 1, $n = 1; $i < count($article_names); $i++):
         if ($ads_list[$i - 1] == TRUE):
           continue;
@@ -54,3 +49,4 @@
   <script type='text/javascript'>$(document).foundation('orbit').init();</script>
 </body>
 </html>
+

@@ -1,8 +1,6 @@
 <?php
-
 /**
  * @file
- * dpsbridge.module.
  * Module provides funcationality to generate Adobe DPS Folios from Drupal.
  */
 
@@ -474,9 +472,9 @@ function dpsbridge_dps_credentials_add() {
 
 /**
  * Pulls the stored Folio Producer credentials from the database.
- * 
- * @return array 
- *   Array containing the user credentials and Folio Producer API's 
+ *
+ * @return array
+ *   Array containing the user credentials and Folio Producer API's
  *   Key and Secret.
  */
 function dpsbridge_dps_credentials_pull() {
@@ -605,8 +603,8 @@ function dpsbridge_folio_append() {
 
 /**
  * Remove the generated HTML article folders and folio files.
- * 
- *   With the given list of file names.
+ *
+ * With the given list of file names.
  */
 function dpsbridge_folio_cleanup() {
   $current_dir = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge';
@@ -629,7 +627,7 @@ function dpsbridge_folio_cleanup() {
 
 /**
  * Given the folio node ID, pull the folio node content.
- * 
+ *
  * And reset the NID, VID, folio ID, upload status, and non-Drupal articles ID
  */
 function dpsbridge_folio_clone_node() {
@@ -726,7 +724,7 @@ function dpsbridge_folio_article_preview() {
 
 /**
  * Delete the targeted HTML Article.
- * 
+ *
  * Which was created temperary for previewing purposes.
  */
 function dpsbridge_folio_article_delete() {
@@ -900,7 +898,7 @@ function dpsbridge_folio_generate_selected_html() {
 
 /**
  * Download the file and delete it from the server.
- * 
+ *
  * Given the file name and the server path to the selected file.
  */
 function dpsbridge_folio_download_selected() {
@@ -1028,7 +1026,7 @@ function dpsbridge_folio_pull_content() {
 
 /**
  * Update the targeted folio node in the database.
- * 
+ *
  * Contains Folio Producer's folio metadata.
  */
 function dpsbridge_folio_update() {
@@ -1142,7 +1140,7 @@ function dpsbridge_folio_update_status() {
 
 /**
  * Given the folio node ID.
- * 
+ *
  * Update the timestamp for when the folio was last uploaded to Folio Producer,
  * Update the sync status to 'In Sync'.
  * Used for checking if local Drupal articles are in sync with Folio Producer.
@@ -1166,7 +1164,7 @@ function dpsbridge_folio_update_timestamp() {
 
 /**
  * Store the given landscape or portrait image file.
- * 
+ *
  * Contains Folio Producer's folio metadata.
  */
 function dpsbridge_img_upload() {
@@ -1514,7 +1512,7 @@ function dpsbridge_field_formatter_view($entity_type, $entity, $field, $instance
 }
 
 /**
- * Implements of hook_views_api().
+ * Implements hook_views_api().
  */
 function dpsbridge_views_api() {
   return array(
@@ -1610,10 +1608,10 @@ function dpsbridge_node_delete($node) {
 
 /**
  * Theme function for number field in form.
- * 
+ *
  * @param array $variables
  *   Variables passed to the theming function.
- * 
+ *
  * @return string
  *   Returned themed date string.
  */
@@ -1714,6 +1712,9 @@ function theme_dpsbridge_image_formatter($variables) {
   return $output;
 }
 
+/**
+ * Create DPSBridge directory.
+ */
 function dpsbridge_create_diretories() {
   $dir = file_default_scheme() . '://dpsbridge';
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
@@ -1722,3 +1723,4 @@ function dpsbridge_create_diretories() {
   $dir = file_default_scheme() . '://dpsbridge/folio';
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 }
+

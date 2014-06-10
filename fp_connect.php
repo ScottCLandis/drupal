@@ -1,8 +1,6 @@
 <?php
-
 /**
  * @file
- * fp_config.php
  * Folio Producer Config file.
  */
 

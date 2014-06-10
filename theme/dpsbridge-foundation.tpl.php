@@ -2,16 +2,6 @@
 /**
  * @file
  * Template for foundation page.
- * 
- * - $ds_content: content array() from DPS node view.
- * - $publication
- * - $kicker
- * - $title
- * - $author
- * - $images
- * - $filename
- * - $videos
- * - $paragraphs
  */
 ?>
 <!doctype html>
@@ -49,13 +39,13 @@
           // Creates a slideshow if there are multiple images.
           else: ?>
             <ul data-orbit>
-            <?php 
+            <?php
             for ($q = 0; $q < count($images); $q++): ?>
               <li>
                 <img src='<?php print dpsbridge_helper_link_img($filename, $images[$q]); ?>' />
                 <div class='orbit-caption'>Some caption here</div>
               </li>
-            <?php 
+            <?php
             endfor; ?>
             </ul>
           <?php
@@ -83,3 +73,4 @@
   <script type='text/javascript'>$(document).foundation('orbit').init();</script>
 </body>
 </html>
+

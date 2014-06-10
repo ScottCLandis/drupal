@@ -2,16 +2,6 @@
 /**
  * @file
  * Template for bootstrap page.
- *
- * - $ds_content: content array() from DPS node view.
- * - $publication
- * - $kicker
- * - $title
- * - $author
- * - $images
- * - $filename
- * - $videos
- * - $paragraphs
  */
 ?>
 <!doctype html>
@@ -43,7 +33,7 @@
       <h5>By <?php $author ?></h5>
       </div>
       <div class='col-lg-12 col-12'>
-      <?php 
+      <?php
         if ($images):
       ?>
         <div id='imageArea' class='col-lg-6 col-12'>
@@ -51,9 +41,9 @@
         // If there are only one image.
         if (count($images) == 1): ?>
           <img src='" . dpsbridge_helper_linkImg($filename, $images[0]) . "' width='100%' /><br/>
-        <?php 
+        <?php
         // Creates a slideshow if there are multiple images.
-        else: ?>  
+        else: ?>
           <div id='carousel-generic' class='carousel slide'>
           <ol class='carousel-indicators'>
           <!-- TODO: Use jQuery to assign default class=active to first li -->
@@ -95,3 +85,4 @@
   <script>$('.carousel').carousel()</script>
 </body>
 </html>
+

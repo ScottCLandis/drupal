@@ -2,8 +2,6 @@
 /**
  * @file
  * Template for edit existing folio form.
- *
- * - $form
  */
 ?>
 
@@ -45,16 +43,16 @@
     </tr>
     <tr class="odd views-row-last">
       <td class="views-field">
-        <?php echo drupal_render($form['dimension']); ?>  
+        <?php echo drupal_render($form['dimension']); ?>
       </td>
       <td class="views-field">
-        <?php echo drupal_render($form['folio_ui_fversion']); ?>  
+        <?php echo drupal_render($form['folio_ui_fversion']); ?>
       </td>
       <td class="views-field">
-        <?php echo drupal_render($form['folio_ui_orientation']); ?>  
+        <?php echo drupal_render($form['folio_ui_orientation']); ?>
       </td>
       <td class="views-field">
-        <?php echo drupal_render($form['folio_ui_generator']); ?>  
+        <?php echo drupal_render($form['folio_ui_generator']); ?>
       </td>
     </tr>
     </tbody>

@@ -1,8 +1,7 @@
 <?php
 /**
  * @file
- * dpsbridge.admin.inc
- * Defines admin config. screens and functionality for the dpsbridge module
+ * Defines admin configuration screens and functionality for DPSBridge module.
  */
 
 /**

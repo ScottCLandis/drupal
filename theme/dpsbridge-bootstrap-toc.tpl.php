@@ -2,11 +2,6 @@
 /**
  * @file
  * Template for boostrap toc page.
- *
- * - $publication
- * - $ads_list
- * - $article_names
- * - $ds_articles - content array() from DPS TOC node view.
  */
 ?>
 <!doctype html>
@@ -50,7 +45,7 @@
           $n++;
         endfor;
       ?>
-      <?php print drupal_render($ds_articles); ?>        
+      <?php print drupal_render($ds_articles); ?>
       </div>
     </div>
   </div>
@@ -58,3 +53,4 @@
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/bootstrap.min.js'></script>
 </body>
 </html>
+

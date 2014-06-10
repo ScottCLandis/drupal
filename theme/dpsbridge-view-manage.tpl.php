@@ -2,17 +2,13 @@
 /**
  * @file
  * Template for folio manage page.
- *
- * - $folio_listing
- * - $folio_edit_form
- * - $folio_image_form
  */
 ?>
 
 <?php print $folio_listing; ?>
 
 <!-- ==============================
-Overlay for editing existing folios 
+Overlay for editing existing folios
 =============================== -->
 <div id="dialog-edit-folio" title="">
   <?php print $folio_edit_form; ?>

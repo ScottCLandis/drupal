@@ -1,13 +1,12 @@
 <?php
-
 /**
  * @file
- * DPSBridge Style Bootstrap functions. 
+ * DPSBridge Style Bootstrap functions.
  */
 
 /**
  * Helper method for creating the HTML cover page with Bootstrap stylesheet.
- * 
+ *
  * @param string $publication
  *   The folio publication name.
  * @param string $landscape
@@ -35,11 +34,13 @@ function dpsbridge_helper_style_bootstrap_cover($publication, $landscape, $portr
 
 /**
  * Helper method to create the HTML TOC page with Bootstrap stylesheet.
- * 
+ *
  * @param string $publication
  *   The folio publication name.
- * @param array  $article_names
+ * @param array $article_names
  *   A list of article names, used to generate the nav-to links.
+ * @param array $ds_article
+ *   A list of Display Suite articles.
  */
 function dpsbridge_helper_style_bootstrap_toc($publication, $article_names, $ds_articles) {
   $ads_list = NULL;
@@ -59,10 +60,9 @@ function dpsbridge_helper_style_bootstrap_toc($publication, $article_names, $ds_
   dpsbridge_helper_save_img($toc_img, 'TableofContents/toc.png');
 }
 
-
 /**
  * Helper method for generating the HTML article with Bootstrap stylesheet.
- * 
+ *
  * @param string $publication
  *   The folio publication name.
  * @param string $title
@@ -73,10 +73,12 @@ function dpsbridge_helper_style_bootstrap_toc($publication, $article_names, $ds_
  *   The folio kicker.
  * @param string $body
  *   The article content.
- * @param array  $images
+ * @param array $images
  *   The article image(s), generate a slideshow if there are more than 1 images.
  * @param string $videos
  *   The article video.
+ * @param array $ds_content
+ *   A list of Display Suite articles.
  */
 function dpsbridge_helper_style_bootstrap($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content) {
   $filename = dpsbridge_helper_format_title($title);
