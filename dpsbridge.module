@@ -472,10 +472,6 @@ function dpsbridge_dps_credentials_add() {
 
 /**
  * Pulls the stored Folio Producer credentials from the database.
- *
- * @return array
- *   Array containing the user credentials and Folio Producer API's
- *   Key and Secret.
  */
 function dpsbridge_dps_credentials_pull() {
   // Loads each respective users.
@@ -1615,7 +1611,7 @@ function dpsbridge_node_delete($node) {
  * @return string
  *   Returned themed date string.
  */
-function theme_dpsbridge_date($variables) {
+function theme_dpsbridge_date(array $variables) {
   $element = $variables['element'];
   $element['#attributes']['type'] = 'date';
   element_set_attributes($element, array(
@@ -1657,7 +1653,7 @@ function theme_dpsbridge_date($variables) {
  *
  * @ingroup themeable
  */
-function theme_dpsbridge_image_formatter($variables) {
+function theme_dpsbridge_image_formatter(array $variables) {
   $item = $variables['item'];
   $image = array(
     'path' => $item['uri'],
