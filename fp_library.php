@@ -89,16 +89,16 @@ protected function oAuthSignature() {
 /**
  * Set the properties for curl request.
  *
- * @param [type] $method
- *   GET, POST, DELETE
- * @param [type] $url
- *   API
+ * @param string $method
+ *   GET, POST, DELETE.
+ * @param sting $url
+ *   API.
  * @param array $params
- *   request parameters
- * @param [type] $filepath
- *   path to file if uploading
+ *   request parameters.
+ * @param string $filepath
+ *   path to file if uploading.
  * @param bool $is_download
- *   set if using the download server
+ *   set if using the download server.
  */
 public function request($method, $url, $params = array(), $filepath = NULL, $is_download = FALSE, $is_distribution = FALSE) {
   if (strstr($filepath, 'folio/') || strstr($filepath, 'html/')) {
@@ -279,4 +279,4 @@ protected function fileUpload() {
 
   $this->params = $data;
 }
-
+}

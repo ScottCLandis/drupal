@@ -39,7 +39,7 @@ function dpsbridge_helper_style_bootstrap_cover($publication, $landscape, $portr
  *   The folio publication name.
  * @param array $article_names
  *   A list of article names, used to generate the nav-to links.
- * @param array $ds_article
+ * @param array $ds_articles
  *   A list of Display Suite articles.
  */
 function dpsbridge_helper_style_bootstrap_toc($publication, $article_names, $ds_articles) {
