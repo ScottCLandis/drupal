@@ -44,10 +44,10 @@ Overlay for selecting article preview option
   <label>Select an orientation to preview the article:</label><br/>
   <div class='align-center'>
     <a href="javascript:previewArticle('landscape');" alt="Landscape Mode" title="Landscape Mode">
-      <img src="<?php echo drupal_get_path('module', 'dpsbridge') ?>/images/icons/preview_h.png" /> Landscape Mode
+      <img src="/<?php echo drupal_get_path('module', 'dpsbridge') ?>/images/icons/preview_h.png" /> Landscape Mode
     </a><br/><br/>
     <a href="javascript:previewArticle('portrait');" alt="Portrait Mode" title="Portrait Mode">
-      <img src="<?php echo drupal_get_path('module', 'dpsbridge') ?>/images/icons/preview_v.png" /> Portrait Mode
+      <img src="/<?php echo drupal_get_path('module', 'dpsbridge') ?>/images/icons/preview_v.png" /> Portrait Mode
     </a>
   </div>
 </div>

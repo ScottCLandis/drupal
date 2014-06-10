@@ -106,6 +106,11 @@ class DPSBridgeFPLibrary {
    *   set if using the download server
    */
   public function request($method, $url, $params = array(), $filepath = NULL, $is_download = FALSE, $is_distribution = FALSE) {
+    if (strstr($filepath, 'folio/') || strstr($filepath, 'html/')) {
+      $dir = strstr(realpath(__FILE__), '/sites', TRUE);
+      $filepath = empty($filepath) ? NULL : $dir . '/sites/default/files' . '/dpsbridge/' . $filepath;
+    }
+    
     $this->method = $method;
     $this->headers = array(
       'Content-Type: application/json; charset=utf-8',
@@ -257,7 +262,7 @@ class DPSBridgeFPLibrary {
   protected function fileUpload() {
     $file = $this->file;
     if (!file_exists($file)) {
-      throw new Exception("File does not exist");
+      throw new Exception("File does not exist:" . $file);
     }
 
     $handle = fopen($file, 'rb');

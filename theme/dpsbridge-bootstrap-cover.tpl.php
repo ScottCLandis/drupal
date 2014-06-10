@@ -41,7 +41,7 @@
     // If a landscape image was provided.
     if ($landscape):
       $landscape_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $landscape);
-      file_put_contents($directory . 'Cover/landscape.png', $landscape_img);?>
+      file_put_contents($directory . '/html/Cover/landscape.png', $landscape_img);?>
       <div class='visible-lg'><img src='landscape.png' width='100%' /></div>
     <?php
     else:?>
@@ -51,7 +51,7 @@
     // If a portrait image was provided.
     if ($portrait):
       $portrait_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $portrait);
-      file_put_contents($directory . 'Cover/portrait.png', $portrait_img);?>
+      file_put_contents($directory . '/html/Cover/portrait.png', $portrait_img);?>
       <div class='hidden-lg'><img src='portrait.png' width='100%' /></div>
     <?php
     else:?>

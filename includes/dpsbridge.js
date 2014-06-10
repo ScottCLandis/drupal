@@ -27,6 +27,15 @@ function dpsbridge_helper_check_article_by_id(articleList, articleID) {
   }
   return '';
 }
+function dpsbridge_helper_get_sort_number_by_nid(articleList, nid) {
+  var tag = 'DPSBridge-' + nid;
+  for (var i = 0; i < articleList.length; i++) {
+    if (articleList[i]['articleMetadata']['tags'].indexOf(tag) >=0) {
+        return articleList[i]['articleMetadata']['sortNumber'];
+    }
+  }
+  return 0;
+}
 /**
  * Given an array of article and the targeted article name,
  *   check to see if the targeted article name exists within the array of articles

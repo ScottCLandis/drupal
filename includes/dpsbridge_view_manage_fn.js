@@ -294,6 +294,20 @@ function node_status_timestamp(folioNodeID) {
  * ============================================================================ */
 function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, uploadDate, fpArticles) {
   var alienatedCount = 0, index = 1;
+  
+  // get sort numbers in sequence.
+  var sortNumbers = Array();
+  var indexSort = 0;
+  for (var n = 0; n < fpArticles.length; n++) {
+    sortNumber = parseInt(fpArticles[n]['articleMetadata']['sortNumber']);
+    if (fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge-') >=0 
+        || fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge') < 0) {
+        sortNumbers[indexSort] = sortNumber;
+        indexSort ++;
+    }
+  }
+  sortNumbers.sort();
+
   // display all Drupal and non-Drupal articles that were previously stored in Drupal
   for (var i = 0; i < drupalArticles.length; i++) {
     var articleID = drupalArticles[i]['target_id'];
@@ -332,11 +346,11 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
         // create a editable row if the content is from Drupal.
         else {
           // check if the Drupal article is up in Folio Producer (true if so, false otherwise)
-          var exist = dpsbridge_helper_check_article_by_name(fpArticles, output['filename']);
+          var sortNumber = dpsbridge_helper_get_sort_number_by_nid(fpArticles, articleID);
           html += "<tr id='article-row-id-" + articleID + "'>\n";
           html += "<td class='article-index'><input type='checkbox' value='" + articleID + "' /></td>\n";
           html += "<td><span class='ui-icon ui-icon-arrow-4'></span></td>\n";
-          html += "<td id='articleSortIndex-" + index + "' class='sortable-index' style='text-align:center'>" + index + "</td>\n";
+          html += "<td id='articleSortIndex-" + sortNumber + "' class='sortable-index' style='text-align:center'>" + index + "</td>\n";
           html += "<td><a href='/node/" + articleID + "/edit?destination=admin/config/content/fpmanage'><span class='ui-icon ui-icon-pencil'></span></a></td>\n";
           html += "<td><a href='javascript:previewOptions(" + articleID + ", \"" + output['filename'] + "\")'>" + output['title'] + "</a></td>\n";
           html += "<td>" + output['type'] + "</td>\n";
@@ -359,17 +373,17 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
   // display all non-Drupal articles that has not been stored in Drupal previously
   for (var n = 0; n < fpArticles.length; n++) {
     // skip if it is a Drupal article
-    if (fpArticles[n]['articleMetadata']['assetFormat'] == 'Auto') {
+    if (fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge') >= 0) { 
       continue;
     }
     // insert non-Drupal articles that hasn't been added to Drupal database
     if (jQuery('#article-row-id-' + fpArticles[n]['id']).length == 0) {
-      var sortNumber  = (fpArticles[n]['articleMetadata']['sortNumber'] / 1000) - offsetIndex;
-      var sortOrder   = Math.floor(sortNumber);
+      var sortNumber  = fpArticles[n]['articleMetadata']['sortNumber'];
+      var sortIndex = sortNumbers.indexOf(sortNumber);
       html  = "<tr id='article-row-id-" + fpArticles[n]['id'] + "'>\n";
       html += "<td class='article-index'><input type='hidden' value='" + fpArticles[n]['id'] + "' /><span class='ui-icon ui-icon-locked'></span></td>\n";
       html += "<td><span class='ui-icon ui-icon-arrow-4'></span></td>\n";
-      html += "<td class='sortable-index' style='text-align:center'>" + sortNumber + "</td>\n";
+      html += "<td id='articleSortIndex-" + sortNumber + "' class='sortable-index' style='text-align:center'>" + index + "</td>\n";
       html += "<td><span class='ui-icon ui-icon-locked'></span></td>\n";
       html += "<td>" + fpArticles[n]['articleMetadata']['title'] + "</td>\n";
       html += "<td>" + fpArticles[n]['articleMetadata']['assetFormat'] + "</td>\n";
@@ -377,14 +391,33 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
       html += "<td class='is-ad'><input type='hidden' /><span class='ui-icon ui-icon-locked'></span></td>\n";
       html += "<td><span class='ui-icon ui-icon-check'></span></td>\n";
       html += "</tr>\n";
-      if (sortOrder <= 0) {
-        jQuery('#articleSortIndex-1').parent().before(html);
+      if (sortIndex == 0) {
+        jQuery('#articles-wrapper').prepend(html);
+      }
+      else if (sortIndex ==  (sortNumbers.length-1)) {
+          jQuery('#articles-wrapper').append(html);
       }
       else {
-        jQuery('#articleSortIndex-' + sortOrder).parent().after(html);
+        if (preSortNumber = sortNumbers[sortIndex-1]) {
+            if (jQuery('#articleSortIndex-' + preSortNumber).length > 0) { 
+                jQuery('#articleSortIndex-' + preSortNumber).parent().after(html);
+                continue;
       }
     }
+        if (nextSortNumber = sortNumbers[sortIndex+1]) {
+            if (jQuery('#articleSortIndex-' + nextSortNumber).length > 0) { 
+                jQuery('#articleSortIndex-' + nextSortNumber).parent().before(html);
+                continue;
+            }
   }
+        jQuery('#articles-wrapper').append(html);
+      }
+      index++;
+    }
+  }
+  jQuery('#articles-wrapper tr').each(function(i, value){
+    jQuery(this).find('td.sortable-index').text(i+1);
+  });
   // refreshes the stylesheets
   jQuery('#dialog-status').dialog('close');
   jQuery('#dialog-edit-folio').dialog('option', 'title', folioName).dialog('open');
@@ -522,7 +555,7 @@ function previewArticle(orientation) {
     windows_width = preview_token[1];
     windows_height = preview_token[0];
   }
-  previewURL = 'sites/all/modules/dpsbridge/html/' + previewFileName + '/' + previewFileName + '.html';
+  previewURL = pathToDir + '/html/' + previewFileName + '/' + previewFileName + '.html';
   window.open(previewURL, "popup", "width=" + windows_width + ", height=" + windows_height);
 }
 /* ========================================================= *

@@ -18,7 +18,7 @@
  *   The targeted folio dimension.
  */
 function dpsbridge_helper_style_foundation_cover($publication, $landscape, $portrait, $dimension) {
-  $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
+  $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/html/';
   $html = '';
   $variables = array(
     'publication' => $publication,
@@ -44,7 +44,7 @@ function dpsbridge_helper_style_foundation_cover($publication, $landscape, $port
  */
 function dpsbridge_helper_style_foundation_toc($publication, $article_names, $ds_articles) {
   $ads_list = NULL;
-  $directory     = drupal_get_path('module', 'dpsbridge') . '/html/';
+  $directory     = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/html/';
   // Generate the contents of the HTML article.
   $variables = array(
     'publication' => $publication,
@@ -81,7 +81,7 @@ function dpsbridge_helper_style_foundation_toc($publication, $article_names, $ds
 function dpsbridge_helper_style_foundation($publication, $title, $author, $kicker, $body, $images, $videos, $ds_content) {
   $filename = dpsbridge_helper_format_title($title);
   $paragraphs = isset($body[LANGUAGE_NONE][0]['safe_value']) ? $body[LANGUAGE_NONE][0]['safe_value'] : '';
-  $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
+  $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/html/';
   $variables = array(
     'ds_content' => $ds_content,
     'publication' => $publication,

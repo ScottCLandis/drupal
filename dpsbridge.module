@@ -185,6 +185,18 @@ function dpsbridge_menu() {
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function dpsbridge_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    if ($form['#id'] == 'views-exposed-form-folio-article-selection-page') {
+      // Use current page url instead of the one from view page.
+      $form['#action'] = url($_GET['q']);
+    }
+  }
+}
+
+/**
  * Implements Add New Articles To Folio Form.
  */
 function dpsbridge_add_new_articles_to_folio_form($form, &$form_state) {
@@ -597,6 +609,7 @@ function dpsbridge_folio_append() {
  *   With the given list of file names.
  */
 function dpsbridge_folio_cleanup() {
+  $current_dir = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge';
   // List of file names, used to generate HTML Articles and .folio files.
   $filenames = isset($_POST['filenames']) ? $_POST['filenames'] : '';
   $message  = 'ok';
@@ -606,8 +619,8 @@ function dpsbridge_folio_cleanup() {
   else {
     for ($i = 0; $i < count($filenames); $i++) {
       $file = dpsbridge_helper_format_title($filenames[$i]);
-      unlink(dirname(__FILE__) . '/folio/' . $file . '.folio');
-      dpsbridge_helper_rrmdir(dirname(__FILE__) . '/html/' . $file);
+      unlink($current_dir . '/folio/' . $file . '.folio');
+      dpsbridge_helper_rrmdir($current_dir . '/html/' . $file);
     }
   }
   drupal_json_output($message);
@@ -752,7 +765,7 @@ function dpsbridge_folio_generate_folios() {
       }
       // Locations of targeted HTML article folder to designated .folio file.
       $filename    = dpsbridge_helper_format_title($filenames[$i]);
-      $directory   = drupal_get_path('module', 'dpsbridge');
+      $directory   = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge';
       $source      = $directory . '/html/' . $filename;
       $destination = $directory . '/folio/' . $filename . ".folio";
       // Commands to zip up the HTML article folder.
@@ -832,7 +845,6 @@ function dpsbridge_folio_generate_html() {
       $file_list,
       $ds_articles
     );
-    dpm($ds_articles);
   }
   drupal_json_output($file_list);
   drupal_exit();
@@ -856,7 +868,7 @@ function dpsbridge_folio_generate_selected_html() {
     // Calls helper to pull folio node metadata.
     $folio_node = dpsbridge_helper_pull_content($folio_node_id);
     // Get local path.
-    $current_dir = drupal_get_path('module', 'dpsbridge');
+    $current_dir = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge';
     // Loops through each article node ID.
     for ($i = 0; $i < count($article_node_id); $i++) {
       if ($article_node_id[$i] == '') {
@@ -1700,4 +1712,13 @@ function theme_dpsbridge_image_formatter($variables) {
   $output = '<img src="' . $filename . '" />';
 
   return $output;
+}
+
+function dpsbridge_create_diretories() {
+  $dir = file_default_scheme() . '://dpsbridge';
+  file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  $dir = file_default_scheme() . '://dpsbridge/html';
+  file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  $dir = file_default_scheme() . '://dpsbridge/folio';
+  file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 }

@@ -9,10 +9,11 @@
  * Implements hook_install().
  */
 function dpsbridge_install() {
+  dpsbridge_create_diretories();
   node_types_rebuild();
   $types = node_type_get_types();
   node_add_body_field($types['folios']);
-  add_custom_fields();
+  dpsbridge_add_custom_fields();
 }
 
 /**
@@ -27,7 +28,7 @@ function dpsbridge_uninstall() {
     $node_ids[] = $row->nid;
   }
   node_delete_multiple($node_ids);
-  delete_custom_fields();
+  dpsbridge_delete_custom_fields();
   // Node_type_delete($folios);.
   field_purge_batch(500);
 }

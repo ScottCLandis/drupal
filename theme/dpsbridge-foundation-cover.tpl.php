@@ -23,16 +23,11 @@
   <script type='text/javascript'>try{Typekit.load();}catch(e){}</script>
   <script type='text/javascript' src='../HTMLResources/js/vendor/custom.modernizr.js'></script>
 </head>
-<body>
-  <div id='pubtitle'><?php print $publication; ?></div>
-  <div id='kicker'>Cover</div>
-  <div id='display-home' class='row'>
-    <div class='large-12 small-12 columns'>
-      <div class='large-12 small-12 columns'>
+<body id="cover">
       <?php
       if ($landscape):
         $landscape_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $landscape);
-        file_put_contents($directory . 'Cover/landscape.png', $landscape_img);
+        file_put_contents($directory . '/html/Cover/landscape.png', $landscape_img);
       ?>
         <div class='show-for-landscape'><img src='landscape.png' width='100%' /></div>
       <?php
@@ -42,16 +37,13 @@
       endif;
       if ($portrait):
         $portrait_img = file_get_contents('http://' . $_SERVER['SERVER_NAME'] . $portrait);
-        file_put_contents($directory . 'Cover/portrait.png', $portrait_img);?>
+        file_put_contents($directory . '/html/Cover/portrait.png', $portrait_img);?>
         <div class='show-for-portrait'><img src='portrait.png' width='100%' /></div>
       <?php
       else: ?>
         <div class='show-for-portrait'><img src='landscape.png' width='100%' /></div>
       <?php
       endif; ?> 
-      </div>
-    </div>
-  </div>
   <script type='text/javascript'>document.write('<script src=' + ('__proto__' in {} ? '../HTMLResources/js/vendor/zepto' : '../HTMLResources/js/vendor/jquery') + '.js><\/script>')</script>
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/foundation.js'></script>
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/foundation.orbit.js'></script>

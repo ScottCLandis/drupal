@@ -65,7 +65,7 @@ else {
       $articles = $articles['articles'];
       for ($n = 0; $n < count($articles); $n++) {
         // If article is HTML base?
-        if ($articles[$n]['articleMetadata']['assetFormat'] == 'Auto') {
+        if (strstr($articles[$n]['articleMetadata']['tags'], 'DPSBridge')) {
           // Delete the article from Folio folder in the Folio Producer.
           $fp->deleteArticle($folio_id, $articles[$n]['id']);
         }

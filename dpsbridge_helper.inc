@@ -39,8 +39,8 @@ function dpsbridge_helper_check_existence($article_id, $folio_node_array) {
  * @param string $filename
  *   Filtered Article name, used as folder and file name.
  */
-function dpsbridge_helper_create_dir($filename) {
-  $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
+function dpsbridge_helper_create_dir($filename) { 
+  $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/html/';
   if (!file_exists($directory . '/' . $filename)) {
     mkdir($directory . $filename);
     mkdir($directory . $filename . '/META-INF');
@@ -136,7 +136,8 @@ function dpsbridge_helper_format_thumbnail($url) {
   $pattern = '<img src="([\w:\/.]+)" />';
   preg_match($pattern, $img_url, $formatted_url);
   if (!$formated_url) {
-    return 'http://placehold.it/100x100&text=Adobe';
+    // return 'http://placehold.it/100x100&text=Adobe';
+    return drupal_get_path("module", "dpsbridge") . "/images/icons/toc.png";
   }
   else {
     return $formated_url[1];
@@ -233,6 +234,12 @@ function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads
   dpsbridge_helper_create_dir($filename);
   // Write to the PKGProperties.xml.
   dpsbridge_helper_writepkg($filename);
+  if (empty($article_metadata['node'])) {
+    $article_metadata['tags'] .= "DPSBridge";
+  }
+  else {
+    $article_metadata['tags'] .= "DPSBridge-" . $article_metadata['node']->nid ;
+  }
 
   // Write to the Folio.xml.
   dpsbridge_helper_writefolioxml(
@@ -570,7 +577,7 @@ function dpsbridge_helper_rrmdir($directory) {
  *   Path to save the image (@ /dpsbridge/html/[filename]/).
  */
 function dpsbridge_helper_save_img($img_url, $filename) {
-  $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
+  $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/html/';
   $img = file_get_contents($img_url);
   file_put_contents($directory . $filename, $img);
 }
@@ -638,7 +645,7 @@ function dpsbridge_helper_scale_img($img_url, $newwidth, $newheight, $orientatio
  *   The article orientation, default to both orientations.
  */
 function dpsbridge_helper_writefolioxml($title, $author, $mag_title, $folio_num, $desc, $kicker, $tags, $is_ads, $version, $dimension, $orientation = 'Always') {
-  $directory = drupal_get_path('module', 'dpsbridge') . '/html/';
+  $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/html/';
   $date = date('Y-m-d\TH:i:s');
   $filename = dpsbridge_helper_format_title($title);
   $targeted = explode(' x ', $dimension);
@@ -706,7 +713,7 @@ function dpsbridge_helper_writefolioxml($title, $author, $mag_title, $folio_num,
  *   Same as the article name.
  */
 function dpsbridge_helper_writepkg($filename) {
-  $directory   = drupal_get_path('module', 'dpsbridge') . '/html/';
+  $directory   = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/html/';
   $current_date = date('Y-m-d\TH:i:s');
   // Generate the content of the pkgproperties.xml.
   $pkg  = "<?xml version='1.0' encoding='UTF-8'?>\n";
