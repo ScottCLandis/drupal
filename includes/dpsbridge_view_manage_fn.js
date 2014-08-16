@@ -636,7 +636,7 @@ function replaceHREF(ahref, toggle) {
     Drupal.behaviors.dpsbridge_view_credential_init = {
         attach: function() {
             baseURL = Drupal.settings.dpsbridge.base_url;
-            pathToDir = '/' + Drupal.settings.dpsbridge.path_to_dir;
+            pathToDir = baseURL + '/' + Drupal.settings.dpsbridge.path_to_dir;
         }
     }
     Drupal.behaviors.dpsbridge_view_select = {

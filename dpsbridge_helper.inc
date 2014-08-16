@@ -39,6 +39,9 @@ function dpsbridge_helper_check_existence($article_id, $folio_node_array) {
  */
 function dpsbridge_helper_create_dir($filename) {
   $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/html/';
+  if (!file_exists($directory)) {
+    mkdir($directory);
+  }
   if (!file_exists($directory . '/' . $filename)) {
     mkdir($directory . $filename);
     mkdir($directory . $filename . '/META-INF');
@@ -110,7 +113,7 @@ function dpsbridge_helper_credential_update($uid, $id, $pass, $dimension, $key, 
  */
 function dpsbridge_helper_extract_stylesheet($stylesheet) {
   $stylesheet  = str_replace(" ", "\ ", $stylesheet);
-  $directory   = drupal_get_path("module", "dpsbridge");
+  $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge';
   $source      = $directory . "/styles/" . $stylesheet . "/HTMLResources.zip";
   $destination = $directory . "/html/HTMLResources";
   // Linux built-in zipper.

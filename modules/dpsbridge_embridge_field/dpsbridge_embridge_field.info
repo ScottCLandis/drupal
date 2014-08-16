@@ -1,0 +1,8 @@
+name = "DPS Bridge Embridge Field"
+description = "This module will provide formatter for Embridge Field in DPS."
+package = "Adobe DPS"
+core = 7.x
+
+dependencies[] = dpsbridge
+dependencies[] = embridge
+dependencies[] = embridge_field

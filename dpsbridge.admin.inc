@@ -73,15 +73,10 @@ function dpsbridge_fpmanage_page() {
  * Menu callback for Credential Page.
  */
 function dpsbridge_credential_page() {
-  $view = views_get_view('dpsbridge_module_config');
-  $display = 'page';
-
-  // Set the display.
-  $view->set_display($display);
-  $dpsbridge_config = $view->preview($display);
+  $form = drupal_get_form('dpsbridge_module_config_form');
 
   $variables = array(
-    'dpsbridge_config' => $dpsbridge_config,
+    'dpsbridge_config' => $form,
   );
 
   drupal_add_js(drupal_get_path('module', 'dpsbridge') . '/includes/dpsbridge_view_credential_fn.js');

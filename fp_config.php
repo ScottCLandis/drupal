@@ -33,7 +33,7 @@ class DPSBridgeFPConfig extends DPSBridgeSettings {
     session_start();
 
     $preconfigured = FALSE;
-    $cconfig = isset($_SESSION['config']) ? $_SESSION['config'] : array();
+    $cconfig = isset($_SESSION['dpsbridge_config']) ? $_SESSION['dpsbridge_config'] : array();
     if ($cconfig || !isset($cconfig['mode'])) {
       $preconfigured = FALSE;
     }

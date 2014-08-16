@@ -101,7 +101,7 @@ protected function oAuthSignature() {
  *   set if using the download server.
  */
 public function request($method, $url, $params = array(), $filepath = NULL, $is_download = FALSE, $is_distribution = FALSE) {
-  if (strstr($filepath, 'folio/') || strstr($filepath, 'html/')) {
+    if (strstr($filepath, 'folio/') || strstr($filepath, 'html/') || strstr($filepath, 'styles/')) {
     $dir = strstr(realpath(__FILE__), '/sites', TRUE);
     $filepath = empty($filepath) ? NULL : $dir . '/sites/default/files' . '/dpsbridge/' . $filepath;
   }
@@ -112,10 +112,10 @@ public function request($method, $url, $params = array(), $filepath = NULL, $is_
   );
   $ready_for_request = FALSE;
 
-  if ($is_distribution && isset($_SESSION['distributionTicket'])) {
+  if ($is_distribution && isset($_SESSION['dpsbridge_distributionTicket'])) {
     $ready_for_request = TRUE;
   }
-  if (!$is_distribution && isset($_SESSION['ticket'])) {
+  if (!$is_distribution && isset($_SESSION['dpsbridge_ticket'])) {
     $ready_for_request = TRUE;
   }
   // If no oAuth then set it up!
@@ -154,10 +154,10 @@ public function request($method, $url, $params = array(), $filepath = NULL, $is_
       $this->params = json_encode($credentials);
       $this->headers[] = 'Authorization: OAuth oauth_consumer_key="' . $this->config->consumer_key . '", oauth_timestamp="' . $this->config->timestamp . '", oauth_signature_method="HMAC-SHA256", oauth_signature="' . $this->sig . '"';
       $this->oauth = $this->curl(FALSE);
-      $_SESSION['ticket'] = $this->oauth['ticket'];
-      $_SESSION['server'] = $this->oauth['server'];
-      $_SESSION['downloadTicket'] = $this->oauth['downloadTicket'];
-      $_SESSION['downloadServer'] = $this->oauth['downloadServer'];
+      $_SESSION['dpsbridge_ticket'] = $this->oauth['ticket'];
+      $_SESSION['dpsbridge_server'] = $this->oauth['server'];
+      $_SESSION['dpsbridge_downloadTicket'] = $this->oauth['downloadTicket'];
+      $_SESSION['dpsbridge_downloadServer'] = $this->oauth['downloadServer'];
       return $this->oauth;
     }
   }
@@ -165,17 +165,19 @@ public function request($method, $url, $params = array(), $filepath = NULL, $is_
   else {
     $this->params = json_encode($params);
     if ($is_distribution) {
-      $ticket = $_SESSION['distributionTicket'];
+      $ticket = $_SESSION['dpsbridge_distributionTicket'];
       $server = $this->config->distributionHost;
     }
     elseif ($is_download) {
-      $ticket = $_SESSION['downloadTicket'];
-      $server = $_SESSION['downloadServer'];
+      $ticket = $_SESSION['dpsbridge_downloadTicket'];
+      $server = $_SESSION['dpsbridge_downloadServer'];
     }
     else {
-      $ticket = $_SESSION['ticket'];
-      $server = $_SESSION['server'];
+      $ticket = $_SESSION['dpsbridge_ticket'];
+      $server = $_SESSION['dpsbridge_server'];
     }
+      $this->url = $this->createURL($server, $url);
+      $this->headers[] = 'Authorization: AdobeAuth ticket="' . $ticket  . '"';
 
     if (isset($filepath)) {
       // Remove content-type.
@@ -185,10 +187,10 @@ public function request($method, $url, $params = array(), $filepath = NULL, $is_
     }
     $response = $this->curl(FALSE);
     if (isset($response['ticket'])) {
-      $_SESSION['ticket'] = $response['ticket'];
+      $_SESSION['dpsbridge_ticket'] = $response['ticket'];
     }
     if (isset($response['downloadTicket'])) {
-      $_SESSION['downloadTicket'] = $response['downloadTicket'];
+      $_SESSION['dpsbridge_downloadTicket'] = $response['downloadTicket'];
     }
     return $response;
   }

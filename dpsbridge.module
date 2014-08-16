@@ -10,6 +10,7 @@
 function dpsbridge_init() {
   global $base_url;
   $path_to_dir = drupal_get_path('module', 'dpsbridge');
+  $path_to_files = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge';
   drupal_add_js('misc/jquery.form.js');
   drupal_add_library('system', 'drupal.ajax');
   drupal_add_library('system', 'jquery.form');
@@ -17,7 +18,7 @@ function dpsbridge_init() {
   drupal_add_library('system', 'ui.tabs');
   drupal_add_library('system', 'ui.sortable');
   drupal_add_js($path_to_dir . '/includes/dpsbridge.js');
-  drupal_add_js(array('dpsbridge' => array('base_url' => $base_url, 'path_to_dir' => $path_to_dir)), 'setting');
+  drupal_add_js(array('dpsbridge' => array('base_url' => $base_url, 'path_to_dir' => $path_to_dir, 'path_to_files' => $path_to_files)), 'setting');
   drupal_add_css($path_to_dir . '/includes/override.css');
 
   module_load_include('inc', 'dpsbridge', 'dpsbridge_helper');
@@ -389,6 +390,112 @@ function dpsbridge_edit_existing_folio_form($form, &$form_state) {
     '#required' => TRUE,
     '#attributes' => array('id' => 'folio-ui-generator'),
   );
+  return $form;
+}
+
+/**
+ * Implements Edit Existing Folio Form.
+ */
+function dpsbridge_module_config_form($form, &$form_state) {
+  $form = array();
+  $form['apikey'] = array(
+    '#type' => 'password',
+    '#title' => t('API Key'),
+    '#size' => 30,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'apikey', 'required' => '', 'placeholder' => t('API Key')),
+  );
+  $form['apisec'] = array(
+    '#type' => 'password',
+    '#title' => t('API Secret'),
+    '#size' => 30,
+    '#required' => TRUE,
+    '#attributes' => array('id' => 'apisec', 'required' => '','placeholder' => t('API Secret')),
+  );
+
+  $form['add_stylesheet'] = array(
+    '#markup' => '<button type="button" onclick="javascript:jQuery(\'#dialog-option-stylesheet-add\').dialog(\'open\')">Add Stylesheet</button>',
+  );
+  $form['delete_stylesheet'] = array(
+    '#markup' => '<button type="button" onclick="javascript:jQuery(\'#dialog-option-stylesheet-delete\').dialog(\'open\')">Delete Stylesheet</button>',
+  );
+  $form['download_stylesheet'] = array(
+    '#markup' => '<button type="button" onclick="javascript:jQuery(\'#dialog-option-stylesheet-download\').dialog(\'open\')">Download Stylesheet</button>',
+  );
+
+  $form['amazon_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Folio Producer User ID'),
+    '#size' => 30,
+    '#attributes' => array('id' => 'amazon_id', 'required' => '', 'placeholder' => t('User ID (E-mail)')),
+  );
+  $form['amazon_pass'] = array(
+    '#type' => 'password',
+    '#title' => t('Folio Producer Password'),
+    '#size' => 30,
+    '#attributes' => array('id' => 'amazon_pass', 'required' => '', 'placeholder' => t('User Password')),
+  );
+  $form['amazon_dimension'] = array(
+    '#type' => 'select',
+    '#title' => t('Available Dimensions'),
+    '#attributes' => array('id' => 'amazon_dimension', 'multiple' => '', 'disabled' => ''),
+    '#options' => array(),
+  );
+
+  $form['android_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Folio Producer User ID'),
+    '#size' => 30,
+    '#attributes' => array('id' => 'android_id', 'required' => '', 'placeholder' => t('User ID (E-mail)')),
+  );
+  $form['android_pass'] = array(
+    '#type' => 'password',
+    '#title' => t('Folio Producer Password'),
+    '#size' => 30,
+    '#attributes' => array('id' => 'android_pass', 'required' => '', 'placeholder' => t('User Password')),
+  );
+  $form['android_dimension'] = array(
+    '#type' => 'select',
+    '#title' => t('Available Dimensions'),
+    '#attributes' => array('id' => 'android_dimension', 'multiple' => '', 'disabled' => ''),
+    '#options' => array(),
+  );
+
+  $form['apple_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Folio Producer User ID'),
+    '#size' => 30,
+    '#attributes' => array('id' => 'apple_id', 'required' => '', 'placeholder' => t('User ID (E-mail)')),
+  );
+  $form['apple_pass'] = array(
+    '#type' => 'password',
+    '#title' => t('Folio Producer Password'),
+    '#size' => 30,
+    '#attributes' => array('id' => 'apple_pass', 'required' => '', 'placeholder' => t('User Password')),
+  );
+  $form['apple_dimension'] = array(
+    '#type' => 'select',
+    '#title' => t('Available Dimensions'),
+    '#attributes' => array('id' => 'apple_dimension', 'multiple' => '', 'disabled' => ''),
+    '#options' => array(),
+  );
+
+  $form['test_connection'] = array(
+    '#markup' => '<button type="button" onclick="javascript:jQuery(\'#dialog-option-connectivity\').dialog(\'open\')">Test Connection</button>',
+  );
+  $form['add_dimensions'] = array(
+    '#markup' => '<button type="button" onclick="javascript:jQuery(\'#dialog-option-dimension-add\').dialog(\'open\')">Add Dimensions</button>',
+  );
+  $form['delete_dimensions'] = array(
+    '#markup' => '<button type="button" onclick="javascript:jQuery(\'#dialog-option-dimension-delete\').dialog(\'open\')">Delete Dimensions</button>',
+  );
+  $form['save'] = array(
+    '#markup' => '<button type="button" onclick="javascript:dps_credentials()">Save</button>',
+  );
+  $form['cancel'] = array(
+    '#markup' => '<button type="button" onclick="location.href=\'/admin/config/content/fpselect\'">Cancel</button>',
+  );
+
   return $form;
 }
 
@@ -1207,7 +1314,8 @@ function dpsbridge_img_upload() {
 function dpsbridge_stylesheet_reader() {
   // @return array containing the name of the local stylesheets.
   $stylesheets = array();
-  $directory = new DirectoryIterator(dirname(__FILE__) . '/styles');
+  $styles_directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/styles/';
+  $directory = new DirectoryIterator($styles_directory);
   foreach ($directory as $file) {
     if (!$file->isDot() && $file->getFilename() !== '.DS_Store' && $file->getFilename() !== 'HTMLResources') {
       array_push($stylesheets, $file->getFilename());
@@ -1231,7 +1339,7 @@ function dpsbridge_stylesheet_delete() {
     $message = '[Denied] Cannot delete the stocked Bootstrap or Foundation stylesheet!';
   }
   else {
-    $directory = drupal_get_path('module', 'dpsbridge') . '/styles/';
+    $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/styles/';
     dpsbridge_helper_rrmdir($directory . $filename);
   }
   drupal_json_output($message);
@@ -1258,7 +1366,7 @@ function dpsbridge_stylesheet_upload() {
     $message = '[Denied]-Cannot override the stocked Bootstrap or Foundation stylesheet!';
   }
   else {
-    $directory = drupal_get_path('module', 'dpsbridge') . '/styles/' . $derivative . '-' . $filename;
+    $directory = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge' . '/styles/' . $derivative . '-' . $filename;
     mkdir($directory);
     $destination = $directory . '/HTMLResources.zip';
     move_uploaded_file($zipfile['tmp_name'], $destination);
@@ -1611,7 +1719,7 @@ function dpsbridge_node_delete($node) {
  * @return string
  *   Returned themed date string.
  */
-function theme_dpsbridge_date(array $variables) {
+function theme_dpsbridge_date($variables) {
   $element = $variables['element'];
   $element['#attributes']['type'] = 'date';
   element_set_attributes($element, array(
@@ -1653,7 +1761,7 @@ function theme_dpsbridge_date(array $variables) {
  *
  * @ingroup themeable
  */
-function theme_dpsbridge_image_formatter(array $variables) {
+function theme_dpsbridge_image_formatter($variables) {
   $item = $variables['item'];
   $image = array(
     'path' => $item['uri'],
@@ -1718,5 +1826,22 @@ function dpsbridge_create_diretories() {
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
   $dir = file_default_scheme() . '://dpsbridge/folio';
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  $dir = file_default_scheme() . '://dpsbridge/styles';
+  file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  $dir = file_default_scheme() . '://dpsbridge/styles/Bootstrap';
+  file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+   $dir = file_default_scheme() . '://dpsbridge/styles/Foundation';
+  file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  $dir = file_default_scheme() . '://dpsbridge/images';
+  file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  
+  // Copy precreated html resource files to files.
+  $source = drupal_get_path('module', 'dpsbridge') . '/styles/Bootstrap/HTMLResources.zip';
+  $destination = file_default_scheme() . '://dpsbridge/styles/Bootstrap/HTMLResources.zip';
+  file_unmanaged_copy($source, $destination);
+  
+  $source = drupal_get_path('module', 'dpsbridge') . '/styles/Foundation/HTMLResources.zip';
+  $destination = file_default_scheme() . '://dpsbridge/styles/Foundation/HTMLResources.zip';
+  file_unmanaged_copy($source, $destination);
 }
 

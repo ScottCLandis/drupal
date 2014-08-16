@@ -11,6 +11,7 @@ var apikey,
   apple_dimension,
   baseURL = "",
   pathToDir = "";
+  pathToFiles = "";
 /* =================================================== *
  * Given the account type,
  *   call helper to connect to Folio Producer,
@@ -229,7 +230,8 @@ function updateFields() {
     Drupal.behaviors.dpsbridge_view_credential_init = {
         attach: function() {
             baseURL = Drupal.settings.dpsbridge.base_url;
-            pathToDir = '/' + Drupal.settings.dpsbridge.path_to_dir;
+            pathToDir = baseURL + '/' + Drupal.settings.dpsbridge.path_to_dir;
+            pathToFiles = Drupal.settings.dpsbridge.path_to_files;
         }
     }
     Drupal.behaviors.dpsbridge_view_credential = {
@@ -364,7 +366,7 @@ function updateFields() {
     buttons: {
       Download: function() {
         var stylesheet = $('#stylesheet-download :selected').val();
-        dpsbridge_helper_download_file(baseURL, pathToDir + '/styles/' + stylesheet + '/HTMLResources.zip', 'HTMLResources', '0');
+        dpsbridge_helper_download_file(baseURL, pathToFiles + '/styles/' + stylesheet + '/HTMLResources.zip', 'HTMLResources', '0');
         $(this).dialog("close"); },
       Close: function() {
         $(this).dialog("close"); }}

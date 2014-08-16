@@ -5,7 +5,77 @@
  */
 ?>
 
-<?php print $dpsbridge_config; ?>
+<form action="#" method="POST">
+<table id="edit-credential-table" class="views-table cols-2">
+<tbody>
+	<tr class="odd views-row-first">
+		<td class="views-field">
+      <h4>[Adobe Folio Producer]</h4>
+      <?php print drupal_render($dpsbridge_config['apikey']); ?>
+		</td>
+		<td class="views-field" colspan="2">
+      <h4>&nbsp;</h4>
+      <?php print drupal_render($dpsbridge_config['apisec']); ?>
+		</td>
+		<td class="views-field" rowspan="4">
+			<label for="stylesheets">Available Publication Stylesheets</label>
+			<table id="stylesheets"></table>
+			<?php print drupal_render($dpsbridge_config['add_stylesheet']); ?>
+			<?php print drupal_render($dpsbridge_config['delete_stylesheet']); ?>
+			<?php print drupal_render($dpsbridge_config['download_stylesheet']); ?>
+		</td>
+	</tr>
+	<tr class="even">
+		<td class="views-field">
+      <h4>[Amazon]</h4>
+			<?php print drupal_render($dpsbridge_config['amazon_id']); ?>
+		</td>
+		<td class="views-field">
+      <h4>&nbsp;</h4>
+			<?php print drupal_render($dpsbridge_config['amazon_pass']); ?>
+		</td>
+		<td>
+			<?php print drupal_render($dpsbridge_config['amazon_dimension']); ?>
+		</td>
+	</tr>
+	<tr class="odd">
+		<td class="views-field">
+      <h4>[Android]</h4>
+			<?php print drupal_render($dpsbridge_config['android_id']); ?>
+		</td>
+		<td class="views-field">
+      <h4>&nbsp;</h4>
+			<?php print drupal_render($dpsbridge_config['android_pass']); ?>
+		</td>
+		<td>
+			<?php print drupal_render($dpsbridge_config['android_dimension']); ?>
+		</td>
+	</tr>
+	<tr class="even">
+		<td class="views-field">
+      <h4>[Apple]</h4>
+			<?php print drupal_render($dpsbridge_config['apple_id']); ?>
+		</td>
+		<td class="views-field">
+      <h4>&nbsp;</h4>
+			<?php print drupal_render($dpsbridge_config['apple_pass']); ?>
+		</td>
+		<td>
+      <?php print drupal_render($dpsbridge_config['apple_dimension']); ?>
+		</td>
+	</tr>
+	<tr class="odd views-row-last">
+		<td class="views-field align-center" colspan="4">
+			<?php print drupal_render($dpsbridge_config['test_connection']); ?>
+			<?php print drupal_render($dpsbridge_config['add_dimensions']); ?>
+			<?php print drupal_render($dpsbridge_config['delete_dimensions']); ?>
+			<?php print drupal_render($dpsbridge_config['save']); ?>
+			<?php print drupal_render($dpsbridge_config['cancel']); ?>
+		</td>
+	</tr>
+</tbody>
+</table>
+</form>
 <!-- ==================================================
 Overlay for displaying options for testing connectivity
 =================================================== -->

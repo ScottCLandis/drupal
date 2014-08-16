@@ -12,14 +12,14 @@ $cache_expire = session_cache_expire();
 $config = DPSBridgeFPConfig::Instance();
 require_once dirname(__FILE__) . '/fp_helper.php';
 
-$_SESSION['AdobeID'] = htmlspecialchars(isset($_POST["AdobeID"]) ? $_POST["AdobeID"] : '');
-$_SESSION['Password'] = htmlspecialchars(isset($_POST["Password"]) ? $_POST["Password"] : '');
-$_SESSION['APIKey'] = htmlspecialchars(isset($_POST["APIKey"]) ? $_POST["APIKey"] : '');
-$_SESSION['APISecret'] = htmlspecialchars(isset($_POST["APISecret"]) ? $_POST["APISecret"] : '');
+$_SESSION['dpsbridge_AdobeID'] = htmlspecialchars(isset($_POST["AdobeID"]) ? $_POST["AdobeID"] : '');
+$_SESSION['dpsbridge_Password'] = htmlspecialchars(isset($_POST["Password"]) ? $_POST["Password"] : '');
+$_SESSION['dpsbridge_APIKey'] = htmlspecialchars(isset($_POST["APIKey"]) ? $_POST["APIKey"] : '');
+$_SESSION['dpsbridge_APISecret'] = htmlspecialchars(isset($_POST["APISecret"]) ? $_POST["APISecret"] : '');
 $folio_id = htmlspecialchars(isset($_POST['folioID']) ? $_POST['folioID'] : '');
 $is_test = htmlspecialchars(isset($_POST["Test"]) ? $_POST["Test"] : '');
 
-$fp = new DPSBridgeFPHelper($_SESSION['AdobeID'], $_SESSION['Password'], $_SESSION['APIKey'], $_SESSION['APISecret']);
+$fp = new DPSBridgeFPHelper($_SESSION['dpsbridge_AdobeID'], $_SESSION['dpsbridge_Password'], $_SESSION['dpsbridge_APIKey'], $_SESSION['dpsbridge_APISecret']);
 $config->fp = $fp;
 $config = DPSBridgeFPConfig::Instance();
 $fp = $config->fp;
@@ -27,11 +27,11 @@ $config->fpError = 'ok';
 $config->fulfillmentError = 'ok';
 
 // Create session.
-if (!isset($_SESSION['ticket'])) {
+if (!isset($_SESSION['dpsbridge_ticket'])) {
   $session = $fp->createSession();
   $distribution_api = $fp->createDistributionSession();
   $distribution_info = new SimpleXMLElement($distribution_api);
-  $_SESSION['DistributionID'] = (string) $distribution_info->accountId;
+  $_SESSION['dpsbridge_DistributionID'] = (string) $distribution_info->accountId;
 
   if ($session['status'] != 'ok') {
     if ($session['status'] === 'InvalidLogin') {

@@ -9,11 +9,11 @@ require_once dirname(__FILE__) . '/fp_config.php';
 $config = DPSBridgeFPConfig::Instance();
 require_once dirname(__FILE__) . '/fp_helper.php';
 
-if (!isset($_SESSION['AdobeID']) || !isset($_SESSION['Password'])) {
+if (!isset($_SESSION['dpsbridge_AdobeID']) || !isset($_SESSION['dpsbridge_Password'])) {
   echo "Please provide Adobe ID and password!";
 }
 else {
-  $fp = new DPSBridgeFPHelper($_SESSION['AdobeID'], $_SESSION['Password'], $_SESSION['APIKey'], $_SESSION['APISecret']);
+  $fp = new DPSBridgeFPHelper($_SESSION['dpsbridge_AdobeID'], $_SESSION['dpsbridge_Password'], $_SESSION['dpsbridge_APIKey'], $_SESSION['dpsbridge_APISecret']);
   $folio_name = isset($_POST["folioName"]) ? $_POST["folioName"] : '';
   $magazine_title = isset($_POST["magazineTitle"]) ? $_POST["magazineTitle"] : '';
   $folio_number = isset($_POST["folioNumber"]) ? $_POST["folioNumber"] : '';
