@@ -1,93 +1,96 @@
-============
-Installation
-============
+CONTENTS OF THIS FILE
+---------------------
+ * Introduction
+ * Requirements
+ * Recommended modules
+ * Installation
+ * Configuration
+ * Troubleshooting
+ * FAQ
+ * Maintainers
 
-Dependencies
-============
-Entity Reference
-Entity API
-Chaos Tools
-Views
-Views Bulk Operations
-Views PHP
-Shrink the Web (optional)
 
-Permissions
-===========
-Navigate to [base_url]/admin/people/permissions to configuring 
-the user permissions for this module.
+INTRODUCTION
+------------
+The DPSBridge module converts selected articles into HTML stacks and then 
+uploads the articles directly to Adobe DPS Folio Producer by utilizing the Folio
+Producer APIs. In addition, DPSBridge compares each selected Drupal article with
+the version in the folio and indicates when the content is out of sync. An 
+authorized user can then update the contents of the folio to utilize the most 
+current version of the Drupal article.
 
-Content Type
-============
-Folio content type is added by this module.
+The DPSBridge Module allows you to work within Drupal to:
 
-field_folio_product_id
-Folio Producer metadata: folio folder ID
+ * Create a new HTML Folio for Adobe DPS
+ * Search for and select articles for publishing to Adobe DPS
+ * Add and remove HTML articles from a folio
+ * Convert images associated with a Drupal node to a slideshow in the HTML 
+   article
+ * Assign your own CSS to style the resulting HTML article
+ * Reorder articles contained within an HTML Folio
+ * Compare Drupal article content to that which has been uploaded to Folio
+   Producer with the option to update the folio articles to keep the content in
+   sync (for Adobe DPS Enterprise customers)
+ * Clone a folio to create a copy of the selected folio and all article
+   references (useful when publishing the same content to multiple marketplaces)
+ * Upload article content directly to Folio Producer (for Adobe DPS Enterprise 
+   customers; requires no interaction with Adobe InDesign)
+ * Automatically generate a Cover article and Table of Contents article if 
+   desired
 
-field_folio_publication_name
-Folio Producer metadata: folio publication name
 
-field_folio_number
-Folio Producer metadata: folio number
+REQUIREMENTS
+------------
+ The DPSBridge module requires the following modules:
 
-field_folio_description
-Folio Producer metadata: folio description
+ * Entity reference (https://www.drupal.org/project/entityreference)
+ * Entity API (https://www.drupal.org/project/entity)
+ * Chaos tool suite (https://www.drupal.org/project/ctools)
+ * Views (https://www.drupal.org/project/views)
+ * Views Bulk Operations (https://www.drupal.org/project/views_bulk_operations)
+ * Views PHP (https://www.drupal.org/project/views_php)
 
-field_folio_dimension
-Folio Producer metadata: folio targeted dimension
+ This module integrates with Adobe Digital Publishing Suite (Adobe DPS).
+ An Adobe Digital Publishing Suite Enterprise License is required to publish the
+ generated folios on with Adobe.
 
-field_folio_viewer_version
-Folio Producer metadata: folio targeted viewer version
 
-field_folio_producer_accounts
-Folio Producer Account Types: Amazon, Android, & Apple
+RECOMMENDED MODULES
+-------------------
+ * Display Suite (https://www.drupal.org/project/ds)
+  When enabled, it harness the power of Display Suite for theming the HTML folio
 
-field_folio_producer_timestamp
-The last date that the folio was uploaded to the Folio Producer
 
-field_folio_status
-Upload status (Uploaded vs Not uploaded)
+INSTALLATION
+------------
+ * Install as you would normally install a contributed drupal module. See:
+   https://drupal.org/documentation/install/modules-themes/modules-7
+   for further information.
+   
+CONFIGURATION
+-------------
+ * Configure user permissions in Administration » Content Authoring » DPS Bridge 
+   Configuration:
+   - Configure the Adobe API Key and API Secret
+   - Configure any of the 3 publishing platforms (Amazon, Android, Apple)
+ * Configure user permissions in Administration » People » Permissions:
+ * A screencast "DPSBridge: Getting Started" i available here, which describes
+   how to install, configure and use this module with Adobe DPS.
+   http://youtu.be/PufG2DosTkU
+   
+TROUBLESHOOTING
+---------------
+ Drupal default memory limit issues (i.e. blank page when loading Drupal)
+ Configure following:  php_value memory_limit 128M
 
-field_folio_sync_status
-Synchronication status with Folio Producer
+MAINTAINERS
+-----------
+Current maintainers:
+ * Joozer Tohfafarosh (justy) - https://www.drupal.org/user/115811
+This project has been sponsored by:
+ * DPCI
+   This project is maintained by staff at DPCI. For more information about this
+   module or for consulting and implementation support, please contact us 
+   directly at (800) 818-2905 or http://www.databasepublish.com.
 
-field_folio_orientation
-Folio Producer metadata: article orientation (landscape, portrait, or both)
 
-field_folio_publication_css
-Stylesheet for generated HTML Articles
-
-field_folio_published_date
-Folio Producer metadata: folio published date
-
-field_folio_toc
-Table of Contents status (Generated vs Not Generated) <- unnecessary ATM
-
-field_folio_toc_layout
-Stylesheet for generated Table of Contents
-
-field_folio_library_filter
-Folio Producer metadata: folio library filter
-
-field_folio_ads_filter
-Keeps track of which article is an ad and which isn't
-
-field_folio_landscape_url
-Folio landscape image, used for the auto-generated cover page
-
-field_folio_portrait_url
-Folio portrait image, used for the auto-generated cover page
-
-field_folio_reference
-Reference to the respective article nodes within the folio node
-
-field_folio_producer_article_id
-Reference to the non-Drupal articles
-Folio Selection view
-
-emory Issue
-============
-
-Drupal default memory limit issues (i.e. blank page when loading Drupal)
-Configure following:
-php_value memory_limit 128M
