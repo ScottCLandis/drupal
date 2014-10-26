@@ -39,9 +39,9 @@ function dpsbridge_helper_style_foundation_cover($publication, $landscape, $port
  *
  * @param string $publication
  *   The folio publication name.
- * @param array $article_names
+ * @param object $article_names
  *   A list of article names, used to generate the nav-to links.
- * @param array $ds_articles
+ * @param object $ds_articles
  *   A list of Dispaly Suite articles.
  */
 function dpsbridge_helper_style_foundation_toc($publication, $article_names, $ds_articles) {
@@ -75,7 +75,7 @@ function dpsbridge_helper_style_foundation_toc($publication, $article_names, $ds
  *   The folio kicker.
  * @param string $body
  *   The article content.
- * @param array $images
+ * @param object $images
  *   The article image(s), generating a slideshow if more than 1 images.
  * @param string $videos
  *   The article video.
@@ -104,4 +104,3 @@ function dpsbridge_helper_style_foundation($publication, $title, $author, $kicke
   $toc_img = dpsbridge_helper_format_thumbnail($GLOBALS['base_url'] . '/' . $directory . $filename . '/' . $filename . '.html');
   dpsbridge_helper_save_img($toc_img, $filename . '/toc.png');
 }
-

@@ -11,13 +11,11 @@ function dpsbridge_init() {
   global $base_url;
   $path_to_dir = drupal_get_path('module', 'dpsbridge');
   $path_to_files = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge';
-  drupal_add_js('misc/jquery.form.js');
   drupal_add_library('system', 'drupal.ajax');
   drupal_add_library('system', 'jquery.form');
   drupal_add_library('system', 'ui.dialog');
   drupal_add_library('system', 'ui.tabs');
   drupal_add_library('system', 'ui.sortable');
-  drupal_add_js($path_to_dir . '/includes/dpsbridge.js');
   drupal_add_js(array(
     'dpsbridge' => array(
       'base_url' => $base_url,
@@ -25,12 +23,15 @@ function dpsbridge_init() {
       'path_to_files' => $path_to_files,
     ),
   ), 'setting');
-  drupal_add_css($path_to_dir . '/includes/override.css');
 
   module_load_include('inc', 'dpsbridge', 'dpsbridge_helper');
   module_load_include('inc', 'dpsbridge', 'dpsbridge_style_bootstrap');
   module_load_include('inc', 'dpsbridge', 'dpsbridge_style_foundation');
 }
+
+
+
+
 
 /**
  * Implements hook_menu().

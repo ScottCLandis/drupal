@@ -9,3 +9,5 @@ dependencies[] = entityreference
 dependencies[] = views
 dependencies[] = views_bulk_operations
 dependencies[] = views_php
+scripts[] = dpsbridge.js
+stylesheets[all][] = override.css
