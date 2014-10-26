@@ -148,7 +148,7 @@ function generate_form_table_stylesheet() {
         if (output[i].indexOf('-') < 0) {
           styleText = output[i];
         }
-        // removes the derivatives for viewing purposes
+        // Removes the derivatives for viewing purposes.
         else {
           styleText = output[i].split(/-/)[1];
         }

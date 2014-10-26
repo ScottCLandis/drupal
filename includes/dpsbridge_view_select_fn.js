@@ -1,3 +1,7 @@
+/**
+ * View Select Scripting.
+ */
+
 var articles = "";
 /* ----------------------------------------------------------- *
  * Attempts to obtain the values from the selected checkboxes,
@@ -11,13 +15,13 @@ function get_selected(toggle) {
             selectedArticles += checkboxes[i].value + ",";
         }
     }
-    // Give warning if nothing was selected
+    // Give warning if nothing was selected.
     if (!selectedArticles) {
         dpsbridge_helper_show_status("Please select an article first!");
     }
     else {
         articles = selectedArticles;
-        // toggle the respective popup window
+        // Toggle the respective popup window.
         switch (toggle) {
             case "new":
                 jQuery("#dialog-new").dialog("open");

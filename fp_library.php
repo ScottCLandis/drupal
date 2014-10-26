@@ -15,7 +15,7 @@ class DPSBridgeFPLibrary {
   /**
    * Create new object and initialise the variables.
    *
-   * @param {array} $config_in
+   * @param array $config_in
    *   Stores parameters.
    */
   public function __construct($config_in) {

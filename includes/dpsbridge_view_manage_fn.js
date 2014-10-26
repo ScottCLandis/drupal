@@ -291,7 +291,7 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
   var indexSort = 0;
   for (var n = 0; n < fpArticles.length; n++) {
     sortNumber = parseInt(fpArticles[n]['articleMetadata']['sortNumber']);
-    if (fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge-') >=0
+    if (fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge-') >= 0
         || fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge') < 0) {
         sortNumbers[indexSort] = sortNumber;
         indexSort ++;
@@ -325,7 +325,6 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
             html += "<td><span class='ui-icon ui-icon-locked'></span></td>\n";
             html += "<td>" + exist['name'] + "</td>\n";
             html += "<td>" + exist['type'] + "</td>\n";
-            //html += "<td><span class='ui-icon ui-icon-locked'></span></td>\n";
             html += "<td><span class='ui-icon ui-icon-locked'></span></td>\n";
             html += "<td class='is-ad'><input type='hidden' /><span class='ui-icon ui-icon-locked'></span></td>\n";
             html += "<td><span class='ui-icon ui-icon-check'></span></td>\n";
@@ -345,7 +344,6 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
           html += "<td><a href='/node/" + articleID + "/edit?destination=admin/config/content/fpmanage'><span class='ui-icon ui-icon-pencil'></span></a></td>\n";
           html += "<td><a href='javascript:previewOptions(" + articleID + ", \"" + output['filename'] + "\")'>" + output['title'] + "</a></td>\n";
           html += "<td>" + output['type'] + "</td>\n";
-          //html += "<td><select class='overridecss'></select></td>\n";
           html += "<td>" + output['modified'] + "</td>\n";
           html += "<td class='is-ad'><input type='checkbox' " + checked + "/></td>\n";
           if (output['timestamp'] <= uploadDate && exist) {
@@ -364,7 +362,7 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
   // Display all non-Drupal articles that has not been stored previously.
   for (var n = 0; n < fpArticles.length; n++) {
     // Skip if it is a Drupal article.
-    if (fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge') >= 0) { 
+    if (fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge') >= 0) {
       continue;
     }
     // Insert non-Drupal articles that hasn't been added to Drupal database.
@@ -385,29 +383,29 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
       if (sortIndex == 0) {
         jQuery('#articles-wrapper').prepend(html);
       }
-      else if (sortIndex ==  (sortNumbers.length-1)) {
-          jQuery('#articles-wrapper').append(html);
+      else if (sortIndex == (sortNumbers.length - 1)) {
+        jQuery('#articles-wrapper').append(html);
       }
       else {
-        if (preSortNumber = sortNumbers[sortIndex-1]) {
-            if (jQuery('#articleSortIndex-' + preSortNumber).length > 0) { 
-                jQuery('#articleSortIndex-' + preSortNumber).parent().after(html);
-                continue;
-      }
-    }
-        if (nextSortNumber = sortNumbers[sortIndex+1]) {
-            if (jQuery('#articleSortIndex-' + nextSortNumber).length > 0) { 
-                jQuery('#articleSortIndex-' + nextSortNumber).parent().before(html);
-                continue;
-            }
-  }
+        if (preSortNumber = sortNumbers[sortIndex - 1]) {
+          if (jQuery('#articleSortIndex-' + preSortNumber).length > 0) {
+            jQuery('#articleSortIndex-' + preSortNumber).parent().after(html);
+            continue;
+          }
+        }
+        if (nextSortNumber = sortNumbers[sortIndex + 1]) {
+          if (jQuery('#articleSortIndex-' + nextSortNumber).length > 0) {
+            jQuery('#articleSortIndex-' + nextSortNumber).parent().before(html);
+            continue;
+          }
+        }
         jQuery('#articles-wrapper').append(html);
       }
       index++;
     }
   }
   jQuery('#articles-wrapper tr').each(function(i, value){
-    jQuery(this).find('td.sortable-index').text(i+1);
+    jQuery(this).find('td.sortable-index').text(i + 1);
   });
   // Refreshes the stylesheets.
   jQuery('#dialog-status').dialog('close');
@@ -544,7 +542,7 @@ function previewArticle(orientation) {
   window.open(previewURL, "popup", "width=" + windows_width + ", height=" + windows_height);
 }
 /**
- * Read Stylesheets
+ * Read Stylesheets.
  */
 function readStylesheets() {
   var styleText = '';
@@ -562,7 +560,6 @@ function readStylesheets() {
           styleText = output[i].split(/-/)[1];
         }
         jQuery("#pubcss").append(jQuery("<option></option>").attr("value", output[i]).text(styleText));
-        //jQuery(".overridecss").append(jQuery("<option></option>").attr("value", output[i]).text(styleText));
       }
     }
   });
