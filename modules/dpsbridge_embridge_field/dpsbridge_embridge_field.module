@@ -2,14 +2,8 @@
 
 /**
  * @file
- * gsb_formbuilder_reports.module.
- * Module provides report functions to GSB FormBuilder.
+ * Module provides functions to integrating this module with EMBridge.
  */
-
-/******** Enums ********/
-
-/******** Hooks ********/
-// define all Drupal hooks here.
 
 /**
  * Implements hook_field_formatter_info().
@@ -30,13 +24,13 @@ function dpsbridge_embridge_field_field_formatter_info() {
 function dpsbridge_embridge_field_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
-  
+
   $catalog_id = $instance['settings']['asset_catalog'];
   $catalog_tokens = explode('/', $catalog_id);
   $catalog_name = array_pop($catalog_tokens);
   $selected_renditions = _embridge_get_selected_rendition_types($catalog_name);
 
-  $element = array();  
+  $element = array();
   if ($display['type'] == 'dpsbridge_embridge_field_default') {
     $element['rendition'] = array(
       '#title' => t('Conversion'),
@@ -91,7 +85,11 @@ function dpsbridge_embridge_field_field_formatter_view($entity_type, $entity, $f
 function dpsbridge_embridge_field_theme() {
   return array(
     'dpsbridge_embridge_field' => array(
-      'variables' => array('entermediaasset' => NULL, 'rendition' => NULL, 'entity' => NULL),
+      'variables' => array(
+        'entermediaasset' => NULL,
+        'rendition' => NULL,
+        'entity' => NULL,
+      ),
     ),
   );
 }
@@ -103,7 +101,7 @@ function theme_dpsbridge_embridge_field($variables) {
   $entity = $variables['entity'];
   $title = $entity->title;
   $article_folder = dpsbridge_helper_format_title($title);
-  
+
   if (!empty($embridge_field['aid'])) {
     $filename = basename($embridge_field['sourcepath']);
     $display = empty($variables['rendition']) ? 'thumbnail' : $variables['rendition'];

@@ -85,4 +85,3 @@
   <script>$('.carousel').carousel()</script>
 </body>
 </html>
-

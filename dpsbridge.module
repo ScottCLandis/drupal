@@ -18,7 +18,13 @@ function dpsbridge_init() {
   drupal_add_library('system', 'ui.tabs');
   drupal_add_library('system', 'ui.sortable');
   drupal_add_js($path_to_dir . '/includes/dpsbridge.js');
-  drupal_add_js(array('dpsbridge' => array('base_url' => $base_url, 'path_to_dir' => $path_to_dir, 'path_to_files' => $path_to_files)), 'setting');
+  drupal_add_js(array(
+    'dpsbridge' => array(
+      'base_url' => $base_url,
+      'path_to_dir' => $path_to_dir,
+      'path_to_files' => $path_to_files,
+    ),
+  ), 'setting');
   drupal_add_css($path_to_dir . '/includes/override.css');
 
   module_load_include('inc', 'dpsbridge', 'dpsbridge_helper');
@@ -403,14 +409,22 @@ function dpsbridge_module_config_form($form, &$form_state) {
     '#title' => t('API Key'),
     '#size' => 30,
     '#required' => TRUE,
-    '#attributes' => array('id' => 'apikey', 'required' => '', 'placeholder' => t('API Key')),
+    '#attributes' => array(
+      'id' => 'apikey',
+      'required' => '',
+      'placeholder' => t('API Key'),
+    ),
   );
   $form['apisec'] = array(
     '#type' => 'password',
     '#title' => t('API Secret'),
     '#size' => 30,
     '#required' => TRUE,
-    '#attributes' => array('id' => 'apisec', 'required' => '','placeholder' => t('API Secret')),
+    '#attributes' => array(
+      'id' => 'apisec',
+      'required' => '',
+      'placeholder' => t('API Secret'),
+    ),
   );
 
   $form['add_stylesheet'] = array(
@@ -427,18 +441,30 @@ function dpsbridge_module_config_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Folio Producer User ID'),
     '#size' => 30,
-    '#attributes' => array('id' => 'amazon_id', 'required' => '', 'placeholder' => t('User ID (E-mail)')),
+    '#attributes' => array(
+      'id' => 'amazon_id',
+      'required' => '',
+      'placeholder' => t('User ID (E-mail)'),
+    ),
   );
   $form['amazon_pass'] = array(
     '#type' => 'password',
     '#title' => t('Folio Producer Password'),
     '#size' => 30,
-    '#attributes' => array('id' => 'amazon_pass', 'required' => '', 'placeholder' => t('User Password')),
+    '#attributes' => array(
+      'id' => 'amazon_pass',
+      'required' => '',
+      'placeholder' => t('User Password'),
+    ),
   );
   $form['amazon_dimension'] = array(
     '#type' => 'select',
     '#title' => t('Available Dimensions'),
-    '#attributes' => array('id' => 'amazon_dimension', 'multiple' => '', 'disabled' => ''),
+    '#attributes' => array(
+      'id' => 'amazon_dimension',
+      'multiple' => '',
+      'disabled' => '',
+    ),
     '#options' => array(),
   );
 
@@ -446,18 +472,30 @@ function dpsbridge_module_config_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Folio Producer User ID'),
     '#size' => 30,
-    '#attributes' => array('id' => 'android_id', 'required' => '', 'placeholder' => t('User ID (E-mail)')),
+    '#attributes' => array(
+      'id' => 'android_id',
+      'required' => '',
+      'placeholder' => t('User ID (E-mail)'),
+    ),
   );
   $form['android_pass'] = array(
     '#type' => 'password',
     '#title' => t('Folio Producer Password'),
     '#size' => 30,
-    '#attributes' => array('id' => 'android_pass', 'required' => '', 'placeholder' => t('User Password')),
+    '#attributes' => array(
+      'id' => 'android_pass',
+      'required' => '',
+      'placeholder' => t('User Password'),
+    ),
   );
   $form['android_dimension'] = array(
     '#type' => 'select',
     '#title' => t('Available Dimensions'),
-    '#attributes' => array('id' => 'android_dimension', 'multiple' => '', 'disabled' => ''),
+    '#attributes' => array(
+      'id' => 'android_dimension',
+      'multiple' => '',
+      'disabled' => '',
+    ),
     '#options' => array(),
   );
 
@@ -465,18 +503,30 @@ function dpsbridge_module_config_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Folio Producer User ID'),
     '#size' => 30,
-    '#attributes' => array('id' => 'apple_id', 'required' => '', 'placeholder' => t('User ID (E-mail)')),
+    '#attributes' => array(
+      'id' => 'apple_id',
+      'required' => '',
+      'placeholder' => t('User ID (E-mail)'),
+    ),
   );
   $form['apple_pass'] = array(
     '#type' => 'password',
     '#title' => t('Folio Producer Password'),
     '#size' => 30,
-    '#attributes' => array('id' => 'apple_pass', 'required' => '', 'placeholder' => t('User Password')),
+    '#attributes' => array(
+      'id' => 'apple_pass',
+      'required' => '',
+      'placeholder' => t('User Password'),
+    ),
   );
   $form['apple_dimension'] = array(
     '#type' => 'select',
     '#title' => t('Available Dimensions'),
-    '#attributes' => array('id' => 'apple_dimension', 'multiple' => '', 'disabled' => ''),
+    '#attributes' => array(
+      'id' => 'apple_dimension',
+      'multiple' => '',
+      'disabled' => '',
+    ),
     '#options' => array(),
   );
 
@@ -1834,14 +1884,13 @@ function dpsbridge_create_diretories() {
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
   $dir = file_default_scheme() . '://dpsbridge/images';
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-  
+
   // Copy precreated html resource files to files.
   $source = drupal_get_path('module', 'dpsbridge') . '/styles/Bootstrap/HTMLResources.zip';
   $destination = file_default_scheme() . '://dpsbridge/styles/Bootstrap/HTMLResources.zip';
   file_unmanaged_copy($source, $destination);
-  
+
   $source = drupal_get_path('module', 'dpsbridge') . '/styles/Foundation/HTMLResources.zip';
   $destination = file_default_scheme() . '://dpsbridge/styles/Foundation/HTMLResources.zip';
   file_unmanaged_copy($source, $destination);
 }
-

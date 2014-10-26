@@ -53,4 +53,3 @@
   <script type='text/javascript' type='text/javascript' src='../HTMLResources/js/bootstrap.min.js'></script>
 </body>
 </html>
-

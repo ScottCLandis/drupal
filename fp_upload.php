@@ -110,4 +110,3 @@ else {
     echo " - Failed: Articles <br/> :: Missing one or more of the following: Folio ID, article name, sort order, and target viewer!";
   }
 }
-

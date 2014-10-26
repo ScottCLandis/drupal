@@ -26,14 +26,6 @@ function dpsbridge_helper_check_existence($article_id, $folio_node_array) {
 /**
  * Helper method for creating the Folio structure.
  *
- *   directory [filename]
- *   -> Folio.xml
- *   -> [filename].html
- *   -> mimetype
- *   -> META-INF
- *      -> pkgproperties.xml
- *   Skip creation if already exists.
- *
  * @param string $filename
  *   Filtered Article name, used as folder and file name.
  */
@@ -207,17 +199,6 @@ function dpsbridge_helper_format_title($filename, $replacement = '') {
 /**
  * Helper method for generating the HTML article folder.
  *
- * Make calls to the following:
- *  dpsbridge_helper_create_dir()...........creates the HTML article structure
- *  dpsbridge_helper_writePKG().............writes to the pkgproperties.xml file
- *  dpsbridge_helper_writeFolioXML() .......writes to the Folio.xml file
- *  dpsbridge_helper_style_bootstrap_toc()....TOC page w/ Bootstrap layout
- *  dpsbridge_helper_style_bootstrap_cover()..Cover page w/ Bootstrap layout
- *  dpsbridge_helper_style_bootstrap()........Article page w/ Bootstrap layout
- *  dpsbridge_helper_style_foundation_toc()...TOC page w/ Foundation layout
- *  dpsbridge_helper_style_foundation_cover().Cover page w/ Foundation layout
- *  dpsbridge_helper_style_foundation().......Article page w/ Foundation layout
- *
  * @param array $article_metadata
  *   A list of metadata fields pertaining to the article node.
  * @param array $folio_metadata
@@ -359,8 +340,6 @@ function dpsbridge_helper_include_goodies($toggle) {
 }
 /**
  * Helper method for saving the given image url, to the predefined image path.
- *
- * (/dpsbridge/file_name/image.jpg), with the given image name.
  *
  * @param string $filename
  *   Image URL.
