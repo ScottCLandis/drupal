@@ -16,22 +16,11 @@ function dpsbridge_init() {
   drupal_add_library('system', 'ui.dialog');
   drupal_add_library('system', 'ui.tabs');
   drupal_add_library('system', 'ui.sortable');
-  drupal_add_js(array(
-    'dpsbridge' => array(
-      'base_url' => $base_url,
-      'path_to_dir' => $path_to_dir,
-      'path_to_files' => $path_to_files,
-    ),
-  ), 'setting');
 
   module_load_include('inc', 'dpsbridge', 'dpsbridge_helper');
   module_load_include('inc', 'dpsbridge', 'dpsbridge_style_bootstrap');
   module_load_include('inc', 'dpsbridge', 'dpsbridge_style_foundation');
 }
-
-
-
-
 
 /**
  * Implements hook_menu().
