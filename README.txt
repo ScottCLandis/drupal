@@ -12,11 +12,11 @@ CONTENTS OF THIS FILE
 
 INTRODUCTION
 ------------
-The DPSBridge module converts selected articles into HTML stacks and then 
+The DPSBridge module converts selected articles into HTML stacks and then
 uploads the articles directly to Adobe DPS Folio Producer by utilizing the Folio
 Producer APIs. In addition, DPSBridge compares each selected Drupal article with
-the version in the folio and indicates when the content is out of sync. An 
-authorized user can then update the contents of the folio to utilize the most 
+the version in the folio and indicates when the content is out of sync. An
+authorized user can then update the contents of the folio to utilize the most
 current version of the Drupal article.
 
 The DPSBridge Module allows you to work within Drupal to:
@@ -24,7 +24,7 @@ The DPSBridge Module allows you to work within Drupal to:
  * Create a new HTML Folio for Adobe DPS
  * Search for and select articles for publishing to Adobe DPS
  * Add and remove HTML articles from a folio
- * Convert images associated with a Drupal node to a slideshow in the HTML 
+ * Convert images associated with a Drupal node to a slideshow in the HTML
    article
  * Assign your own CSS to style the resulting HTML article
  * Reorder articles contained within an HTML Folio
@@ -33,9 +33,9 @@ The DPSBridge Module allows you to work within Drupal to:
    sync (for Adobe DPS Enterprise customers)
  * Clone a folio to create a copy of the selected folio and all article
    references (useful when publishing the same content to multiple marketplaces)
- * Upload article content directly to Folio Producer (for Adobe DPS Enterprise 
+ * Upload article content directly to Folio Producer (for Adobe DPS Enterprise
    customers; requires no interaction with Adobe InDesign)
- * Automatically generate a Cover article and Table of Contents article if 
+ * Automatically generate a Cover article and Table of Contents article if
    desired
 
 
@@ -66,10 +66,10 @@ INSTALLATION
  * Install as you would normally install a contributed drupal module. See:
    https://drupal.org/documentation/install/modules-themes/modules-7
    for further information.
-   
+
 CONFIGURATION
 -------------
- * Configure user permissions in Administration » Content Authoring » DPS Bridge 
+ * Configure user permissions in Administration » Content Authoring » DPS Bridge
    Configuration:
    - Configure the Adobe API Key and API Secret
    - Configure any of the 3 publishing platforms (Amazon, Android, Apple)
@@ -77,7 +77,7 @@ CONFIGURATION
  * A screencast "DPSBridge: Getting Started" i available here, which describes
    how to install, configure and use this module with Adobe DPS.
    http://youtu.be/PufG2DosTkU
-   
+
 TROUBLESHOOTING
 ---------------
  Drupal default memory limit issues (i.e. blank page when loading Drupal)
@@ -90,7 +90,5 @@ Current maintainers:
 This project has been sponsored by:
  * DPCI
    This project is maintained by staff at DPCI. For more information about this
-   module or for consulting and implementation support, please contact us 
+   module or for consulting and implementation support, please contact us
    directly at (800) 818-2905 or http://www.databasepublish.com.
-
-

@@ -1763,7 +1763,7 @@ function dpsbridge_node_delete($node) {
 /**
  * Theme function for number field in form.
  *
- * @param array $variables
+ * @param {array} $variables
  *   Variables passed to the theming function.
  *
  * @return string
@@ -1802,7 +1802,7 @@ function theme_dpsbridge_date($variables) {
 /**
  * Returns HTML for an image field formatter.
  *
- * @param array $variables
+ * @param {array} $variables
  *   An associative array containing:
  *   - item: Associative array of image data, which may include "uri", "alt",
  *     "width", "height", "title" and "attributes".
@@ -1880,7 +1880,7 @@ function dpsbridge_create_diretories() {
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
   $dir = file_default_scheme() . '://dpsbridge/styles/Bootstrap';
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-   $dir = file_default_scheme() . '://dpsbridge/styles/Foundation';
+  $dir = file_default_scheme() . '://dpsbridge/styles/Foundation';
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
   $dir = file_default_scheme() . '://dpsbridge/images';
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);

@@ -1,4 +1,8 @@
 /**
+ * Main Scripting.
+ */
+
+/**
  * Given an array of values, convert it to string of values separated by commas.
  *
  * @param {array} dimensionArray
@@ -18,6 +22,7 @@ function dpsbridge_helper_array_to_string(dimensionArray) {
  *   Array list of articles.
  * @param {string} articleID
  *   Single article ID.
+ *
  * @return {string}
  *   Name of the non-Drupal article if found, empty string otherwise.
  */
@@ -34,7 +39,7 @@ function dpsbridge_helper_check_article_by_id(articleList, articleID) {
 function dpsbridge_helper_get_sort_number_by_nid(articleList, nid) {
   var tag = 'DPSBridge-' + nid;
   for (var i = 0; i < articleList.length; i++) {
-    if (articleList[i]['articleMetadata']['tags'].indexOf(tag) >=0) {
+    if (articleList[i]['articleMetadata']['tags'].indexOf(tag) >= 0) {
         return articleList[i]['articleMetadata']['sortNumber'];
     }
   }
@@ -47,6 +52,7 @@ function dpsbridge_helper_get_sort_number_by_nid(articleList, nid) {
  *   Array list of articles.
  * @param {string} article
  *   Single article name.
+ *
  * @return {boolean}
  *   True if found, false otherwise.
  */
@@ -60,7 +66,6 @@ function dpsbridge_helper_check_article_by_name(articleList, article) {
 }
 /**
  * Generates dimension as an option tag, and appends to the designated tag.
- *   Toggle is for the different type of dimension array.
  */
 function dpsbridge_helper_generate_dimensions(id, dimensions, toggle) {
   for (var i = 0; i < dimensions.length; i++) {

@@ -1,7 +1,5 @@
 <?php
-
 /**
- * @file
  * Module provides functions to integrating this module with EMBridge.
  */
 
@@ -94,6 +92,9 @@ function dpsbridge_embridge_field_theme() {
   );
 }
 
+/**
+ * Theming function.
+ */
 function theme_dpsbridge_embridge_field($variables) {
   module_load_include('inc', 'dpsbridge', 'dpsbridge_helper');
   $embridge_field = $variables['entermediaasset'];

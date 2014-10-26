@@ -1,3 +1,7 @@
+/**
+ * View Credential Scripting.
+ */
+
 var apikey,
   apisec,
   amazon_id,
@@ -65,7 +69,7 @@ function dps_connect(AdobeID, AdobePass, APIKey, APISecret, type, toggle) {
 function dps_credentials() {
   updateFields();
   dpsbridge_helper_show_status('Updating credentials, please wait...');
-  // call helper to convert the array of dimensions into a string, separated by commas
+  // Call helper to convert the array of dimensions into a string, separated by commas.
   var amazon_target_dimension = dpsbridge_helper_array_to_string(amazon_dimension);
   var android_target_dimension = dpsbridge_helper_array_to_string(android_dimension);
   var apple_target_dimension = dpsbridge_helper_array_to_string(apple_dimension);
@@ -236,14 +240,14 @@ function updateFields() {
     }
     Drupal.behaviors.dpsbridge_view_credential = {
         attach: function() {
-  // dialog box for checking credentials
+  // Dialog box for checking credentials.
   $("#dialog-option-connectivity").dialog({
     autoOpen:false, height:325, width:350, modal:true,
     buttons: {
       Close: function() {
         $(this).dialog("close"); }}
   });
-  // dialog box for adding dimensions
+  // Dialog box for adding dimensions.
   $("#dialog-option-dimension-add").dialog({
     autoOpen:false, height:300, width:300, modal:true,
     buttons: {
@@ -252,9 +256,9 @@ function updateFields() {
           dimensionLength = $('#dlength'),
           dimensionWidth  = $('#dwidth');
         if (dimensionLength.val() && dimensionWidth.val()) {
-          // calls helper method to insert the dimension in numerical order
+          // Calls helper method to insert the dimension in numerical order.
           insertDimension(desiredAccount.val(), dimensionLength.val() + ' x ' + dimensionWidth.val());
-          // clean the text fields
+          // Clean the text fields.
           $('#dlength').val('');
           $('#dwidth').val('');
           $(this).dialog("close");
@@ -265,14 +269,14 @@ function updateFields() {
       Close: function() {
         $(this).dialog("close"); }}
   });
-  // dialog box for deleting dimensions
+  // Dialog box for deleting dimensions.
   $("#dialog-option-dimension-delete").dialog({
     autoOpen:false, height:350, width:300, modal:true,
     buttons: {
       Delete: function() {
         var desiredAccount = $('#account-type-delete :selected'),
           dimensions = $('#dimension-list :selected');
-        // check if all available dimensions are selected, to prevent deletion of all available dimensions
+        // Check if all available dimensions are selected, to prevent deletion of all available dimensions.
         if (dimensions.length >= $('#' + desiredAccount.val() + '_dimension option').length) {
           dpsbridge_helper_show_status('At least 1 dimension has to exist per account type!');
         }
@@ -284,7 +288,7 @@ function updateFields() {
           }
           $(this).dialog("close");
         }
-        // if user hasn't selected any dimensions
+        // If user hasn't selected any dimensions.
         else {
           dpsbridge_helper_show_status('Please select dimension(s) to delete.');
         } },
@@ -294,7 +298,7 @@ function updateFields() {
       refreshDimensions();
     }
   });
-  // dialog box for adding stylesheets
+  // Dialog box for adding stylesheets.
   $("#dialog-option-stylesheet-add").dialog({
     autoOpen:false, height:350, width:400, modal:true,
     buttons: {
@@ -311,7 +315,7 @@ function updateFields() {
           dpsbridge_helper_show_status("Cannot override the stocked Bootstrap or Foundation stylesheet!");
         }
         else {
-          // sends the zip file via XML-HTTP-Request
+          // Sends the zip file via XML-HTTP-Request.
           var form = document.getElementById('stylesheet-form'),
             formData = new FormData(form),
              xhr = new XMLHttpRequest();
@@ -333,7 +337,7 @@ function updateFields() {
       Close: function() {
         $(this).dialog("close"); }}
   });
-  // dialog box for deleting stylesheets
+  // Dialog box for deleting stylesheets.
   $("#dialog-option-stylesheet-delete").dialog({
     autoOpen:false, height:250, width:350, modal:true,
     buttons: {
@@ -349,9 +353,9 @@ function updateFields() {
           dpsbridge_helper_show_status("Cannot delete the stocked Bootstrap or Foundation stylesheet!");
         }
         else {
-          // deletes the stylesheet from local directory
+          // Deletes the stylesheet from local directory.
           $.ajax({ url: baseURL + "/dpsbridge/stylesheet/delete", type: "POST", data: {'filename':stylesheet} });
-          // remove stylesheet from view
+          // Remove stylesheet from view.
           $("#style-" + stylesheet).remove();
           $("#stylesheet-delete option[value=" + stylesheet + "]").remove();
           $("#stylesheet-download option[value=" + stylesheet + "]").remove();
@@ -360,7 +364,7 @@ function updateFields() {
       Close: function() {
         $(this).dialog("close"); }}
   });
-  // dialog box for deleting stylesheets
+  // Dialog box for deleting stylesheets.
   $("#dialog-option-stylesheet-download").dialog({
     autoOpen:false, height:200, width:350, modal:true,
     buttons: {
@@ -371,14 +375,14 @@ function updateFields() {
       Close: function() {
         $(this).dialog("close"); }}
   });
-  // dialog box for showing any messages
+  // Dialog box for showing any messages.
   $("#dialog-status").dialog({
     autoOpen:false, modal:true,
     buttons: {
       Close: function() {
         $(this).dialog("close"); }}
   });
-  // initialize the tabs
+  // Initialize the tabs.
   $('#jqueryui-tabs').tabs();
         generate_form_table_values();
   generate_form_table_stylesheet();

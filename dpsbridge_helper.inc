@@ -12,7 +12,7 @@
  *
  * @param string $article_id
  *   Article node id.
- * @param array $folio_node_array
+ * @param {array} $folio_node_array
  *   Array containing a list of article node ID's.
  */
 function dpsbridge_helper_check_existence($article_id, $folio_node_array) {
@@ -154,7 +154,7 @@ function dpsbridge_helper_format_url($url) {
  *
  * @param string $fid
  *   Folio node ID.
- * @param array $articles
+ * @param {array} $articles
  *   List of article node ID's.
  */
 function dpsbridge_helper_folio_append($fid, $articles) {
@@ -199,15 +199,15 @@ function dpsbridge_helper_format_title($filename, $replacement = '') {
 /**
  * Helper method for generating the HTML article folder.
  *
- * @param array $article_metadata
+ * @param {array} $article_metadata
  *   A list of metadata fields pertaining to the article node.
- * @param array $folio_metadata
+ * @param {array} $folio_metadata
  *   A list of metadata fields pertaining to the folio node.
- * @param array $ads_toggle
+ * @param {array} $ads_toggle
  *   A list of 0's and 1's, 1 for ads and 0 for not.
- * @param array $article_list
+ * @param {array} $article_list
  *   A list of article names, used for generating the ToC.
- * @param array $ds_articles
+ * @param {array} $ds_articles
  *   A list of Display Suite articles.
  */
 function dpsbridge_helper_generate_html($article_metadata, $folio_metadata, $ads_toggle, $article_list = '', $ds_articles = array()) {
@@ -514,7 +514,7 @@ function dpsbridge_helper_pull_node($node_id) {
 /**
  * Helper method to check for article node ref exist within the folio node.
  *
- * @param array $container
+ * @param {array} $container
  *   List of article node references that are currently within the folio node.
  * @param string $target
  *   Pending article node reference.

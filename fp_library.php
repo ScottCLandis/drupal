@@ -15,7 +15,7 @@ class DPSBridgeFPLibrary {
   /**
    * Create new object and initialise the variables.
    *
-   * @param array $config_in
+   * @param {array} $config_in
    *   Stores parameters.
    */
   public function __construct($config_in) {
@@ -24,7 +24,7 @@ class DPSBridgeFPLibrary {
     $this->config = DPSBridgeFPConfig::Instance();
     $this->config->mergePublic($config_in);
   }
-  
+
   /**
    * Generate nonce and store in config.
    */
@@ -92,17 +92,17 @@ class DPSBridgeFPLibrary {
    *
    * @param string $method
    *   GET, POST, DELETE.
-   * @param sting $url
+   * @param string $url
    *   API.
-   * @param array $params
-   *   request parameters.
+   * @param {array} $params
+   *   Request parameters.
    * @param string $filepath
-   *   path to file if uploading.
+   *   Path to file if uploading.
    * @param bool $is_download
-   *   set if using the download server.
+   *   Set if using the download server.
    */
   public function request($method, $url, $params = array(), $filepath = NULL, $is_download = FALSE, $is_distribution = FALSE) {
-      if (strstr($filepath, 'folio/') || strstr($filepath, 'html/') || strstr($filepath, 'styles/')) {
+    if (strstr($filepath, 'folio/') || strstr($filepath, 'html/') || strstr($filepath, 'styles/')) {
       $dir = strstr(realpath(__FILE__), '/sites', TRUE);
       $filepath = empty($filepath) ? NULL : $dir . '/sites/default/files' . '/dpsbridge/' . $filepath;
     }
@@ -177,8 +177,8 @@ class DPSBridgeFPLibrary {
         $ticket = $_SESSION['dpsbridge_ticket'];
         $server = $_SESSION['dpsbridge_server'];
       }
-        $this->url = $this->createURL($server, $url);
-        $this->headers[] = 'Authorization: AdobeAuth ticket="' . $ticket  . '"';
+      $this->url = $this->createURL($server, $url);
+      $this->headers[] = 'Authorization: AdobeAuth ticket="' . $ticket  . '"';
 
       if (isset($filepath)) {
         // Remove content-type.

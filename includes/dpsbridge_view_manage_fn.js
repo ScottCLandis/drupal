@@ -1,6 +1,7 @@
 /**
  * View Manage Scripting.
  */
+
 // Set to Folio node ID when opening the edit panel.
 var fid = '',
     previewFileName   = '',
@@ -10,11 +11,9 @@ var fid = '',
     offsetIndex = 0,
     baseURL     = "",
     pathToDir   = "";
-/* ==================================================== *
- * Given the folio node ID,
- *   pull the account type from the Folio node,
- *   then the account credentials using the account type
- * ==================================================== */
+/**
+ * Pull the account type from the Folio node and credentials using account type.
+ */
 function acquire_account_credentials(folioNodeID, filenames) {
   jQuery.ajax({
     url: baseURL + "/dpsbridge/folio/pull-accounts",
@@ -34,11 +33,9 @@ function acquire_account_credentials(folioNodeID, filenames) {
     }
   });
 }
-/* ============================================ *
- * Given the list of HTML article folder names,
- *   convert the folders into .folio files.
- *   (The .folio files are stored at /dpsbridge/folio/)
- * ============================================ */
+/**
+ * Convert the folders into .folio files.
+ */
 function generate_folio(folioNodeID, filenames) {
   jQuery.ajax({
     url: baseURL + "/dpsbridge/folio/generate-folios",
@@ -50,11 +47,10 @@ function generate_folio(folioNodeID, filenames) {
     }
   });
 }
-/* ================================================= *
- * Given the selected folio node ID,
- *   pull the metadata and generate the HTML articles.
- *   (The HTML articles are stored at /dpsbridge/html/)
- * ================================================= */
+
+/**
+ * Pull the metadata and generate the HTML articles.
+ */
 function generate_html(folioNodeID) {
   jQuery.ajax({
     url: baseURL + "/dpsbridge/folio/generate-HTML",
@@ -66,11 +62,9 @@ function generate_html(folioNodeID) {
     }
   });
 }
-/* =========================================== *
- * Given the selected list of article node ID,
- *   auto generate an HTML article folder,
- *   and store it at /dpsbridge/html_stacks/
- * =========================================== */
+/**
+ * Auto generate an HTML article folder.
+ */
 function generate_selected_html(articleNodeID) {
   dpsbridge_helper_show_status('Generating HTML Stacks...');
   jQuery.ajax({
@@ -89,10 +83,9 @@ function generate_selected_html(articleNodeID) {
     }
   });
 }
-/* ========================================================== *
- * Attempts to obtain the values from the selected checkboxes,
- *   toggles the overlay window if checkboxes are selected
- * ========================================================== */
+/**
+ * Obtain the values from the selected checkboxes, and toggle the overlay.
+ */
 function get_selected(toggle) {
   var selectedFolio = jQuery('.views-table tr input:checked');
   if (!selectedFolio.val()) {
@@ -239,10 +232,9 @@ function fp_upload(accountMeta, folioMeta, filenames) {
     }
   });
 }
-/* ======================================================================== *
- * Attempts to pull image urls from the targeted Folio node ID.
- *   Update the image url(s) on the current webpage using JQUERY on success.
- * ======================================================================== */
+/**
+ * Update the image url(s) on the current webpage using JQUERY on success.
+ */
 function imageUI_update() {
   jQuery.ajax({
     url: baseURL + "/dpsbridge/folio/pull-content",
@@ -256,10 +248,9 @@ function imageUI_update() {
     }
   });
 }
-/* ======================================= *
- * Save the folio ID (from Folio Producer)
- *   in the folio node (Drupal node)
- * ======================================= */
+/**
+ * Save the folio ID (from Folio Producer) in the folio node (Drupal node).
+ */
 function node_status_update(folioNodeID, folioID) {
   jQuery.ajax({
     url: baseURL + "/dpsbridge/folio/update-status",
@@ -272,9 +263,9 @@ function node_status_update(folioNodeID, folioID) {
     }
   });
 }
-/* ======================================================= *
- * Update the upload timestamp for the given folio node ID
- * ======================================================= */
+/**
+ * Update the upload timestamp for the given folio node ID.
+ */
 function node_status_timestamp(folioNodeID) {
   jQuery.ajax({
     url: baseURL + "/dpsbridge/folio/update-timestamp",
@@ -294,13 +285,13 @@ function node_status_timestamp(folioNodeID) {
  * ============================================================================ */
 function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, alienatedID, uploadDate, fpArticles) {
   var alienatedCount = 0, index = 1;
-  
-  // get sort numbers in sequence.
+
+  // Get sort numbers in sequence.
   var sortNumbers = Array();
   var indexSort = 0;
   for (var n = 0; n < fpArticles.length; n++) {
     sortNumber = parseInt(fpArticles[n]['articleMetadata']['sortNumber']);
-    if (fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge-') >=0 
+    if (fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge-') >=0
         || fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge') < 0) {
         sortNumbers[indexSort] = sortNumber;
         indexSort ++;
@@ -308,7 +299,7 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
   }
   sortNumbers.sort();
 
-  // display all Drupal and non-Drupal articles that were previously stored in Drupal
+  // Display Drupal/non-Drupal articles that were previously stored in Drupal.
   for (var i = 0; i < drupalArticles.length; i++) {
     var articleID = drupalArticles[i]['target_id'];
     jQuery.ajax({
@@ -322,9 +313,9 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
         if (isAds[i] == true) {
           checked = "checked";
         }
-        // create a locked row if the content is not from Drupal
+        // Create a locked row if the content is not from Drupal.
         if (output.length === 0) {
-          // makes sure to not show non-Drupal articles that has been deleted from Folio Producer
+          // Makes sure to not show non-Drupal articles, deleted from FP.
           var exist = dpsbridge_helper_check_article_by_id(fpArticles, alienatedID[alienatedCount]);
           if (exist) {
             html += "<tr id='article-row-id-" + alienatedID[alienatedCount] + "'>\n";
@@ -343,9 +334,9 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
           }
           alienatedCount++;
         }
-        // create a editable row if the content is from Drupal.
+        // Create a editable row if the content is from Drupal.
         else {
-          // check if the Drupal article is up in Folio Producer (true if so, false otherwise)
+          // Check if the Drupal article is up in FP.
           var sortNumber = dpsbridge_helper_get_sort_number_by_nid(fpArticles, articleID);
           html += "<tr id='article-row-id-" + articleID + "'>\n";
           html += "<td class='article-index'><input type='checkbox' value='" + articleID + "' /></td>\n";
@@ -370,13 +361,13 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
       }
     });
   }
-  // display all non-Drupal articles that has not been stored in Drupal previously
+  // Display all non-Drupal articles that has not been stored previously.
   for (var n = 0; n < fpArticles.length; n++) {
-    // skip if it is a Drupal article
+    // Skip if it is a Drupal article.
     if (fpArticles[n]['articleMetadata']['tags'].indexOf('DPSBridge') >= 0) { 
       continue;
     }
-    // insert non-Drupal articles that hasn't been added to Drupal database
+    // Insert non-Drupal articles that hasn't been added to Drupal database.
     if (jQuery('#article-row-id-' + fpArticles[n]['id']).length == 0) {
       var sortNumber  = fpArticles[n]['articleMetadata']['sortNumber'];
       var sortIndex = sortNumbers.indexOf(sortNumber);
@@ -418,15 +409,14 @@ function dpsbridge_helper_pull_articles(folioName, drupalArticles, isAds, aliena
   jQuery('#articles-wrapper tr').each(function(i, value){
     jQuery(this).find('td.sortable-index').text(i+1);
   });
-  // refreshes the stylesheets
+  // Refreshes the stylesheets.
   jQuery('#dialog-status').dialog('close');
   jQuery('#dialog-edit-folio').dialog('option', 'title', folioName).dialog('open');
 }
-/* =========================================================================== *
- * Pulls all information regarding the targeted Folio node from the database,
- *   update all fields on the UI dialog box to the newly pulled Folio node,
- *   calls dpsbridge_helper_pull_articles() to pull individual articles content
- * =========================================================================== */
+
+/**
+ * Pulls all information regarding the targeted Folio node from the database.
+  */
 function profileUI(folioNodeID, toggle) {
   fid = folioNodeID;
   dpsbridge_helper_show_status("Pulling content, please wait...", 400, 225);
@@ -444,13 +434,13 @@ function profileUI(folioNodeID, toggle) {
       offsetIndex = 0;
       var landscapeImg = (output['landscape'] != '') ? '/' + output['landscape'] : 'http://placehold.it/300x400&text=Cover+Landscape';
       var portraitImg = (output['portrait'] != '') ? '/' + output['portrait'] : 'http://placehold.it/400x300&text=Cover+Portrait';
-      // insert new attributes into the current overlay
+      // Insert new attributes into the current overlay.
       jQuery('#portrait').attr('src', portraitImg);
       jQuery('#landscape').attr('src', landscapeImg);
       jQuery('#image').attr('src', landscapeImg);
       jQuery('#image-ui-fid').val(folioNodeID);
       jQuery('#image-ui-fname').val(output['title']);
-      // toggle for opening the Folio edit UI
+      // Toggle for opening the Folio edit UI.
       if (toggle == 'full') {
         jQuery("#folio-ui-fname").val(output['title']);
         jQuery("#folio-ui-pname").val(output['pubName']);
@@ -462,16 +452,16 @@ function profileUI(folioNodeID, toggle) {
         jQuery('#folio-ui-orientation').val(output['orientation']);
         jQuery('#folio-ui-generator').val(output['autoToggle']);
         jQuery('#accounts').val(output['accounts']);
-        // updates the dimension field depending on the default account choice
+        // Updates the dimension field depending on the default account choice.
         refreshDimensions();
         jQuery('#dimension').val(output['dimension']);
-        // disable account & dimension selection if published
+        // Disable account & dimension selection if published.
         if (output['status'] == 'Uploaded') {
           jQuery('#accounts').attr('disabled', 'disabled');
           jQuery('#dimension').attr('disabled', 'disabled');
           jQuery('#folio-ui-orientation').attr('disabled', 'disabled');
         }
-        // re-enable account & dimension selection if not published
+        // Re-enable account & dimension selection if not published.
         else {
           jQuery('#accounts').removeAttr('disabled');
           jQuery('#dimension').removeAttr('disabled');
@@ -480,9 +470,8 @@ function profileUI(folioNodeID, toggle) {
         if (landscapeImg || portraitImg) {
           offsetIndex++;
         }
-        //for (var n = 0; n < output['articles'].length; n++)
-        //  dpsbridge_helper_pull_articles(output['articles'][n]['target_id'], n+1, output['isAds'][n], output['alienated'], output['uploadDate'], '');
-        // sync with the Folio Producer
+
+        // Sync with the Folio Producer.
         if (output['pubID']) {
           fp_sync(
             output['pubID'],
@@ -507,7 +496,7 @@ function profileUI(folioNodeID, toggle) {
         jQuery('#pubcss').val(output['pubCSS']);
         jQuery('.overridecss').val(output['pubCSS']);
       }
-      // toggle for opening the image edit UI
+      // Toggle for opening the image edit UI.
       else if (toggle == 'half') {
         jQuery('#dialog-status').dialog('close');
         jQuery('#dialog-edit-cover').dialog('option', 'title', output['title']).dialog('open');
@@ -515,11 +504,9 @@ function profileUI(folioNodeID, toggle) {
     }
   });
 }
-/* ====================================================================================== *
- * Given the article node ID, article name, and the temperary HTML article name,
- *   generate a temperary HTML article in /dpsbridge/html folder.
- *   Open the option UI dialog box for selecting the dimension size and mode upon success.
- * ====================================================================================== */
+/**
+ * Generate a temperary HTML article in /dpsbridge/html folder.
+ */
 function previewOptions(previewID, filename) {
   var pname  = jQuery("#folio-ui-pname").val(),
     pubcss = jQuery("#pubcss").val();
@@ -536,21 +523,19 @@ function previewOptions(previewID, filename) {
     }
   });
 }
-/* ============================================================================ *
- * Attempts to read the selected dimension in the preview dialog box,
- *   open a new window with the designated width and height,
- *   and set the URL to the preview HTML article created in /dpsbridge/html/ folder.
- * ============================================================================ */
+/**
+ * Open a new window with the designated width and height preview dialog.
+ */
 function previewArticle(orientation) {
   var windows_width, windows_height, previewURL,
     preview_dimension = jQuery('#preview-dimension :selected').val(),
     preview_token = preview_dimension.split(',');
-  // view landscape mode
+  // View landscape mode.
   if (orientation == "landscape") {
     windows_width = preview_token[0];
     windows_height = preview_token[1];
   }
-  // view portrait mode
+  // View portrait mode.
   else {
     windows_width = preview_token[1];
     windows_height = preview_token[0];
@@ -558,10 +543,9 @@ function previewArticle(orientation) {
   previewURL = pathToDir + '/html/' + previewFileName + '/' + previewFileName + '.html';
   window.open(previewURL, "popup", "width=" + windows_width + ", height=" + windows_height);
 }
-/* ========================================================= *
- * Attempts to read the current available local stylesheets,
- *   The local storage folder is @ /dpsbridge/styles.
- * ========================================================= */
+/**
+ * Read Stylesheets
+ */
 function readStylesheets() {
   var styleText = '';
   jQuery.ajax({
@@ -573,7 +557,7 @@ function readStylesheets() {
         if (output[i].indexOf('-') < 0) {
           styleText = output[i];
         }
-        // removes the derivatives for viewing purposes
+        // Removes the derivatives for viewing purposes.
         else {
           styleText = output[i].split(/-/)[1];
         }
@@ -583,10 +567,9 @@ function readStylesheets() {
     }
   });
 }
-/* ======================================= *
- * Depending on the selected account type,
- *   display the dimensions accordingly.
- * ======================================= */
+/**
+ * Depending on the selected account type, display the dimensions accordingly.
+ */
 function refreshDimensions() {
   var account = jQuery('#accounts :selected')
   jQuery('#dimension').empty();
@@ -605,10 +588,9 @@ function refreshDimensions() {
       break;
   }
 }
-/* ============================================================= *
- * Given the filename (global variable),
- *   recursively remove all HTML article folders and .folio files.
- * ============================================================= */
+/**
+ * Recursively remove all HTML article folders and .folio files.
+ */
 function removePreviewFile() {
   jQuery.ajax({
     url: baseURL + "/dpsbridge/folio/preview-delete",
@@ -616,10 +598,10 @@ function removePreviewFile() {
     data: { "filename":previewFileName }
   })
 }
-/* =================================== *
- * Given a set of edit buttons,
- *   replace them with javascript calls
- * =================================== */
+
+/**
+ * Given a set of edit buttons, replace them with javascript calls.
+ */
 function replaceHREF(ahref, toggle) {
   for (var i = 0; i < ahref.length; i++) {
     var url = ahref[i].href;
@@ -653,7 +635,7 @@ function replaceHREF(ahref, toggle) {
                 image       = $('#image'),
                 portrait    = $('#portrait'),
                 landscape   = $('#landscape');
-            // JQUERY UI: dialog box functionality for editing cover images
+            // Dialog box functionality for editing cover images.
             $("#dialog-edit-cover").dialog({
                 autoOpen:false, height:525, width:570, modal:true,
                 buttons: {
@@ -667,7 +649,7 @@ function replaceHREF(ahref, toggle) {
                         $(this).dialog("close"); },
                     Cancel: function() { $(this).dialog("close"); }}
             });
-            // JQUERY UI: dialog box functionality for editing folio
+            // Dialog box functionality for editing folio.
             $("#dialog-edit-folio").dialog({
                 autoOpen:false, height:666, width:1100, modal:true,
                 buttons: {
@@ -707,14 +689,14 @@ function replaceHREF(ahref, toggle) {
                             pubcss     = $('#pubcss'),
                             toccss     = $('#toccss'),
                             account    = $('#accounts :selected');
-                        // appends the current articles from folio
+                        // Appends the current articles from folio.
                         for (var i = 0; i < indexes.length; i++) {
                           articles += indexes[i].value + ",";
                         }
                         for (var n = 0; n < isad.length; n++) {
                           ads += (isad[n].checked)?"1,":"0,";
                         }
-                        // attempts to save the metadata to the selected Folio node
+                        // Attempts to save the metadata to the selected Folio node.
                         $.ajax({
                             url: baseURL + "/dpsbridge/folio/update",
                             type: "POST",
@@ -752,7 +734,7 @@ function replaceHREF(ahref, toggle) {
                     Cancel: function() { $(this).dialog("close"); }
                 }
             });
-            // JQUERY UI: dialog box functionality for providing previewing option (landscape or portrait)
+            // Dialog box functionality for providing previewing option (landscape or portrait).
             $("#dialog-iframe-preview-option").dialog({
                     autoOpen:false, height:400, width:375, modal:true,
                     buttons: {
@@ -761,20 +743,20 @@ function replaceHREF(ahref, toggle) {
                             $(this).dialog("close"); }},
                     close: function() { removePreviewFile(); }
             });
-            // JQUERY UI: dialog box functionality for providing previewing option (landscape or portrait)
+            // Dialog box functionality for providing previewing option (landscape or portrait).
             $("#dialog-status").dialog({
                     autoOpen:false, modal:true,
                     buttons: {
                         Close: function() {
                             $(this).dialog("close"); }}
             });
-            // JQUERY UI: auto sort the table
+            // Auto sort the table.
             $("#sortable-table tbody").sortable({
                     update: function(event, ui) {
                         $('#sortable-table tbody tr').each(function() {
                             $(this).children('td.sortable-index').html($(this).index() + 1); }); }
             });
-            // JQUERY UI: auto resizing the dialog boxes depending on the size of the browser
+            // Auto resizing the dialog boxes depending on the size of the browser.
             $(window).resize(function() {
             $("#dialog-edit-folio").dialog("option", "width", "auto");
             $("#dialog-edit-cover").dialog("option", "width", "auto");
