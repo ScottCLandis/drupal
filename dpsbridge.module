@@ -8,9 +8,6 @@
  * Implements hook_init().
  */
 function dpsbridge_init() {
-  global $base_url;
-  $path_to_dir = drupal_get_path('module', 'dpsbridge');
-  $path_to_files = variable_get('file_public_path', conf_path() . '/files') . '/dpsbridge';
   drupal_add_library('system', 'drupal.ajax');
   drupal_add_library('system', 'jquery.form');
   drupal_add_library('system', 'ui.dialog');
