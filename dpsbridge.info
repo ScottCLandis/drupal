@@ -1,0 +1,4 @@
+name = "Adobe Publish"
+description = "This module will convert the contents from selected page(s) into HTML format and upload it into Adobe Publish."
+package = "Adobe Publish"
+core = 7.x
