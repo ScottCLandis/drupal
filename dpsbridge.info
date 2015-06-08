@@ -1,4 +1,12 @@
-name = "Adobe Publish"
-description = "This module will convert the contents from selected page(s) into HTML format and upload it into Adobe Publish."
-package = "Adobe Publish"
+name = "DPS Bridge"
+description = "This module will convert the contents from selected page(s) into HTML format and upload it into Adobe Folio Producer."
+package = "Adobe DPS"
 core = 7.x
+
+configure = admin/config/dpsnext/settings
+
+dependencies[] = entityreference
+dependencies[] = views
+dependencies[] = views_bulk_operations
+dependencies[] = views_php
+stylesheets[all][] = override.css

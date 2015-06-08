@@ -1,0 +1,70 @@
+.align-center {
+  text-align: center;
+}
+
+.align-left {
+  float: left;
+}
+
+.align-right {
+  float: right;
+}
+
+.file-upload {
+  width: 200px;
+}
+
+.folio-edit-dialog-articles {
+  height: 270px;
+  overflow: scroll;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.up-15 {
+  margin-top: -15px;
+}
+
+.down-5 {
+  margin-top: 5px;
+}
+
+#dialog-new label,
+#dialog-new input,
+#dialog-existing label,
+#dialog-existing select {
+  margin-left: 10px;
+}
+
+#dialog-new input,
+#dialog-existing select,
+#edit-folio-table input,
+#edit-folio-table select,
+#edit-folio-table textarea,
+#edit-credential-table input,
+#dialog-iframe-preview-option select,
+#dialog-option-stylesheet-add input,
+#dialog-option-connectivity button,
+#dialog-option-dimension-add input,
+#dialog-option-dimension-add select,
+#dialog-option-dimension-delete input,
+#dialog-option-dimension-delete select,
+#dialog-option-stylesheet-add select,
+#dialog-option-stylesheet-delete select,
+#dialog-option-stylesheet-download select {
+  border: thin solid #bebfb9;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#edit-select {
+  display: none;
+}

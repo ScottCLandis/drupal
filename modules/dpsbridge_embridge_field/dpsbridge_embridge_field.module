@@ -1,0 +1,116 @@
+<?php
+/**
+ * Module provides functions to integrating this module with EMBridge.
+ */
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function dpsbridge_embridge_field_field_formatter_info() {
+  return array(
+    'dpsbridge_embridge_field_default' => array(
+      'label' => t('DPS Embridge Field'),
+      'field types' => array('entermediaasset'),
+      'settings' => array('rendition' => 'thumbnail'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function dpsbridge_embridge_field_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $catalog_id = $instance['settings']['asset_catalog'];
+  $catalog_tokens = explode('/', $catalog_id);
+  $catalog_name = array_pop($catalog_tokens);
+  $selected_renditions = _embridge_get_selected_rendition_types($catalog_name);
+
+  $element = array();
+  if ($display['type'] == 'dpsbridge_embridge_field_default') {
+    $element['rendition'] = array(
+      '#title' => t('Conversion'),
+      '#type' => 'select',
+      '#options' => $selected_renditions,
+      '#default_value' => $settings['rendition'],
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function dpsbridge_embridge_field_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = '';
+  if ($display['type'] == 'dpsbridge_embridge_field_default') {
+    $summary .= '<br/>' . t('Conversion') . ': ' . $settings['rendition'];
+  }
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function dpsbridge_embridge_field_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  switch ($display['type']) {
+    case 'dpsbridge_embridge_field_default':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'dpsbridge_embridge_field',
+          '#entermediaasset' => (object) $item,
+          '#rendition' => $display['settings']['rendition'],
+          '#entity' => $entity,
+        );
+      }
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dpsbridge_embridge_field_theme() {
+  return array(
+    'dpsbridge_embridge_field' => array(
+      'variables' => array(
+        'entermediaasset' => NULL,
+        'rendition' => NULL,
+        'entity' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Theming function.
+ */
+function theme_dpsbridge_embridge_field($variables) {
+  module_load_include('inc', 'dpsbridge', 'dpsbridge_helper');
+  $embridge_field = $variables['entermediaasset'];
+  $embridge_field = (array) $embridge_field;
+  $entity = $variables['entity'];
+  $title = $entity->title;
+  $article_folder = dpsbridge_helper_format_title($title);
+
+  if (!empty($embridge_field['aid'])) {
+    $filename = basename($embridge_field['sourcepath']);
+    $display = empty($variables['rendition']) ? 'thumbnail' : $variables['rendition'];
+    $image_url = $embridge_field[$display];
+    dpsbridge_helper_save_img($image_url, $article_folder . '/' . $filename);
+    return '<img src="' . $filename . '" />';
+  }
+  else {
+    return '';
+  }
+}

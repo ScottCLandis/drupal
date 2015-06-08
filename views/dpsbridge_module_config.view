@@ -1,0 +1,156 @@
+<?php
+
+$view = new view();
+$view->name = 'dpsbridge_module_config';
+$view->description = '';
+$view->tag = 'default';
+$view->base_table = 'node';
+$view->human_name = 'DPSBridge Module Config';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Configure Adobe Digital Publishing Suite';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = '10';
+$handler->display->display_options['style_plugin'] = 'jump_menu';
+$handler->display->display_options['row_plugin'] = 'node';
+/* Header: Global: PHP */
+$handler->display->display_options['header']['php']['id'] = 'php';
+$handler->display->display_options['header']['php']['table'] = 'views';
+$handler->display->display_options['header']['php']['field'] = 'php';
+$handler->display->display_options['header']['php']['empty'] = TRUE;
+$handler->display->display_options['header']['php']['php_output'] = '<?php
+// echo "<div id=\'jqueryui-tabs\'>\\n";
+// echo	"<ul>\\n";
+// echo		"<li><a href=\'#tabs-1\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/content/fpselect\\"\'>Folio Article Selection</a></li>\\n";
+// echo		"<li><a href=\'#tabs-2\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/content/fpmanage\\"\'>Folio Management View</a></li>\\n";
+// echo		"<li class=\'ui-tabs-active\'><a href=\'#tabs-3\' onclick=\'window.location=\\"".$GLOBALS[\'base_url\']."/admin/config/content/dpsbridge\\"\'>DPSBridge Config</a></li>\\n";
+// echo	"</ul>\\n";
+// echo "</div>\\n";
+echo \'<form action="#" method="POST">\';
+echo \'<table id="edit-credential-table" class="views-table cols-2">\';
+echo \'<tbody>\';
+echo \'	<tr class="odd views-row-first">\';
+echo \'		<td class="views-field">\';
+echo \'			<label for="apikey"><h4>[Adobe Folio Producer]</h4> API Key</label>\';
+echo \'			<input id="apikey" name="apikey" type="password" size="30" value="" placeholder="API Key" required />\';
+echo \'		</td>\';
+echo \'		<td class="views-field" colspan="2">\';
+echo \'			<label for="apisec"><h4>&nbsp;</h4>API Secret</label>\';
+echo \'			<input id="apisec" name="apisec" type="password" size="30" value="" placeholder="API Secret" required />\';
+echo \'		</td>\';
+echo \'		<td class="views-field" rowspan="4">\';
+echo \'			<label for="stylesheets">Available Publication Stylesheets</label>\';
+echo \'			<table id="stylesheets"></table>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-stylesheet-add\\\').dialog(\\\'open\\\')">Add Stylesheet</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-stylesheet-delete\\\').dialog(\\\'open\\\')">Delete Stylesheet</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-stylesheet-download\\\').dialog(\\\'open\\\')">Download Stylesheet</button>\';
+echo \'		</td>\';
+echo \'	</tr>\';
+echo \'	<tr class="even">\';
+echo \'		<td class="views-field">\';
+echo \'			<label for="amazon_id"><h4>[Amazon]</h4> Folio Producer User ID</label>\';
+echo \'			<input id="amazon_id" name="amazon_id" type="email" size="30" value="" placeholder="User ID (E-mail)" required />\';
+echo \'		</td>\';
+echo \'		<td class="views-field">\';
+echo \'			<label for="amazon_pass"><h4>&nbsp;</h4>Folio Producer Password</label>\';
+echo \'			<input id="amazon_pass" name="amazon_pass" type="password" size="30" value="" placeholder="User Password" required />\';
+echo \'		</td>\';
+echo \'		<td>\';
+echo \'			<label for="amazon_dimension">Available Dimensions</label>\';
+echo \'			<select id="amazon_dimension" multiple disabled></select>\';
+echo \'		</td>\';
+echo \'	</tr>\';
+echo \'	<tr class="odd">\';
+echo \'		<td class="views-field">\';
+echo \'			<label for="android_id"><h4>[Android]</h4> Folio Producer User ID</label>\';
+echo \'			<input id="android_id" name="android_id" type="email" size="30" value="" placeholder="User ID (E-mail)" required />\';
+echo \'		</td>\';
+echo \'		<td class="views-field">\';
+echo \'			<label for="android_pass"><h4>&nbsp;</h4>Folio Producer Password</label>\';
+echo \'			<input id="android_pass" name="android_pass" type="password" size="30" value="" placeholder="User Password" required />\';
+echo \'		</td>\';
+echo \'		<td>\';
+echo \'			<label for="android_dimension">Available Dimensions</label>\';
+echo \'			<select id="android_dimension" multiple disabled></select>\';
+echo \'		</td>\';
+echo \'	</tr>\';
+echo \'	<tr class="even">\';
+echo \'		<td class="views-field">\';
+echo \'			<label for="apple_id"><h4>[Apple]</h4> Folio Producer User ID</label>\';
+echo \'			<input id="apple_id" name="apple_id" type="email" size="30" value="" placeholder="User ID (E-mail)" required />\';
+echo \'		</td>\';
+echo \'		<td class="views-field">\';
+echo \'			<label for="apple_pass"><h4>&nbsp;</h4>Folio Producer Password</label>\';
+echo \'			<input id="apple_pass" name="apple_pass" type="password" size="30" value="" placeholder="User Password" required />\';
+echo \'		</td>\';
+echo \'		<td>\';
+echo \'			<label for="apple_dimension">Available Dimensions</label>\';
+echo \'			<select id="apple_dimension" multiple disabled></select>\';
+echo \'		</td>\';
+echo \'	</tr>\';
+echo \'	<tr class="odd views-row-last">\';
+echo \'		<td class="views-field align-center" colspan="4">\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-connectivity\\\').dialog(\\\'open\\\')">Test Connection</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-dimension-add\\\').dialog(\\\'open\\\')">Add Dimensions</button>\';
+echo \'			<button type="button" onclick="javascript:jQuery(\\\'#dialog-option-dimension-delete\\\').dialog(\\\'open\\\')">Delete Dimensions</button>\';
+echo \'			<button type="button" onclick="javascript:dps_credentials()">Save</button>\';
+echo \'			<button type="button" onclick="location.href=\\\'/admin/config/content/fpselect\\\'">Cancel</button>\';
+echo \'		</td>\';
+echo \'	</tr>\';
+echo \'</tbody>\';
+echo \'</table>\';
+echo \'</form>\';
+?>';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['label'] = '';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 1;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['operator'] = 'not in';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'all' => 'all',
+  'article' => 'article',
+  'page' => 'page',
+  'folios' => 'folios',
+  'photos' => 'photos',
+  'poll' => 'poll',
+  'simplenews' => 'simplenews',
+  'video' => 'video',
+);
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['path'] = 'admin/config/content/dpsbridge_0';
+$handler->display->display_options['menu']['title'] = 'DPSBridge Config';
+$handler->display->display_options['menu']['weight'] = '0';
+$handler->display->display_options['menu']['context'] = 0;
+$handler->display->display_options['menu']['context_only_inline'] = 0;
+$handler->display->display_options['tab_options']['weight'] = '0';
+
