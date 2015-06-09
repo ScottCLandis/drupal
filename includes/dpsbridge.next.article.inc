@@ -112,8 +112,8 @@ class DPSNextArticle extends DPSNextEntity {
     // call helper to initiate the cURL request
     $this->_request('PUT', $url, $headers, $file_path, 'file');
     // store latest version and contentVersion
-    $this->contentVersion = $this->_getContentVersion();
-    $this->version = $this->_getVersion();
+    //$this->contentVersion = $this->_getContentVersion();
+    //$this->version = $this->_getVersion();
     return $this;
   }
 }
